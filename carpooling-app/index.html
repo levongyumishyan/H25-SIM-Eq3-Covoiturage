@@ -14,182 +14,175 @@
     </style>
 </head>
 <body>
-    <h2>Carpool Route Optimizer</h2>
+<h2>Carpool Route Optimizer</h2>
 
-    <!-- Map Container -->
-    <div id="map"></div>
+<!-- Map Container -->
+<div id="map"></div>
 
-    <h3>Locations:</h3>
-    <div id="locations"></div>
+<h3>Locations:</h3>
+<div id="locations"></div>
 
-    <button onclick="optimizeRoute()">Get Optimized Route</button>
+<button onclick="optimizeRoute()">Get Optimized Route</button>
 
-    <h3>Optimized Route:</h3>
-    <p id="result"></p>
+<h3>Optimized Route:</h3>
+<p id="result"></p>
 
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-    <script src="https://unpkg.com/@turf/turf"></script> <!-- Turf.js for polyline decoding -->
-    <script>
-        // Replace with your Mapbox access token
-        mapboxgl.accessToken = 'pk.eyJ1IjoibGV2b25neXVtaXNoeWFuIiwiYSI6ImNtNnA3Mmh5dTBueDAya3B3dnlhazMxbjYifQ.pZ-7kShnJAHFbaNPDFC0sw';  // Your Mapbox token here
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+<script src="https://unpkg.com/@turf/turf"></script> <!-- Turf.js for polyline decoding -->
+<script>
+    // Replace with your Mapbox access token
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGV2b25neXVtaXNoeWFuIiwiYSI6ImNtNnA3Mmh5dTBueDAya3B3dnlhazMxbjYifQ.pZ-7kShnJAHFbaNPDFC0sw';  // Replace this with your Mapbox token
 
-        // Initialize the Mapbox map
-        let map = new mapboxgl.Map({
-            container: 'map', // The container ID where the map will be displayed
-            style: 'mapbox://styles/mapbox/streets-v11', // Map style (default streets style)
-            center: [-74.0060, 40.7128], // Default center (New York City)
-            zoom: 12 // Initial zoom level
-        });
+    // Initialize the Mapbox map
+    let map = new mapboxgl.Map({
+        container: 'map', // The container ID where the map will be displayed
+        style: 'mapbox://styles/mapbox/streets-v11', // Map style (default streets style)
+        center: [-74.0060, 40.7128], // Default center (New York City)
+        zoom: 12 // Initial zoom level
+    });
 
-        let locations = []; // Array to store clicked locations
-        let markers = [];   // Array to store markers for removal
+    let locations = []; // Array to store clicked locations
+    let markers = [];   // Array to store markers for removal
 
-        // Function to fetch and display the optimized route
-        async function optimizeRoute() {
-            if (locations.length < 2) {
-                alert("Please add at least two locations.");
-                return;
-            }
-
-            // Send the locations to the backend
-            const response = await fetch("http://localhost:3000/optimize-route", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ locations })
-            });
-
-            const data = await response.json();
-
-            // Log the response for debugging
-            console.log("Response from backend:", data);
-
-            if (data.optimizedOrder) {
-                document.getElementById("result").innerText = "Optimized Order: " + data.optimizedOrder.map(loc => loc.name).join(" → ");
-                
-                // Clear previous markers and route
-                markers.forEach(marker => marker.remove());
-                markers = [];
-
-                // Add markers for optimized order and show coordinates
-                data.optimizedOrder.forEach(loc => {
-                    const marker = new mapboxgl.Marker()
-                        .setLngLat([loc.lng, loc.lat])
-                        .addTo(map);
-
-                    // Display coordinates
-                    const coordinatesElement = document.createElement('div');
-                    coordinatesElement.classList.add('location-item');
-                    coordinatesElement.innerHTML = `
-                        ${loc.name}: (${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)})
-                    `;
-                    document.getElementById('locations').appendChild(coordinatesElement);
-
-                    markers.push(marker);
-                });
-
-                // Decode the polyline using Turf.js
-                const routeCoordinates = turf.lineString(turf.polylineToGeoJSON(data.polyline).geometry.coordinates);
-                console.log("Decoded route coordinates:", routeCoordinates);
-
-                // Add the polyline to the map
-                map.addLayer({
-                    id: 'optimized-route',
-                    type: 'line',
-                    source: {
-                        type: 'geojson',
-                        data: {
-                            type: 'Feature',
-                            geometry: {
-                                type: 'LineString',
-                                coordinates: routeCoordinates.geometry.coordinates
-                            }
-                        }
-                    },
-                    layout: {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    paint: {
-                        'line-color': '#007cbf',
-                        'line-width': 5
-                    }
-                });
-
-                // Fit the map to show the route and markers
-                const bounds = new mapboxgl.LngLatBounds();
-                routeCoordinates.geometry.coordinates.forEach(coord => bounds.extend(coord));
-                markers.forEach(marker => bounds.extend(marker.getLngLat()));
-                map.fitBounds(bounds, { padding: 50 });
-            } else {
-                document.getElementById("result").innerText = "Error: " + JSON.stringify(data);
-            }
+    // Function to fetch and display the optimized route
+    async function optimizeRoute() {
+        if (locations.length < 2) {
+            alert("Please add at least two locations.");
+            return;
         }
 
-        // Add a click event to the map to add locations
-        map.on('click', function(e) {
-            // Create a marker at the clicked location
-            let marker = new mapboxgl.Marker()
-                .setLngLat(e.lngLat)
-                .addTo(map);
-
-            // Add the location to the locations array
-            locations.push({ name: `Location ${String.fromCharCode(65 + locations.length)}`, lat: e.lngLat.lat, lng: e.lngLat.lng });
-
-            // Add the marker to the markers array
-            markers.push(marker);
-
-            // Update the locations list on the UI
-            updateLocationsList();
+        // Send the locations to the backend
+        const response = await fetch("http://localhost:3000/optimize-route", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ locations })
         });
 
-        // Function to update locations list in the UI
-        function updateLocationsList() {
-            const locationsContainer = document.getElementById('locations');
-            locationsContainer.innerHTML = '';  // Clear the list
+        const data = await response.json();
 
-            locations.forEach((loc, index) => {
-                const locationElement = document.createElement('div');
-                locationElement.classList.add('location-item');
-                locationElement.innerHTML = `
+        // Log the response for debugging
+        console.log("Response from backend:", data);
+
+        if (data.optimizedOrder) {
+            document.getElementById("result").innerText = "Optimized Order: " + data.optimizedOrder.map(loc => loc.name).join(" → ");
+
+            // Clear previous markers and route
+            markers.forEach(marker => marker.remove());
+            markers = [];
+
+            // Add markers for optimized order and show coordinates
+            data.optimizedOrder.forEach(loc => {
+                const marker = new mapboxgl.Marker()
+                    .setLngLat([loc.lng, loc.lat])
+                    .addTo(map);
+
+                // Display coordinates
+                const coordinatesElement = document.createElement('div');
+                coordinatesElement.classList.add('location-item');
+                coordinatesElement.innerHTML = ` ${loc.name}: (${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}) `;
+                document.getElementById('locations').appendChild(coordinatesElement);
+
+                markers.push(marker);
+            });
+
+            // Decode the polyline using Turf.js
+            const routeCoordinates = turf.lineString(turf.polylineToGeoJSON(data.polyline).geometry.coordinates);
+            console.log("Decoded route coordinates:", routeCoordinates);
+
+            // Add the polyline to the map
+            map.addLayer({
+                id: 'optimized-route',
+                type: 'line',
+                source: {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: routeCoordinates.geometry.coordinates
+                        }
+                    }
+                },
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#007cbf',
+                    'line-width': 5
+                }
+            });
+
+            // Fit the map to show the route and markers
+            const bounds = new mapboxgl.LngLatBounds();
+            routeCoordinates.geometry.coordinates.forEach(coord => bounds.extend(coord));
+            markers.forEach(marker => bounds.extend(marker.getLngLat()));
+            map.fitBounds(bounds, { padding: 50 });
+        } else {
+            document.getElementById("result").innerText = "Error: " + JSON.stringify(data);
+        }
+    }
+
+    // Add a click event to the map to add locations
+    map.on('click', function(e) {
+        // Create a marker at the clicked location
+        let marker = new mapboxgl.Marker()
+            .setLngLat(e.lngLat)
+            .addTo(map);
+
+        // Add the location to the locations array
+        locations.push({ name: `Location ${String.fromCharCode(65 + locations.length)}`, lat: e.lngLat.lat, lng: e.lngLat.lng });
+
+        // Add the marker to the markers array
+        markers.push(marker);
+
+        // Update the locations list on the UI
+        updateLocationsList();
+    });
+
+    // Function to update locations list in the UI
+    function updateLocationsList() {
+        const locationsContainer = document.getElementById('locations');
+        locationsContainer.innerHTML = '';  // Clear the list
+
+        locations.forEach((loc, index) => {
+            const locationElement = document.createElement('div');
+            locationElement.classList.add('location-item');
+            locationElement.innerHTML = `
                     ${loc.name}: (${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)})
                 `;
-                locationsContainer.appendChild(locationElement);
+            locationsContainer.appendChild(locationElement);
+        });
+    }
+
+    // Function to get user's current location
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const userLng = position.coords.longitude;
+                const userLat = position.coords.latitude;
+
+                // Set the map to the user's location
+                map.setCenter([userLng, userLat]);
+                map.setZoom(12);
+
+                // Optionally, show the coordinates in the UI
+                const userLocation = document.createElement('div');
+                userLocation.classList.add('location-item');
+                userLocation.innerHTML = `Your location: (${userLat.toFixed(6)}, ${userLng.toFixed(6)})`;
+                document.getElementById('locations').appendChild(userLocation);
+
+            }, (error) => {
+                alert("Unable to retrieve your location.");
+                console.error(error);
             });
+        } else {
+            alert("Geolocation is not supported by your browser.");
         }
+    }
 
-        // Function to get user's current location
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    const userLng = position.coords.longitude;
-                    const userLat = position.coords.latitude;
-
-                    // Set the map to the user's location
-                    map.setCenter([userLng, userLat]);
-                    map.setZoom(12);
-
-                    // Add a marker for the user's location
-                    new mapboxgl.Marker()
-                        .setLngLat([userLng, userLat])
-                        .addTo(map)
-                        .setPopup(new mapboxgl.Popup().setText("You are here"));
-
-                    // Optionally, show the coordinates in the UI
-                    const userLocation = document.createElement('div');
-                    userLocation.classList.add('location-item');
-                    userLocation.innerHTML = `Your location: (${userLat.toFixed(6)}, ${userLng.toFixed(6)})`;
-                    document.getElementById('locations').appendChild(userLocation);
-                }, (error) => {
-                    alert("Unable to retrieve your location.");
-                    console.error(error);
-                });
-            } else {
-                alert("Geolocation is not supported by your browser.");
-            }
-        }
-
-        // Call the function to get user's location when the page loads
-        window.onload = getUserLocation;
-    </script>
+    // Call the function to get user's location when the page loads
+    window.onload = getUserLocation;
+</script>
 </body>
 </html>

@@ -7,25 +7,18 @@ const cors = require("cors");
 const app = express();
 
 // Use CORS and JSON parsing middleware
-app.use(cors());
-app.use(express.json());
-
-// Define your locations with names and coordinates
-const locations = [
-    { name: "Location A", lat: 40.7128, lng: -74.0060 }, // New York
-    { name: "Location B", lat: 34.0522, lng: -118.2437 }, // Los Angeles
-    { name: "Location C", lat: 51.5074, lng: -0.1278 },  // London
-    { name: "Location D", lat: 48.8566, lng: 2.3522 }     // Paris
-];
+app.use(cors());  // Enable CORS for all origins
+app.use(express.json());  // Use express middleware to parse JSON requests
 
 // Route to handle optimizing the route
 app.post("/optimize-route", async (req, res) => {
     try {
-        // Validate that all locations have valid lat/lng
-        for (let i = 0; i < locations.length; i++) {
-            if (!locations[i].lat || !locations[i].lng) {
-                return res.status(400).json({ error: `Invalid location at index ${i}: lat or lng is missing` });
-            }
+        const locations = req.body.locations; // Get locations from the request body
+        console.log("Received locations:", locations);
+
+        // Check if locations array is valid
+        if (!locations || locations.length < 2) {
+            return res.status(400).json({ error: "At least two locations are required." });
         }
 
         // Format coordinates for the OSRM request (OSRM expects "lng,lat")
@@ -34,10 +27,13 @@ app.post("/optimize-route", async (req, res) => {
 
         // Send request to OSRM for routing (optimized route calculation)
         const response = await axios.get(`http://router.project-osrm.org/trip/v1/driving/${coordinates}?source=first&destination=last&roundtrip=false&geometries=polyline6`);
-        
-        // If OSRM returns an error, handle it
-        if (response.data.code !== "Ok") {
-            return res.status(500).json({ error: "OSRM routing error" });
+
+        // Log the entire response for debugging
+        console.log("OSRM response:", response.data);
+
+        // Check if routes exist in the response
+        if (!response.data.routes || response.data.routes.length === 0) {
+            return res.status(500).json({ error: "OSRM did not return a valid route." });
         }
 
         // Get the optimized order of waypoints (indices returned by OSRM)
@@ -46,10 +42,11 @@ app.post("/optimize-route", async (req, res) => {
 
         // Map the indices back to actual locations
         const optimizedLocations = optimizedOrderIndices.map(index => locations[index]);
+        console.log("Optimized locations:", optimizedLocations);
 
         // Get the polyline geometry of the route
         const polyline = response.data.routes[0].geometry;
-        console.log("Polyline geometry:", polyline); // Log the polyline for debugging
+        console.log("Polyline geometry:", polyline); // Check this in your console
 
         // Send the optimized locations and polyline back to the frontend
         res.json({ optimizedOrder: optimizedLocations, polyline });
@@ -63,7 +60,6 @@ app.post("/optimize-route", async (req, res) => {
 // Set the port for the server to listen on
 const PORT = 3000;
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
 });
