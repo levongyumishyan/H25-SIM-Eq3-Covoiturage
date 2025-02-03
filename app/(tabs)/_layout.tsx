@@ -7,6 +7,8 @@ export default function TabLayout() {
       <Tabs.Screen name="map" options={{ title: 'Carte' }} />
       <Tabs.Screen name="rides" options={{ title: 'Mes trajets' }} />
       <Tabs.Screen name="account" options={{ title: 'Mon compte' }} />
+      <Tabs.Screen name="inscription" options={{ href: null}}/> {/*null pour cacher la tab*/}
+      <Tabs.Screen name="mdpOublie" options={{ href: null}}/>
     </Tabs>
   );
 }
