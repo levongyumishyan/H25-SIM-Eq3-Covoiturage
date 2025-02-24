@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
 import { Link, Tabs } from "expo-router";
+import { styles } from "../fonctionnalites/styles";
 
 
 export default function Index() {
@@ -12,7 +13,7 @@ export default function Index() {
       }}
     >
       <Text>Application de covoiturage :)</Text>
-      <Link href="./account">Se connecter</Link> 
+      <Link href="./account" style={styles.linkButton}>Se connecter</Link> 
     </View>
   );
 }
