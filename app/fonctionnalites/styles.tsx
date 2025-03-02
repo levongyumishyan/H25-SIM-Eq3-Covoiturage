@@ -52,5 +52,11 @@ export const styles = StyleSheet.create({
     additionalText: {
       fontSize: 16,
       textAlign: 'center',
+      color: colors.darkgray1,
+    },
+    grosTitre: {
+      fontSize: 32,
+      textAlign: 'center',
+      color: colors.white1,
     },
   });

@@ -11,7 +11,7 @@ export default function Index() {
       <ScrollView>
         <View>
         <ImageBackground source={require("../images/routeChamp1.jpg")} resizeMode="cover" style={styles.imageBackground}>
-          <Text>Application de covoiturage :)</Text>
+          <Text style={styles.grosTitre}>Roulons vert ensemble!</Text>
 
           
             <Link href="./account" style={styles.linkButton}>Se connecter</Link>
@@ -20,7 +20,7 @@ export default function Index() {
         </View>
         
         <View style={styles.index2}>
-          <Text style={styles.additionalText}>D'autres informations...</Text>
+          <Text style={styles.additionalText}>Bienvenue sur Ride/W</Text>
           <Text style={styles.additionalText}>D'autres informations...</Text>
         </View>
         

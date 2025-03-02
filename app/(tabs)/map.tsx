@@ -17,12 +17,17 @@ export default function Index() {
       <Text>Application de covoiturage :)</Text>
       <Link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css">Bonjour</Link>
       
-      {/*<MapView initialRegion={{
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  }}> </MapView>*/}
+      <MapView 
+      style={styles.map}
+      showsUserLocation
+      showsMyLocationButton
+      initialRegion={{ 
+        latitude: 45.5376,
+        longitude: -73.6745,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      }}
+      />{/*Position par défaut au cégep*/}
     
     
     </View>
