@@ -1,23 +1,31 @@
 # Projet intégrateur (Ride/w)
 ![LOGO](temp_logo.png)
-Simple overview of use/purpose.
 
 ## Description
 
 Ceci est une application de covoiturage conçue pour simplifier le covoiturage au Québec.
 
+## Mise en route
 
-## Getting Started
+Pour exécuter le projet, vous aurez besoin: 
 
-### Dependencies
+ 1. Expo
+ 2. Node.js
+ 3. OS (MacOS, Linux, Windows) 
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
 
-### Installing
+### Installation
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+##### MacOS 
+
+<span style="color:#c00000; font-weight:bold;">Alexandre s'il te plaît complète cette section</span>
+
+##### Windows 
+
+##### Linux 
+
+
+
 
 ### Executing program
 
