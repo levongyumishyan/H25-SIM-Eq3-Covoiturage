@@ -1,10 +1,11 @@
-# Project Title
+# Projet intégrateur (Ride/w)
 ![LOGO](temp_logo.png)
 Simple overview of use/purpose.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+Ceci est une application de covoiturage conçue pour simplifier le covoiturage au Québec.
+
 
 ## Getting Started
 
