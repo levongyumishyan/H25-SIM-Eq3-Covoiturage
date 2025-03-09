@@ -1,5 +1,5 @@
 # Project Title
-
+![LOGO](temp_logo.png)
 Simple overview of use/purpose.
 
 ## Description
