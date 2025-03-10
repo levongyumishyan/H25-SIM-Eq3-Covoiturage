@@ -1,71 +1,92 @@
-# Projet intégrateur (Ride/w)
+# Ride/w - Application de Covoiturage
+
 ![LOGO](temp_logo.png)
 
 ## Description
 
-Ceci est une application de covoiturage conçue pour simplifier le covoiturage au Québec.
+Ride/w est une application de covoiturage conçue pour simplifier et améliorer l'expérience de covoiturage au Québec. Elle permet aux utilisateurs de trouver et de proposer des trajets en toute simplicité, tout en favorisant une mobilité plus durable et économique.
 
-## Mise en route
+## Développé par
 
-Pour exécuter le projet, vous aurez besoin: 
+- **Charles Lesage**
+- **Levon Gyumishyan**
+- **Johnny Quach**
+- **Alexandre Lupascu**
 
- 1. Expo
- 2. Node.js
- 3. OS (MacOS, Linux, Windows) 
+## Prérequis
 
+Pour exécuter et développer le projet, vous aurez besoin des éléments suivants :
 
-### Installation
+- **Expo** : Un framework pour les applications React Native
+- **Node.js** : Environnement d'exécution JavaScript
+- **Système d'exploitation compatible** : macOS, Linux ou Windows
 
-##### MacOS 
+## Installation
 
-<span style="color:#c00000; font-weight:bold;">Alexandre s'il te plaît complète cette section</span>
+### 💻 Installation (Linux, macOS, Windows)
 
-##### Windows 
+#### 1️⃣ Installer Node.js
 
-##### Linux 
+- **macOS & Windows** :
+  - Téléchargez et installez Node.js depuis le site officiel [Node.js](https://nodejs.org/)
+- **Linux (Ubuntu/Debian)** :
+  ```sh
+  sudo apt update
+  sudo apt install nodejs npm
+  ```
 
+#### 2️⃣ Installer Expo CLI
 
-
-
-### Executing program
-
-* How to run the program
-* Step-by-step bullets
+Installez Expo CLI globalement en utilisant npm ou yarn :
+```sh
+npm install -g expo-cli
 ```
-code blocks for commands
-```
 
-## Help
+## Exécution de l'application
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+1. Ouvrir un terminal et naviguer dans le dossier du projet :
+   ```sh
+   cd chemin/vers/le/projet
+   ```
+2. Installer les dépendances :
+   ```sh
+   npm install
+   ```
+3. Démarrer le serveur Expo :
+   ```sh
+   expo start
+   ```
+4. Scanner le QR Code avec l'application Expo Go (iOS/Android) ou exécuter sur un émulateur
 
-## Authors
+## Aide
 
-Contributors names and contact info
+Si vous rencontrez des problèmes, vous pouvez essayer les commandes suivantes :
 
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+- Réinstaller les dépendances :
+  ```sh
+  rm -rf node_modules && npm install
+  ```
+- Réinitialiser le cache Expo :
+  ```sh
+  expo start -c
+  ```
 
-## Version History
+## Auteurs
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
+- **Charles Lesage** - [@ma17du32et422](https://github.com/ma17du32et422)
+- **Gyumishyan, Levon** - [@levongyumishyan](https://github.com/levongyumishyan)
+- **Quach, Johnny** - [@6235953](https://github.com/6235953)
+- **Lupascu, Alexandre** - [@alexandrelupascu](https://github.com/alexandrelupascu)
 
-## License
+## Licence
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+Ce projet est sous licence **MIT license**. Consultez le fichier `LICENSE.md` pour plus de détails.
 
-## Acknowledgments
+## Remerciements
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babaris.
+
+---
+
+Cette version du README est plus détaillée et mieux structurée, facilitant l'installation et l'utilisation du projet.
+
