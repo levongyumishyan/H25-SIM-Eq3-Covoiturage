@@ -6,6 +6,7 @@ import React from "react";
 import { colors } from "../fonctionalites/colors";
 import FlatButton from '../fonctionalites/button';
 import { useRouter } from 'expo-router';
+import {styles} from "../fonctionalites/styles"
 
 
 export default function Index() {
@@ -20,14 +21,8 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.gray900,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
+const stylesSheet = StyleSheet.create({
+
   content: {
     width: "100%",
     alignItems: "center",
@@ -37,12 +32,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: "bold",
-    color: colors.gray1,
+    color: colors.couleurTexte,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
-    color: colors.darkgray1,
+    color: colors.couleurTexte,
     marginBottom: 20,
   },
 });

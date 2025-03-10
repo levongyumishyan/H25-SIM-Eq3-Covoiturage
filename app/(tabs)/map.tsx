@@ -30,11 +30,11 @@ export default function MapScreen() {
 
       {/* Floating Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={colors.darkgray1} style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color={colors.blanc} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Où allez-vous ?"
-          placeholderTextColor={colors.darkgray1}
+          placeholderTextColor={colors.noir}
           value={destination}
           onChangeText={setDestination}
         />
@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: "absolute",
-    top: 50,
+    top: 70,
     left: 20,
     right: 20,
-    backgroundColor: colors.white1,
+    backgroundColor: colors.blanc,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 10,
@@ -88,15 +88,16 @@ const styles = StyleSheet.create({
   },
   searchIcon: {
     marginRight: 10,
+    color: colors.noir,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: colors.black,
+    color: colors.noir,
   },
 
   actionButton: {
-    backgroundColor: colors.green1,
+    backgroundColor: colors.vertPrincipal,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   actionText: {
-    color: colors.white1,
+    color: colors.noir,
     fontSize: 14,
     fontWeight: "bold",
     marginTop: 5,
@@ -126,19 +127,19 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   tripTitle: {
-    color: colors.white1,
+    color: colors.couleurTexte,
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 10,
   },
   tripOption: {
-    backgroundColor: colors.darkgray1,
+    backgroundColor: colors.grisPrincipal,
     padding: 10,
     borderRadius: 8,
     marginBottom: 5,
   },
   tripText: {
-    color: colors.white1,
+    color: colors.couleurTexte,
     fontSize: 14,
   },
 });

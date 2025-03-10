@@ -2,8 +2,9 @@ import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "./colors";
 
 export const styles = StyleSheet.create({
+
     linkButton: {
-    backgroundColor: colors.gray1,
+    backgroundColor: colors.grisPrincipal,
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 12,
@@ -25,13 +26,71 @@ export const styles = StyleSheet.create({
   },
 
 
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: colors.couleurTexte,
+    textAlign: "center",
+  },
+
+  subtitle: {
+    fontSize: 18,
+    color: colors.couleurTexte,
+    textAlign: "center",
+    marginTop: 10,
+  },
+
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginTop: 20,
+  },
+
+  button: {
+    backgroundColor: colors.vertPrincipal,
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+
+  buttonText: {
+    color: colors.couleurTexte,
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+
+  outlineButton: {
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: colors.couleurTexte,
+  },
+
+  outlineButtonText: {
+    color: colors.couleurTexte,
+  },
+
   map: {
       width: "100%",
       height: "80%",
     },
 
+    content: {
+      alignItems: "center",
+      width: "90%",
+    },
+
     container: {
       flex: 1,
+      backgroundColor: colors.arrierePlan,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 20,
     },
 
     barreSuperieure: {
@@ -62,13 +121,13 @@ export const styles = StyleSheet.create({
     additionalText: {
       fontSize: 16,
       textAlign: "center",
-      color: colors.darkgray1,
+      color: colors.grisPrincipal,
     },
 
     grosTitre: {
       fontSize: 32,
       textAlign: "center",
-      color: colors.white1,
+      color: colors.couleurTexte,
     },
 
 

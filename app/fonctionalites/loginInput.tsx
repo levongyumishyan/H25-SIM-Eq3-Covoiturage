@@ -25,7 +25,7 @@ const LoginInput = () => {
         onChangeText={setCourriel}
         value={courriel}
         placeholder="courriel@entreprise.ca"
-        placeholderTextColor={colors.darkgray1}
+        placeholderTextColor={colors.grisPrincipal}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -36,7 +36,7 @@ const LoginInput = () => {
         onChangeText={setMdp}
         value={mdp}
         placeholder="**********"
-        placeholderTextColor={colors.darkgray1}
+        placeholderTextColor={colors.grisPrincipal}
         secureTextEntry
       />
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     fontSize: 16,
     fontWeight: 'bold',
-    color: colors.white1,
+    color: colors.couleurTexte,
     marginBottom: 6,
   },
   input: {
@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: colors.white1,
+    color: colors.couleurTexte,
     borderWidth: 1,
-    borderColor: colors.darkgray1,
+    borderColor: colors.grisPrincipal,
     marginBottom: 12,
   },
   linksContainer: {
@@ -84,13 +84,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   link: {
-    color: colors.green1,
+    color: colors.vertPrincipal,
     fontWeight: 'bold',
     fontSize: 14,
   },
   button: {
     width: '100%',
-    backgroundColor: colors.green1,
+    backgroundColor: colors.vertPrincipal,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    color: colors.white1,
+    color: colors.couleurTexte,
     fontSize: 16,
     fontWeight: 'bold',
     textTransform: 'uppercase',

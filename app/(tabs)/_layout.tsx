@@ -1,22 +1,24 @@
 import { Tabs } from 'expo-router';
 import { colors } from '../fonctionalites/colors';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
-import { styles } from '../fonctionalites/styles';
+import { Dimensions } from 'react-native';
+
+const { width } = Dimensions.get("window");
+const iconSize = width * 0.10; 
 
 export default function TabLayout() {
   return (
     <Tabs
+
       screenOptions={{
-        tabBarActiveTintColor: colors.white1,
-        tabBarInactiveTintColor: colors.darkgray1,
+        tabBarActiveTintColor: colors.couleurSurVert,
+        tabBarInactiveTintColor: colors.couleurSurVert,
         headerTransparent: true,
         headerShown: false,
         headerTitleAlign: 'center',
         headerStyle: { backgroundColor: 'transparent' },
-        headerTintColor: colors.darkgray1,
         tabBarStyle: {
-          backgroundColor: colors.green1,
+          backgroundColor: colors.vertPrincipal,
           borderRadius: 20,
           height: 80,
           position: 'absolute',
@@ -34,37 +36,46 @@ export default function TabLayout() {
         tabBarIconStyle: {
           marginBottom: 5,
         },
+        
       }}
     >
       <Tabs.Screen 
         name="index" 
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home" color={color} size={32} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "home" : "home-outline"} 
+            color={color} 
+            size={iconSize} />
           ),
         }}
       />
       <Tabs.Screen 
         name="map" 
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="map" color={color} size={32} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "map" : "map-outline"}
+            color={color} 
+            size={iconSize} />
           ),
         }}
       />
       <Tabs.Screen 
         name="rides" 
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="car" color={color} size={32} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "car" : "car-outline"}
+            color={color} 
+            size={iconSize} />
           ),
         }}
       />
       <Tabs.Screen 
         name="account" 
         options={{
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="person" color={color} size={32} />
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "person" : "person-outline" } 
+            color={color} 
+            size={iconSize} />
           ),
         }}
       />

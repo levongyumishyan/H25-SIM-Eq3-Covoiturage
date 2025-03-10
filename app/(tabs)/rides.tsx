@@ -24,7 +24,7 @@ export default function Index() {
 
   const renderRide = ({ item }) => (
     <TouchableOpacity style={styles.rideItem}>
-      <Ionicons name="car-outline" size={24} color={colors.white1} style={styles.icon} />
+      <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
         <Text style={styles.rideText}>{item.origin} → {item.destination}</Text>
         <Text style={styles.rideTime}>{item.time} • Terminé</Text>
@@ -38,15 +38,15 @@ export default function Index() {
         {/* Statistics Section */}
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
-            <Ionicons name="leaf-outline" size={30} color={colors.green1} />
+            <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
             <Text style={styles.statText}>{stats.treesSaved} arbres sauvés</Text>
           </View>
           <View style={styles.statBox}>
-            <Ionicons name="cloud-outline" size={30} color={colors.green1} />
+            <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
             <Text style={styles.statText}>{stats.co2Reduced} CO₂ réduit</Text>
           </View>
           <View style={styles.statBox}>
-            <Ionicons name="checkmark-circle-outline" size={30} color={colors.green1} />
+            <Ionicons name="checkmark-circle-outline" size={30} color={colors.vertSecondaire} />
             <Text style={styles.statText}>{stats.ridesCompleted} trajets complétés</Text>
           </View>
         </View>
@@ -68,7 +68,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.gray900,
+    backgroundColor: colors.arrierePlan,
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   statBox: {
-    backgroundColor: colors.darkgray1,
+    backgroundColor: colors.grisPrincipal,
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   statText: {
-    color: colors.white1,
+    color: colors.couleurTexte,
     fontSize: 14,
     fontWeight: "bold",
     marginTop: 5,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: colors.gray1,
+    color: colors.couleurTexte,
     marginBottom: 15,
     textAlign: "center",
   },
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   rideItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.darkgray1,
+    backgroundColor: colors.grisPrincipal,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -124,12 +124,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rideText: {
-    color: colors.white1,
+    color: colors.couleurTexte,
     fontSize: 16,
     fontWeight: "bold",
   },
   rideTime: {
-    color: colors.green1,
+    color: colors.vertSecondaire,
     fontSize: 14,
   },
 });
