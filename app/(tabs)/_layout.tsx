@@ -2,9 +2,13 @@ import { Tabs } from 'expo-router';
 import { colors } from '../fonctionalites/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
-import { styles } from '../fonctionalites/styles';
+import { styles } from '../fonctionalites/styles';\
+import { Dimensions } from "react-native";
 
 export default function TabLayout() {
+  const { width } = Dimensions.get("window");
+  const iconSize = width * 0.08; // 8% of screen width
+  
   return (
     <Tabs
       screenOptions={{
@@ -40,7 +44,7 @@ export default function TabLayout() {
         name="index" 
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" color={color} size={32} />
+            <Ionicons name="home" color={color} size={iconSize} />
           ),
         }}
       />
@@ -48,7 +52,7 @@ export default function TabLayout() {
         name="map" 
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="map" color={color} size={32} />
+            <Ionicons name="map" color={color} size={iconSize} />
           ),
         }}
       />
@@ -56,7 +60,7 @@ export default function TabLayout() {
         name="rides" 
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="car" color={color} size={32} />
+            <Ionicons name="car" color={color} size={iconSize} />
           ),
         }}
       />
@@ -64,7 +68,7 @@ export default function TabLayout() {
         name="account" 
         options={{
           tabBarIcon: ({ color }) => (
-            <Ionicons name="person" color={color} size={32} />
+            <Ionicons name="person" color={color} size={iconSize} />
           ),
         }}
       />
