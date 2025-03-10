@@ -27,7 +27,6 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container} /> {/* Dark overlay for contrast */}
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
         <View style={styles.textContainer}>
           <Text style={styles.title}>Ride/w</Text>
