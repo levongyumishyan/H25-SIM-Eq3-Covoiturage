@@ -84,9 +84,8 @@ Ce projet est sous licence **MIT license**. Consultez le fichier `LICENSE.md` po
 
 ## Remerciements
 
-Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babaris.
+Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babari.
 
 ---
 
-Cette version du README est plus détaillée et mieux structurée, facilitant l'installation et l'utilisation du projet.
 
