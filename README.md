@@ -1,50 +1,91 @@
-# Welcome to your Expo app 👋
+# Ride/w - Application de Covoiturage
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+![LOGO](temp_logo.png)
 
-## Get started
+## Description
 
-1. Install dependencies
+Ride/w est une application de covoiturage conçue pour simplifier et améliorer l'expérience de covoiturage au Québec. Elle permet aux utilisateurs de trouver et de proposer des trajets en toute simplicité, tout en favorisant une mobilité plus durable et économique.
 
-   ```bash
-   npm install
-   ```
+## Développé par
 
-2. Start the app
+- **Charles Lesage**
+- **Levon Gyumishyan**
+- **Johnny Quach**
+- **Alexandre Lupascu**
 
-   ```bash
-    npx expo start
-   ```
+## Prérequis
 
-In the output, you'll find options to open the app in a
+Pour exécuter et développer le projet, vous aurez besoin des éléments suivants :
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **Expo** : Un framework pour les applications React Native
+- **Node.js** : Environnement d'exécution JavaScript
+- **Système d'exploitation compatible** : macOS, Linux ou Windows
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Installation
 
-## Get a fresh project
+### 💻 Installation (Linux, macOS, Windows)
 
-When you're ready, run:
+#### 1️⃣ Installer Node.js
 
-```bash
-npm run reset-project
+- **macOS & Windows** :
+  - Téléchargez et installez Node.js depuis le site officiel [Node.js](https://nodejs.org/)
+- **Linux (Ubuntu/Debian)** :
+  ```sh
+  sudo apt update
+  sudo apt install nodejs npm
+  ```
+
+#### 2️⃣ Installer Expo CLI
+
+Installez Expo CLI globalement en utilisant npm ou yarn :
+```sh
+npm install -g expo-cli
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Exécution de l'application
 
-## Learn more
+1. Ouvrir un terminal et naviguer dans le dossier du projet :
+   ```sh
+   cd chemin/vers/le/projet
+   ```
+2. Installer les dépendances :
+   ```sh
+   npm install
+   ```
+3. Démarrer le serveur Expo :
+   ```sh
+   expo start
+   ```
+4. Scanner le QR Code avec l'application Expo Go (iOS/Android) ou exécuter sur un émulateur
 
-To learn more about developing your project with Expo, look at the following resources:
+## Aide
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Si vous rencontrez des problèmes, vous pouvez essayer les commandes suivantes :
 
-## Join the community
+- Réinstaller les dépendances :
+  ```sh
+  rm -rf node_modules && npm install
+  ```
+- Réinitialiser le cache Expo :
+  ```sh
+  expo start -c
+  ```
 
-Join our community of developers creating universal apps.
+## Auteurs
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **Charles Lesage** - [@ma17du32et422](https://github.com/ma17du32et422)
+- **Gyumishyan, Levon** - [@levongyumishyan](https://github.com/levongyumishyan)
+- **Quach, Johnny** - [@6235953](https://github.com/6235953)
+- **Lupascu, Alexandre** - [@alexandrelupascu](https://github.com/alexandrelupascu)
+
+## Licence
+
+Ce projet est sous licence **MIT license**. Consultez le fichier `LICENSE.md` pour plus de détails.
+
+## Remerciements
+
+Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babari.
+
+---
+
+
