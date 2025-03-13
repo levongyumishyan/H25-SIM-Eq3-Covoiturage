@@ -4,6 +4,8 @@ import MapView, { Marker } from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../fonctionalites/colors";
+import { styles } from "../fonctionalites/styles"
+
 
 export default function MapScreen() {
   const [region, setRegion] = useState({
@@ -23,7 +25,7 @@ export default function MapScreen() {
         initialRegion={region}
         showsUserLocation={true}
         showsMyLocationButton={false}
-        customMapStyle={uberMapStyle} // Uber-like map styling
+        customMapStyle={MapStyle}
       >
         <Marker coordinate={region} title="Votre position" />
       </MapView>
@@ -43,105 +45,25 @@ export default function MapScreen() {
   );
 }
 
-const uberMapStyle = [
+const MapStyle = [
   {
     elementType: "geometry",
-    stylers: [{ color: "#212121" }],
+    stylers: [{ color: colors.grisPrincipal }],
   },
   {
     elementType: "labels.text.fill",
-    stylers: [{ color: "#757575" }],
+    stylers: [{ color: colors.couleurTexte }],
   },
   {
     elementType: "labels.text.stroke",
-    stylers: [{ color: "#212121" }],
+    stylers: [{ color: colors.grisPrincipal }],
   },
   {
     featureType: "road",
     elementType: "geometry",
-    stylers: [{ color: "#383838" }],
+    stylers: [{ color:colors.noir }],
   },
 ];
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  searchContainer: {
-    position: "absolute",
-    top: 70,
-    left: 20,
-    right: 20,
-    backgroundColor: colors.blanc,
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-  },
-  searchIcon: {
-    marginRight: 10,
-    color: colors.noir,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: colors.noir,
-  },
-
-  actionButton: {
-    backgroundColor: colors.vertPrincipal,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-  },
-  actionText: {
-    color: colors.noir,
-    fontSize: 14,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
-  tripSuggestions: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: colors.gray900,
-    borderRadius: 15,
-    padding: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-  },
-  tripTitle: {
-    color: colors.couleurTexte,
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  tripOption: {
-    backgroundColor: colors.grisPrincipal,
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 5,
-  },
-  tripText: {
-    color: colors.couleurTexte,
-    fontSize: 14,
-  },
-});
 
 export default MapScreen;

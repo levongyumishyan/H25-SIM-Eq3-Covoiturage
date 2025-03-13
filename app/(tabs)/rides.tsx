@@ -3,9 +3,10 @@ import { Text, View, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../fonctionalites/colors";
+import {styles} from "../fonctionalites/styles"
 
-export default function Index() {
-  // Mock Data for Recent Rides
+export default function Rides() {
+  
   const [rides, setRides] = useState([
     { id: "1", origin: "Centre-Ville", destination: "Aéroport", time: "12 min" },
     { id: "2", origin: "Université", destination: "Maison", time: "18 min" },
@@ -65,73 +66,4 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.arrierePlan,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  scrollContainer: {
-    paddingBottom: 20,
-  },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  statBox: {
-    backgroundColor: colors.grisPrincipal,
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  statText: {
-    color: colors.couleurTexte,
-    fontSize: 14,
-    fontWeight: "bold",
-    marginTop: 5,
-    textAlign: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: colors.couleurTexte,
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  list: {
-    paddingBottom: 20,
-  },
-  rideItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.grisPrincipal,
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  icon: {
-    marginRight: 15,
-  },
-  rideDetails: {
-    flex: 1,
-  },
-  rideText: {
-    color: colors.couleurTexte,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  rideTime: {
-    color: colors.vertSecondaire,
-    fontSize: 14,
-  },
-});
-
-export default Index;
+export default Rides;

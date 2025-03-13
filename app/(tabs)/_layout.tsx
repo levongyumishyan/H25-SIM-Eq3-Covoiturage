@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 
 const { width } = Dimensions.get("window");
-const iconSize = width * 0.10; 
+const iconSize = width * 0.075; 
 
 export default function TabLayout() {
   return (
@@ -18,21 +18,17 @@ export default function TabLayout() {
         headerStyle: { backgroundColor: 'transparent' },
         tabBarStyle: {
           backgroundColor: colors.vertPrincipal,
-          height: 90,
+          height: 80,
           position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          paddingBottom: 20,
           elevation: 8,
           shadowColor: "#000",
-          shadowOffset: { width: 0, height: 5 },
+          shadowOffset: { width: 0, height: 10 },
           shadowOpacity: 0.3,
           shadowRadius: 5,
         },
         tabBarShowLabel: false,
         tabBarIconStyle: {
-          marginBottom: -6,
+          marginTop: 15
         },
         
       }}

@@ -27,7 +27,7 @@ const LoginInput = () => {
         onChangeText={setCourriel}
         value={courriel}
         placeholder="courriel@entreprise.ca"
-        placeholderTextColor={colors.couleurTexteInverse}
+        placeholderTextColor={colors.couleurTexte}
         keyboardType="email-address"
         autoCapitalize="none"
       />
@@ -38,7 +38,7 @@ const LoginInput = () => {
         onChangeText={setMdp}
         value={mdp}
         placeholder="* * * * * * * * * *"
-        placeholderTextColor={colors.couleurTexteInverse}
+        placeholderTextColor={colors.couleurTexte}
         secureTextEntry
       />
 
@@ -54,44 +54,5 @@ const LoginInput = () => {
   );
 };
 
-const stylesSheet = StyleSheet.create({
-  label: {
-    alignSelf: 'flex-start',
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: colors.couleurTexte,
-    marginBottom: 6,
-  },
-  input: {
-    width: '100%',
-    height: 50,
-    backgroundColor: colors.gray900,
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    color: colors.couleurTexte,
-    borderWidth: 1,
-    borderColor: colors.grisPrincipal,
-    marginBottom: 12,
-  },
-  button: {
-    width: '100%',
-    backgroundColor: colors.vertPrincipal,
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonText: {
-    color: colors.couleurTexte,
-    fontSize: 16,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
-});
 
 export default LoginInput;
