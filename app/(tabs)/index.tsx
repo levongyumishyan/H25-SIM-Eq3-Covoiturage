@@ -28,11 +28,8 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
-        <View style={styles.textContainer}>
           <Text style={styles.title}>Ride/w</Text>
           <Text style={styles.subtitle}>Application de Covoiturage</Text>
-        </View>
-
         {/* Moved buttons directly below the text */}
         <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
           <TouchableOpacity 

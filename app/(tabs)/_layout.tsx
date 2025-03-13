@@ -9,7 +9,6 @@ const iconSize = width * 0.10;
 export default function TabLayout() {
   return (
     <Tabs
-
       screenOptions={{
         tabBarActiveTintColor: colors.couleurSurVert,
         tabBarInactiveTintColor: colors.couleurSurVert,
@@ -19,8 +18,7 @@ export default function TabLayout() {
         headerStyle: { backgroundColor: 'transparent' },
         tabBarStyle: {
           backgroundColor: colors.vertPrincipal,
-          borderRadius: 20,
-          height: 110,
+          height: 90,
           position: 'absolute',
           left: 0,
           right: 0,
@@ -34,7 +32,7 @@ export default function TabLayout() {
         },
         tabBarShowLabel: false,
         tabBarIconStyle: {
-          marginBottom: 5,
+          marginBottom: -6,
         },
         
       }}
