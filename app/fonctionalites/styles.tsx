@@ -216,18 +216,29 @@ export const styles = StyleSheet.create({
 
   dateButton: {
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "90%",
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: colors.grisPrincipal,
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: colors.blanc,
     marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // For Android shadow
+    paddingHorizontal: 15,
   },
+  
   dateButtonText: {
     fontSize: 16,
-    color: colors.grisPrincipal,
+    fontWeight: "600",
+    color: colors.noir, // Ensures good contrast
+    textTransform: "capitalize",
   },
+  
 
 
 });

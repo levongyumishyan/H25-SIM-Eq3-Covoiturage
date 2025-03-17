@@ -21,7 +21,7 @@ const LoginInput = () => {
 
   return (
     <SafeAreaView style={styles.textContainer}>
-      <Text style={styles.subtitle}>Courriel</Text>
+      <Text style={styles.label}>Courriel</Text>
       <TextInput
         style={styles.input}
         onChangeText={setCourriel}
@@ -32,7 +32,7 @@ const LoginInput = () => {
         autoCapitalize="none"
       />
 
-      <Text style={styles.subtitle}>Mot de passe</Text>
+      <Text style={styles.label}>Mot de passe</Text>
       <TextInput
         style={styles.input}
         onChangeText={setMdp}
@@ -47,9 +47,11 @@ const LoginInput = () => {
         <Link href="../(tabs)/inscription" style={styles.links}>Se créer un compte</Link>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={verifierConnection}>
+      <SafeAreaView style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={verifierConnection}>
         <Text style={styles.buttonText}>Se connecter</Text>
       </TouchableOpacity>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
