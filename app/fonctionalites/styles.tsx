@@ -8,10 +8,20 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
+    width: "100%",
   },
+  
 
   scrollContainer: {
-    paddingBottom: 20,
+    padding: 20,
+  },
+
+  label: {
+    alignSelf: 'flex-start',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.couleurTexte,
+    marginBottom: 6,
   },
 
   content: {
@@ -203,4 +213,21 @@ export const styles = StyleSheet.create({
   icon: {
     marginRight: 15,
   },
+
+  dateButton: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.grisPrincipal,
+    borderRadius: 8,
+    backgroundColor: colors.blanc,
+    marginBottom: 15,
+  },
+  dateButtonText: {
+    fontSize: 16,
+    color: colors.grisPrincipal,
+  },
+
+
 });
