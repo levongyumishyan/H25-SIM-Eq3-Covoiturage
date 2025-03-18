@@ -5,31 +5,55 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './colors';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import Checkbox from 'expo-checkbox';
 
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
-  const setDate = (event: DateTimePickerEvent, date: Date) => {
-    const {
-      type,
-      nativeEvent: {timestamp, utcOffset},
-    } = event;
-  };
-  
-  
-  const [conducteur, setConducteur] = useState(''); 
-  const [passager, setPassager] = useState(''); 
+  const [dateNaissance, setDateNaissance] = useState(new Date(1970,0,1));
+  const [genre, setGenre] = useState(""); 
+
+  const [telephone, setTelephone] = useState('');
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [mdpVerif, setMdpVerif] = useState('');
 
+  const [conducteur, setConducteur] = useState(false); 
+  const [passager, setPassager] = useState(false); 
+
+  const [modeleVoiture, setModeleVoiture] = useState(''); 
+  const [anneeVoiture, setAnneeVoiture] = useState('');
+  const [kilometrageVoiture, setKilometrageVoiture] = useState('');
+ 
+  const[adresse, setAdresse] = useState("");
+  const[ville, setVille] = useState("");
+  const[province, setProvince] = useState("");
+  const[codePostal, setCodePostal] = useState("");
+
+  const[urgencePrenom, setUrgencePrenom] = useState("");
+  const[urgenceNom, setUrgenceNom] = useState("");
+  const[urgenceTelephone, setUrgenceTelephone] = useState("");
+
+  const[exclusiviteCourriel, setExclusiviteCourriel] = useState(false);
+
+  const[userID, setUserID] = useState("");
+  const[dateInscription, setDateInscription] = useState(Date.now());
+  
+  const onChangeDate = (event: DateTimePickerEvent, dateNaissance?: Date) => {
+    if (dateNaissance) {
+      setDateNaissance(dateNaissance);
+    }
+  };
+
   // Vérification avec la userbase (Placeholder logic)
   const verifierConnection = () => { 
     if ((mdp == mdpVerif) && (mdp != null && mdp != "")) {
-      alert("Connexion réussie!");
+      alert("Mot de passe valide!");
     } else {
       alert("Les deux mots de passe ne sont pas identiques ou manquants");
     }
+
+    alert(dateNaissance);
   };
 
   return (
@@ -57,13 +81,25 @@ const SignUpInput = () => {
       />
 
       <Text style={styles.label}>Date de naissance</Text>   
-      <RNDateTimePicker 
-        value={new Date()} 
-        onChange={setDate}
+      <DateTimePicker
+        value={dateNaissance}
+        mode="date"
+        onChange={onChangeDate}
         maximumDate={new Date()} 
         minimumDate={new Date(1900,0,1)}
-        display="spinner"
+        /*display="spinner"*/
         />
+
+        <Text style={styles.label}>Téléphone</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={setTelephone}
+                value={telephone}
+                placeholder="(514) 666-6666"
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="numeric"
+                autoCapitalize="none"
+            />
 
       <Text style={styles.label}>Courriel</Text>
       <TextInput
@@ -94,6 +130,60 @@ const SignUpInput = () => {
         placeholderTextColor={colors.grisPrincipal}
         secureTextEntry
       />
+      <Text style={styles.label}>Sélectionner votre rôle</Text>
+      
+      <View style={styles.section}>
+        <Text style={styles.label}> Conducteur  </Text>
+        <Checkbox
+            value={conducteur}
+            onValueChange={setConducteur} 
+            color={conducteur ? colors.vertPrincipal : undefined}
+            />
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.label}> Passager  </Text>
+        <Checkbox
+            value={passager}
+            onValueChange={setPassager} 
+            color={passager ? colors.vertPrincipal : undefined}
+            />
+      </View>
+      
+      {conducteur && (
+        
+        <SafeAreaView style={styles.container}>
+            <Text style={styles.label}>Modèle de voiture</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={setModeleVoiture}
+                value={modeleVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="default"
+                autoCapitalize="none"
+            />
+            <Text style={styles.label}>Année</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={setAnneeVoiture}
+                value={anneeVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="numeric"
+                autoCapitalize="none"
+            />
+            <Text style={styles.label}>Kilométrage</Text>
+            <TextInput
+                style={styles.input}
+                onChangeText={setKilometrageVoiture}
+                value={kilometrageVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="numeric"
+                autoCapitalize="none"
+            />
+        </SafeAreaView>
+      )}
 
 
 
@@ -119,6 +209,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.couleurTexte,
     marginBottom: 6,
+  },
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
     width: '100%',
