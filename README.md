@@ -72,7 +72,7 @@ Dans le dossier 'backend', créer un fichier '.env'. Dans ce fichier, ajouter le
 
 Pour tester des requêtes HTTP manuellement :
     - Avoir l'extension VSCode 'REST Client'
-    - Dans backend -> test.http, écrire votre requête et cliquer sur 'Send request en haut à gauche du code.
+    - Dans /backend -> test.http, écrire votre requête et cliquer sur 'Send request en haut à gauche du code.
 
 
 ## Aide

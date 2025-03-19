@@ -2,7 +2,7 @@ POST http://localhost:5001/api/auth/signup
 Content-Type: application/json
 
 {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "mypassword"
+    "nom": "test1",
+    "email": "test1@example.com",
+    "mdp": "mdpuvuyg"
 }
