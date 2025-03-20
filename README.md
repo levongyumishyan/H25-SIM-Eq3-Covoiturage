@@ -52,10 +52,6 @@ npm install -g expo-cli
    ```sh
    npm install
    ```
-   * Si vous utilisez Windows, il faudrait utiliser plutôt la commande suivante :
-    ``` sh
-    npm install --force
-    ```
 3. Démarrer l'aplication Expo :
    ```sh
    expo start
@@ -87,6 +83,10 @@ Si vous rencontrez des problèmes, vous pouvez essayer les commandes suivantes :
   ```sh
   rm -rf node_modules && npm install
   ```
+   * Si vous utilisez Windows, essayez plutôt la commande suivante :
+      ``` sh
+        npm install --force
+      ```
 - Réinitialiser le cache Expo :
   ```sh
   expo start -c
@@ -105,7 +105,7 @@ Ce projet est sous licence **MIT license**. Consultez le fichier `LICENSE.md` po
 
 ## Remerciements
 
-Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babari.
+Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Raouf Babari.
 
 ---
 
