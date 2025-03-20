@@ -52,6 +52,10 @@ npm install -g expo-cli
    ```sh
    npm install
    ```
+   * Si vous utilisez Windows, il faudrait utiliser plutôt la commande suivante :
+    ``` sh
+    npm install --force
+    ```
 3. Démarrer l'aplication Expo :
    ```sh
    expo start
