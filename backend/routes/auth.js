@@ -60,7 +60,7 @@ router.post("/login", [
         if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
         const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
         if (!isMatch) return res.status(400).json({ msg: "Email ou mot de passe invalide" });
-        // génèrer le token JWT et le stocker
+        // génère le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, email } });
     } catch (err) {
