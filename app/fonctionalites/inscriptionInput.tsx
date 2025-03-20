@@ -3,19 +3,22 @@ import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './colors';
+import axios from 'axios';
 
-const LoginInput = () => {
+const InscriptionInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
 
+
   // Vérification avec la userbase (Placeholder logic)
-  const verifierConnection = () => { 
-    if (courriel === "admin" && mdp === "password") {
-      alert("Connexion réussie!");
-    } else {
-      alert("Échec de connexion :(");
-    }
+  const verifierConnection = (e) => 
+  {
+    e.preventDefault()
+    axios.post('https://localhost:8001/users', {courriel, mdp})
+    .then(result => console.log(result))
+    .catch(err=> console.log(err))
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,13 +43,9 @@ const LoginInput = () => {
         secureTextEntry
       />
 
-      <View style={styles.linksContainer}>
-        <Link href="../(tabs)/mdpOublie" style={styles.link}>Mot de passe oublié?</Link>
-        <Link href="../inscription" style={styles.link}>Se créer un compte</Link>
-      </View>
-
       <TouchableOpacity style={styles.button} onPress={verifierConnection}>
-        <Text style={styles.buttonText}>Se connecter</Text>
+
+        <Text style={styles.buttonText}>S'inscrire</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -108,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginInput;
+export default InscriptionInput;
