@@ -32,11 +32,11 @@ router.post("/signup", [
         const mdpHash = await bcrypt.hash(mdp, seed); // hache le mdp
 
         // créer et enregistrer utilisateur
-        utilisateur = new Utilisateur({prenom, nom, email, mdp: mdpHash });
+        utilisateur = new Utilisateur({prenom, nom, email, mdp: mdpHash, estConnecte: true });
         await utilisateur.save();
         // génèrer le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, user: { id: utilisateur._id, nom, prenom, email } });
+        res.json({ token, user: { id: utilisateur._id, nom, prenom, email} });
 
     } catch (err) {
         console.error(err);
@@ -60,13 +60,43 @@ router.post("/login", [
         if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
         const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
         if (!isMatch) return res.status(400).json({ msg: "Email ou mot de passe invalide" });
+        await Utilisateur.updateOne(
+            { email: email }, 
+            { $set: { estConnecte: true } }
+          );
         // génère le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, email } });
+        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: !utilisateur.estConnecte } });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Erreur server" });
     }
 });
+router.post("/logout",[], async (req, res) => {
+
+    // traitement de la connexion
+    const erreurs = validationResult(req);
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });  // retourner erreurs
+
+    const { email, mdp } = req.body;
+    try {
+        const utilisateur = await Utilisateur.findOne({ email });
+        if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
+        const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
+        if (!isMatch) return res.status(400).json({ msg: "Email ou mot de passe invalide" });
+        await Utilisateur.updateOne(
+            { email: email }, 
+            { $set: { estConnecte: false } }
+          );
+        // génère le token JWT et le stocker
+        const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: !utilisateur.estConnecte } });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Erreur server" });
+    }
+});
+
 
 module.exports = router;
