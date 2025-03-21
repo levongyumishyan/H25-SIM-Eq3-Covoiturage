@@ -9,11 +9,24 @@ const LoginInput = () => {
   const [mdp, setMdp] = useState('');
 
   // Vérification avec la userbase (Placeholder logic)
-  const verifierConnection = () => { 
-    if (courriel === "admin" && mdp === "password") {
-      alert("Connexion réussie!");
-    } else {
-      alert("Échec de connexion :(");
+  const verifierConnection = async () => { 
+    try {
+      const response = await fetch("http://" + "192.168.2.16" + ":5001/api/auth/login", { //Changer à votre local IP /ipconfig sous Windows
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: courriel,
+          mdp: mdp,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      console.log("Réponse du serveur :", data);
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
     }
   };
 

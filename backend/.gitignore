@@ -1,0 +1,4 @@
+node_modules
+
+# NE PAS COMMIT VOTRE .env !!!!
+.env 

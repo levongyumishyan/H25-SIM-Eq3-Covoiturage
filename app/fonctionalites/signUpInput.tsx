@@ -46,14 +46,27 @@ const SignUpInput = () => {
   };
 
   // Vérification avec la userbase (Placeholder logic)
-  const verifierConnection = () => { 
-    if ((mdp == mdpVerif) && (mdp != null && mdp != "")) {
-      alert("Mot de passe valide!");
-    } else {
-      alert("Les deux mots de passe ne sont pas identiques ou manquants");
+  const verifierConnection = async () => { 
+    try {
+      const response = await fetch("http://" + "192.168.2.16" + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nom: nom,
+          prenom: prenom,
+          email: courriel,
+          mdp: mdp,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      console.log("Réponse du serveur :", data);
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
     }
-
-    alert(dateNaissance);
   };
 
   return (
