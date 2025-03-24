@@ -34,7 +34,7 @@ export default function App() {
         <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
           <TouchableOpacity 
             style={styles.button} 
-            onPress={() => router.push('/account')}
+            onPress={() => router.push('/inscription')}
           >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>

@@ -52,11 +52,28 @@ npm install -g expo-cli
    ```sh
    npm install
    ```
-3. Démarrer le serveur Expo :
+3. Démarrer l'aplication Expo :
    ```sh
    expo start
    ```
 4. Scanner le QR Code avec l'application Expo Go (iOS/Android) ou exécuter sur un émulateur
+
+
+5. Démarrer le serveur :
+```sh
+   node server.js
+   ```  
+
+## Setup et developpement
+
+Dans le dossier 'backend', créer un fichier '.env'. Dans ce fichier, ajouter les lignes suivantes :
+    MONGO_URI = mongodb+srv://VOTRE_NOM_D_UTLISATEUR:VOTRE_MDP@ridew.xta2m.mongodb.net/?retryWrites=true&w=majority&appName=RideW
+    JWT_SECRET = VOTRE_CLÉE_SECRETE
+
+Pour tester des requêtes HTTP manuellement :
+    - Avoir l'extension VSCode 'REST Client'
+    - Dans /backend -> test.http, écrire votre requête et cliquer sur 'Send request en haut à gauche du code.
+
 
 ## Aide
 
@@ -66,6 +83,10 @@ Si vous rencontrez des problèmes, vous pouvez essayer les commandes suivantes :
   ```sh
   rm -rf node_modules && npm install
   ```
+   * Si vous utilisez Windows, essayez plutôt la commande suivante :
+      ``` sh
+        npm install --force
+      ```
 - Réinitialiser le cache Expo :
   ```sh
   expo start -c
@@ -84,8 +105,7 @@ Ce projet est sous licence **MIT license**. Consultez le fichier `LICENSE.md` po
 
 ## Remerciements
 
-Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Rauf Babari.
+Nous remercions le Collège du Bois de Boulogne pour avoir généreusement fourni ses ressources et son soutien pédagogique, avec une reconnaissance particulière pour les précieux conseils et consultations de Raouf Babari.
 
 ---
-
 

@@ -4,8 +4,8 @@ import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView } from 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './colors';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Checkbox from 'expo-checkbox';
+import { localIP_test } from './variablesGlobales';
 
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
@@ -48,7 +48,7 @@ const SignUpInput = () => {
   // Vérification avec la userbase (Placeholder logic)
   const verifierConnection = async () => { 
     try {
-      const response = await fetch("http://" + "192.168.2.16" + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
+      const response = await fetch("http://" + localIP_test + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,15 +94,15 @@ const SignUpInput = () => {
       />
 
       <Text style={styles.label}>Date de naissance</Text>   
-      <DateTimePicker
+      {/*<DateTimePicker
         value={dateNaissance}
         mode="date"
         onChange={onChangeDate}
         maximumDate={new Date()} 
         minimumDate={new Date(1900,0,1)}
-        /*display="spinner"*/
+        /*display="spinner"
         />
-
+        */}
         <Text style={styles.label}>Téléphone</Text>
             <TextInput
                 style={styles.input}
