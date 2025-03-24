@@ -30,7 +30,7 @@ app.use(cors());
 
 
 
-mongoose.connect("mongodb+srv://user1:win1234@ridew.xta2m.mongodb.net/", {
+mongoose.connect("mongodb+srv://nom_utilisateur:mot_de_passe@ridew.xta2m.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
