@@ -203,4 +203,22 @@ export const styles = StyleSheet.create({
   icon: {
     marginRight: 15,
   },
+
+  /** DATEPICKER */
+
+  datePickerButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: colors.grisPrincipal,
+    borderRadius: 8,
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: colors.grisPrincipal,
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: colors.couleurTexte,
+  },
 });

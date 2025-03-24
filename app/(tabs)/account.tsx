@@ -21,23 +21,3 @@ export default function Index() {
   );
 }
 
-const stylesSheet = StyleSheet.create({
-
-  content: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 20,
-  },
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    color: colors.couleurTexte,
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: colors.couleurTexte,
-    marginBottom: 20,
-  },
-});
