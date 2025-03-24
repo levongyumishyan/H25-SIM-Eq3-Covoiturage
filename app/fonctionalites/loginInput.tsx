@@ -1,19 +1,28 @@
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './colors';
+import axios from 'axios';
+
+const MONGODBURL = "http://199.202.76.102:8000/user/register";
 
 const LoginInput = () => {
-  const [courriel, setCourriel] = useState('');
-  const [mdp, setMdp] = useState('');
+  const [courriel, setCourriel] = useState<String>("");
+  const [mdp, setMdp] = useState<String>("");
+
+  console.log(courriel)
+  console.log(mdp)
 
   // Vérification avec la userbase (Placeholder logic)
-  const verifierConnection = () => { 
-    if (courriel === "admin" && mdp === "password") {
-      alert("Connexion réussie!");
-    } else {
-      alert("Échec de connexion :(");
+  const verifierConnection = async () => {
+    try
+    {
+      await axios.post(MONGODBURL, {courriel: courriel, mdp: mdp});
+    }
+    catch (error)
+    {
+      console.log(error);
     }
   };
 
