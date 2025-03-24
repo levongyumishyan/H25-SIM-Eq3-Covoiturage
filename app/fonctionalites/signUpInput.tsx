@@ -25,10 +25,48 @@ const SignUpInput = () => {
   const [anneeVoiture, setAnneeVoiture] = useState('');
   const [kilometrageVoiture, setKilometrageVoiture] = useState('');
 
+  const[adresse, setAdresse] = useState("");
+  const[ville, setVille] = useState("");
+  const[province, setProvince] = useState("");
+  const[codePostal, setCodePostal] = useState("");
+
+  const[urgencePrenom, setUrgencePrenom] = useState("");
+  const[urgenceNom, setUrgenceNom] = useState("");
+  const[urgenceTelephone, setUrgenceTelephone] = useState("");
+
+  const[exclusiviteCourriel, setExclusiviteCourriel] = useState(false);
+
+  const[userID, setUserID] = useState("");
+  const[dateInscription, setDateInscription] = useState(Date.now());
+
+
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === 'ios'); // On iOS, keep showing; on Android, hide after selection
     if (selectedDate) {
       setDateNaissance(selectedDate);
+    }
+  };
+
+  const verifierConnection = async () => { 
+    try {
+      const response = await fetch("http://" + "192.168.2.16" + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nom: nom,
+          prenom: prenom,
+          email: courriel,
+          mdp: mdp,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      console.log("Réponse du serveur :", data);
+    } catch (error) {
+      console.error("Erreur de connexion :", error);
     }
   };
 
@@ -177,7 +215,7 @@ const SignUpInput = () => {
           </SafeAreaView>
         )}
 
-        <TouchableOpacity style={styles.button} onPress={() => alert('Formulaire prêt à soumettre')}>
+        <TouchableOpacity style={styles.button} onPress={verifierConnection}>
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
       </SafeAreaView>
