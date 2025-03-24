@@ -71,6 +71,7 @@ const LoginInput = () => {
         </>
       ) : (
         <>
+        <Text style={styles.title}>Ride/W</Text>
         <Text style={styles.subtitle}>Courriel</Text>
       <TextInput
         style={styles.input}
