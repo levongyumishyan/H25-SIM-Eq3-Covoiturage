@@ -14,7 +14,6 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>{estConnecte ? "Bienvenue!" : "Déconnecté"}</Text>
         <LoginInput />        
       </View>
     </SafeAreaView>

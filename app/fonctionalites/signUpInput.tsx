@@ -5,6 +5,7 @@ import { colors } from './colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {styles} from '../fonctionalites/styles'
 import Checkbox from 'expo-checkbox';
+import { localIP_test } from './variablesGlobales';
 
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
