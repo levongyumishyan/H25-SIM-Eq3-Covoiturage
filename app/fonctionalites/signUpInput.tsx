@@ -6,9 +6,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {styles} from '../fonctionalites/styles'
 import Checkbox from 'expo-checkbox';
 import { localIP_test } from './variablesGlobales';
-
+const [prenom, setPrenom] = useState('');
 const SignUpInput = () => {
-  const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
   const [dateNaissance, setDateNaissance] = useState(new Date(1970, 0, 1));
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -66,7 +65,13 @@ const SignUpInput = () => {
       });
   
       const data = await response.json();
-  
+      
+      // Placeholder pour vérifier si un des données est vide
+      if (response == undefined)
+        {
+          alert("Une des données sont vides. Veuillez-les remplir. ")
+        }
+      //
       console.log("Réponse du serveur :", data);
     } catch (error) {
       console.error("Erreur de connexion :", error);
@@ -229,3 +234,4 @@ const SignUpInput = () => {
 };
 
 export default SignUpInput;
+export var prenom_ = prenom;
