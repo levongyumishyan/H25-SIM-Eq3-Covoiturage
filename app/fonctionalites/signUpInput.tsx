@@ -23,7 +23,7 @@ const SignUpInput = () => {
 
   const [modeleVoiture, setModeleVoiture] = useState('');
   const [anneeVoiture, setAnneeVoiture] = useState('');
-  const [kilometrageVoiture, setKilometrageVoiture] = useState('');
+  const [consommationVoiture, setConsommationVoiture] = useState('');
 
   const[adresse, setAdresse] = useState("");
   const[ville, setVille] = useState("");
@@ -34,10 +34,6 @@ const SignUpInput = () => {
   const[urgenceNom, setUrgenceNom] = useState("");
   const[urgenceTelephone, setUrgenceTelephone] = useState("");
 
-  const[exclusiviteCourriel, setExclusiviteCourriel] = useState(false);
-
-  const[userID, setUserID] = useState("");
-  const[dateInscription, setDateInscription] = useState(Date.now());
 
 
   const handleDateChange = (event, selectedDate) => {
@@ -49,7 +45,7 @@ const SignUpInput = () => {
 
   const verifierConnection = async () => { 
     try {
-      const response = await fetch("http://" + "192.168.2.16" + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
+      const response = await fetch("http://" + localIP_test + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,6 +55,13 @@ const SignUpInput = () => {
           prenom: prenom,
           email: courriel,
           mdp: mdp,
+          dateNaissance: dateNaissance,
+          telephone: telephone,
+          conducteur: conducteur,
+          passager: passager,
+          modeleVoiture: modeleVoiture,
+          anneeVoiture: anneeVoiture,
+          consommationVoiture: consommationVoiture
         }),
       });
   
@@ -159,6 +162,7 @@ const SignUpInput = () => {
         />
 
         <Text style={styles.subtitle}>Sélectionner votre rôle</Text>
+        <Text style={styles.statText}>Vous pourrez toujours changer en cours de route :)</Text>
 
         <View style={styles.container}>
           <Text style={styles.subtitle}>Conducteur</Text>
@@ -202,11 +206,11 @@ const SignUpInput = () => {
               autoCapitalize="none"
             />
 
-            <Text style={styles.subtitle}>Kilométrage</Text>
+            <Text style={styles.subtitle}>Consommation moyenne en carburant</Text>
             <TextInput
               style={styles.input}
-              onChangeText={setKilometrageVoiture}
-              value={kilometrageVoiture}
+              onChangeText={setConsommationVoiture}
+              value={consommationVoiture}
               placeholder=""
               placeholderTextColor={colors.grisPrincipal}
               keyboardType="numeric"

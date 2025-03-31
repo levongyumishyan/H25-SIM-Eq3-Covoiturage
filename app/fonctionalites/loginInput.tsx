@@ -17,11 +17,13 @@ const LoginInput = () => {
   const verifierConnection = async () => { 
     try {
       setConnecte(true);//à changer par la réponse du serveur p/r à l'utilisateur
+
       const response = await fetch("http://" + localIP_test + ":5001/api/auth/login", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        
         body: JSON.stringify({
           email: courriel,
           mdp: mdp,
@@ -69,7 +71,7 @@ const LoginInput = () => {
             <Text style={styles.buttonText}>Se déconnecter</Text>
           </TouchableOpacity>
         </>
-      ) : (
+      ) : ( //else
         <>
         <Text style={styles.title}>Ride/W</Text>
         <Text style={styles.subtitle}>Courriel</Text>

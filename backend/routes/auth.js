@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs"); // sert à hacher les mots de passe pour la 
 const jwt = require("jsonwebtoken"); // sert à génèrer un token d’authentification après la connexion ou l’inscription
 const { body, validationResult } = require("express-validator"); // sert à vérifier que les entrées utilisateur sont valides
 const Utilisateur = require("../models/Utilisateur");
+const Voiture = require("../models/Voiture"); 
 require("dotenv").config();
 
 const router = express.Router();
@@ -23,20 +24,28 @@ router.post("/signup", [
     const erreurs = validationResult(req);
     if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
 
-    const { prenom, nom, email, mdp } = req.body;
+    const { prenom, nom, dateNaissance, telephone, email, mdp, conducteur, passager, modeleVoiture, anneeVoiture, consommationVoiture } = req.body;
     try {
         let utilisateur = await Utilisateur.findOne({ email });  // cherche si l'utilisateur est déjà dans la base de données
         if (utilisateur) return res.status(400).json({ msg: "Cet utilisateur est déjà existant" });  // retourner message d'erreur
 
         const seed = await bcrypt.genSalt(10); // random seed pour l'inscription
         const mdpHash = await bcrypt.hash(mdp, seed); // hache le mdp
+        
+        let voiture;
+        if(conducteur == true){
+            voiture = new Voiture({modeleVoiture, anneeVoiture, consommationVoiture});
+            console.log("voiture créée");
+        }
+        await voiture.save();
 
         // créer et enregistrer utilisateur
-        utilisateur = new Utilisateur({prenom, nom, email, mdp: mdpHash, estConnecte: true });
+        utilisateur = new Utilisateur({prenom, nom, dateNaissance, telephone, email, mdp: mdpHash, conducteur, passager, estConnecte: true, voiture });
         await utilisateur.save();
+        console.log("utilisateur créé");
         // génèrer le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, user: { id: utilisateur._id, nom, prenom, email} });
+        res.json({ token, user: { id: utilisateur._id, nom, prenom, email, voiture} });
 
     } catch (err) {
         console.error(err);
