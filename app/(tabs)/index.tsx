@@ -27,21 +27,6 @@ export default function App() {
   }, []);
 
   // Page d'accueil en cours
-  if (estConnecte)
-  {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
-            <Text style={styles.title}>Ride/w</Text>
-            <Text style={styles.subtitle}>Application de Covoiturage</Text>
-            <Text style={styles.title}>Bienvenue, </Text>
-          {/* Moved buttons directly below the text */}
-        </Animated.View>
-      </SafeAreaView>
-    );
-  }
-  else
-  {
     return (
       <SafeAreaView style={styles.container}>
         <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
@@ -65,7 +50,6 @@ export default function App() {
         </Animated.View>
       </SafeAreaView>
     );
-  }
 }
 
 
