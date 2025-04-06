@@ -1,43 +1,59 @@
 {
-    "expo": {
-      "name": "StickerSmash",
-      "slug": "StickerSmash",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "icon": "./assets/images/icon.png",
-      "scheme": "myapp",
-      "userInterfaceStyle": "automatic",
-      "newArchEnabled": true,
-      "ios": {
-        "supportsTablet": true
+  "expo": {
+    "name": "StickerSmash",
+    "slug": "StickerSmash",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.yourappname"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
-      "android": {
-        "adaptiveIcon": {
-          "foregroundImage": "./assets/images/adaptive-icon.png",
+      "package": "com.yourcompany.yourappname",
+      "versionCode": 1
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
           "backgroundColor": "#ffffff"
-        },
-        "package": "com.yourcompany.yourappname",
-        "versionCode": 1
-      },
-      "web": {
-        "bundler": "metro",
-        "output": "static",
-        "favicon": "./assets/images/favicon.png"
-      },
-      "plugins": [
-        "expo-router",
-        [
-          "expo-splash-screen",
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibGV2b25neXVtaXNoeWFuIiwiYSI6ImNtOHcwdjVrNzEyY2sya3EydHZxb3VhNDQifQ.o5Hdh7IuAjHs-JzFYl6xrA",
+          "RNMapboxMapsVersion": "11.0.0"
+        }
+      ],
+      [
+      "expo-location",
           {
-            "image": "./assets/images/splash-icon.png",
-            "imageWidth": 200,
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "locationAlwaysAndWhenInUsePermission" : "Allow RideW to use your location.",
+            "isAndroidBackgroundLocationEnabled": true
+            
           }
         ]
-      ],
-      "experiments": {
-        "typedRoutes": true
-      }
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
+}

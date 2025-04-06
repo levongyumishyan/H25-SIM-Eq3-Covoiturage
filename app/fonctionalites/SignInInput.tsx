@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from './colors';
+import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {styles} from '../fonctionalites/styles'
+import {styles} from './Styles'
 import Checkbox from 'expo-checkbox';
-import { localIP_test } from './variablesGlobales';
+import { localIP_test } from './VariablesGlobales';
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');

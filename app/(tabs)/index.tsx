@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import {Text, TouchableOpacity, Animated } from 'react-native';
 import React, { useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors } from '../fonctionalites/colors';
-import {styles} from '../fonctionalites/styles'
-import { estConnecte } from '../fonctionalites/variablesGlobales';
+import {styles} from '../fonctionalites/Styles'
+
 
 export default function App() {
   const router = useRouter();

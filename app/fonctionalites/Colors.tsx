@@ -1,4 +1,4 @@
-import {estDarkMode} from "../fonctionalites/variablesGlobales";
+import {estDarkMode} from "./VariablesGlobales";
 
 
 export const colors = ({  //   dark        light

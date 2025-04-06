@@ -1,7 +1,6 @@
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native";
-import { Link } from "expo-router";
 import React, { useState } from "react";
-import { colors } from "../fonctionalites/colors";
+import { colors } from "../fonctionalites/Colors";
 
 export default function Index() {
   const [courriel, setCourriel] = useState('');
@@ -26,10 +25,10 @@ export default function Index() {
       color: colors.couleurTexte,
       marginBottom: 6,
     },
-    input: {
+    input: {  
       width: '100%',
       height: 50,
-      backgroundColor: colors.gray900,
+      backgroundColor: colors.grisPrincipal,
       borderRadius: 8,
       paddingHorizontal: 15,
       fontSize: 16,

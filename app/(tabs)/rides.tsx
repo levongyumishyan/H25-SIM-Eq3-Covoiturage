@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Text, View, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../fonctionalites/colors";
-import {styles} from "../fonctionalites/styles"
+import { colors } from "../fonctionalites/Colors";
+import {styles} from "../fonctionalites/Styles"
 
 export default function Rides() {
   

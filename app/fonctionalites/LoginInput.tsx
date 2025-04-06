@@ -2,9 +2,9 @@ import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from './colors';
-import { styles } from '../fonctionalites/styles';
-import { localIP_test } from './variablesGlobales';
+import { colors } from './Colors';
+import { styles } from './Styles';
+import { localIP_test } from './VariablesGlobales';
 
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');

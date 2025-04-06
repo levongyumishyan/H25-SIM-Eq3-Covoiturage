@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { colors } from "./colors";
+import { colors } from "./Colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
     top: 70,
     left: 20,
     right: 20,
+    width: "90%",
     backgroundColor: colors.blanc,
     flexDirection: "row",
     alignItems: "center",
@@ -50,6 +51,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: colors.noir,
+    width: "100%",
+    height: 50,
   },
 
   /** TEXT STYLES **/
@@ -220,5 +223,20 @@ export const styles = StyleSheet.create({
   datePickerText: {
     fontSize: 16,
     color: colors.couleurTexte,
+  },
+
+  locationButton: {
+    position: 'absolute',
+    bottom: 100,
+    right: 20,
+    backgroundColor: colors.vertPrincipal,
+    padding: 12,
+    borderRadius: 25,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    zIndex: 999,
   },
 });

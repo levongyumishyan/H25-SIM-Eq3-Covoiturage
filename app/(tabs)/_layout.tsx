@@ -1,7 +1,8 @@
 import { Tabs } from 'expo-router';
-import { colors } from '../fonctionalites/colors';
+import { colors } from '../fonctionalites/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
+import React from 'react';
 
 const { width } = Dimensions.get("window");
 const iconSize = width * 0.075; 

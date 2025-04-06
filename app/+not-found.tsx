@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 import { NavigationRouteContext } from "@react-navigation/native";
 import { navigate } from "expo-router/build/global-state/routing";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import { styles } from "./fonctionalites/styles";
+import { styles } from "./fonctionalites/Styles";
 
 export default function Index() {
   return (

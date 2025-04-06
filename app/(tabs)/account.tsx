@@ -1,12 +1,9 @@
-import { Text, View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import LoginInput from "../fonctionalites/loginInput";
-import { estConnecte } from "../fonctionalites/variablesGlobales";
+import LoginInput from "../fonctionalites/LoginInput";
 import React from "react";
-import { colors } from "../fonctionalites/colors";
-import FlatButton from '../fonctionalites/button';
 import { useRouter } from 'expo-router';
-import {styles} from "../fonctionalites/styles"
+import {styles} from "../fonctionalites/Styles"
 
 
 export default function Index() {
