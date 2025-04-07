@@ -1,3 +1,6 @@
 export var estDarkMode = true;
-export var localIP_test = "10.186.16.223";//Changer à votre local IP /ipconfig sous Windows
-export var estConnecte = false; //
+// Pour le 'localIP_test', vous pouvez
+// soit le changer à votre local IP avec la commande 'ipconfig' sous CommandPrompt (Sur Windows);
+// soit le changer à l'adresse IP de Expo lorsque le projet est démarré
+export var localIP_test = "10.186.16.223"; 
+export var estConnecte = false;
