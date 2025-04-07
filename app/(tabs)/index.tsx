@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import {styles} from '../fonctionalites/Styles'
+import { estConnecte } from '~/fonctionalites/VariablesGlobales';
 
 
 export default function App() {
@@ -32,7 +33,15 @@ export default function App() {
             <Text style={styles.title}>Ride/w</Text>
             <Text style={styles.subtitle}>Application de Covoiturage</Text>
           {/* Moved buttons directly below the text */}
-          <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
+          {estConnecte ? (
+            <>
+              <Text style={styles.title}>Bienvenue, </Text>
+              {/* À faire : utiliser la variable du prenom ou du nom de l'utilisateur*/}
+              <Text style={styles.subtitle}>nom d'utilisateur.</Text>
+            </>
+          ) : (
+            <>
+            <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
             <TouchableOpacity 
               style={styles.button} 
               onPress={() => router.push('/inscription')}
@@ -46,6 +55,8 @@ export default function App() {
               <Text style={[styles.buttonText, styles.outlineButtonText]}>Login</Text>
             </TouchableOpacity>
           </Animated.View>
+            </>
+          )}
         </Animated.View>
       </SafeAreaView>
     );
