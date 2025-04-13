@@ -5,7 +5,7 @@ import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {styles} from './Styles'
 import Checkbox from 'expo-checkbox';
-import { localIP_test } from './VariablesGlobales';
+import { localIP } from './VariablesGlobales';
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
@@ -44,7 +44,7 @@ const SignUpInput = () => {
 
   const verifierConnection = async () => { 
     try {
-      const response = await fetch("http://" + localIP_test + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
+      const response = await fetch("http://" + localIP + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,16 +1,17 @@
-import {Text, TouchableOpacity, Animated } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import {Text, TouchableOpacity, Animated, Button } from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import {styles} from '../fonctionalites/Styles'
-import { estConnecte } from '~/fonctionalites/VariablesGlobales';
+import { getConnecte } from '~/fonctionalites/VariablesGlobales';
+
 
 
 export default function App() {
-  const router = useRouter();
+  
+  const [estConnecte, setConnecte] = useState(getConnecte());
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
-
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -26,21 +27,24 @@ export default function App() {
     }).start();
   }, []);
 
+
+
+  
   // Page d'accueil en cours
     return (
       <SafeAreaView style={styles.container}>
         <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
-            <Text style={styles.title}>Ride/w</Text>
-            <Text style={styles.subtitle}>Application de Covoiturage</Text>
           {/* Moved buttons directly below the text */}
           {estConnecte ? (
             <>
-              <Text style={styles.title}>Bienvenue, </Text>
+              <Text style={styles.title}>Bienvenue sur RideW </Text>
               {/* À faire : utiliser la variable du prenom ou du nom de l'utilisateur*/}
-              <Text style={styles.subtitle}>nom d'utilisateur.</Text>
+              <Text style={styles.subtitle}>nom d'utilisateur</Text>
             </>
           ) : (
             <>
+            <Text style={styles.title}>Ride/w</Text>
+            <Text style={styles.subtitle}>Application de Covoiturage </Text>
             <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
             <TouchableOpacity 
               style={styles.button} 
