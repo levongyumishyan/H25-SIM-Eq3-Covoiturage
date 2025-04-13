@@ -51,6 +51,7 @@ npm install -g expo-cli
 2. Installer les dépendances :
    ```sh
    npm install
+   npm install expo-dev-client
    ```
 3. Démarrer l'aplication avec Expo (non recommandé) :
   
@@ -68,9 +69,11 @@ npm install -g expo-cli
     Vérifier que JAVA_HOME est bien avec une version jdk 17+
 
 4. Build l'application:
-   - npm install expo-dev-client
    - npx expo run:android
    Appuyer sur "a" pour ouvrir dans l'emulateur, "r" si ça ne charge pas
+IMPORTANT: Windows limite la longueur des "paths" à 260 caractères, ce qui pourrait être une cause lors d'un problème de build.
+Dans ce cas, changer le dossier auquel est enregistré le repository git pour un path plus court. OU voir le liens suivant pour changer le paramètre sur votre OS:
+Plus d'informations ici: https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=powershell
 
 6. Démarrer le serveur dans un autre terminal (dans le même dossier):
 ```sh
