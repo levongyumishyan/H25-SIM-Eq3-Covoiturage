@@ -1,9 +1,11 @@
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native";
 import React, { useState } from "react";
-import { colors } from "../fonctionalites/Colors";
+import { couleurs } from '../fonctionalites/Couleurs';
 
 export default function Index() {
   const [courriel, setCourriel] = useState('');
+
+  const palette = couleurs();
 
   const envoieCourrielVerif = () => { 
     {/*Envoie du courriel*/}
@@ -12,7 +14,7 @@ export default function Index() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.arrierePlan,
+      backgroundColor: palette.arrierePlan,
       alignItems: "center",
       justifyContent: "center",
       paddingHorizontal: 20,
@@ -22,19 +24,19 @@ export default function Index() {
       alignSelf: 'flex-start',
       fontSize: 16,
       fontWeight: 'bold',
-      color: colors.couleurTexte,
+      color: palette.couleurTexte,
       marginBottom: 6,
     },
     input: {  
       width: '100%',
       height: 50,
-      backgroundColor: colors.grisPrincipal,
+      backgroundColor: palette.grisPrincipal,
       borderRadius: 8,
       paddingHorizontal: 15,
       fontSize: 16,
-      color: colors.couleurTexte,
+      color: palette.couleurTexte,
       borderWidth: 1,
-      borderColor: colors.grisPrincipal,
+      borderColor: palette.grisPrincipal,
       marginBottom: 12,
     },
     linksContainer: {
@@ -44,13 +46,13 @@ export default function Index() {
       marginBottom: 15,
     },
     link: {
-      color: colors.vertPrincipal,
+      color: palette.vertPrincipal,
       fontWeight: 'bold',
       fontSize: 14,
     },
     button: {
       width: '100%',
-      backgroundColor: colors.vertPrincipal,
+      backgroundColor: palette.vertPrincipal,
       paddingVertical: 14,
       borderRadius: 8,
       alignItems: 'center',
@@ -61,7 +63,7 @@ export default function Index() {
       elevation: 5,
     },
     buttonText: {
-      color: colors.couleurTexte,
+      color: palette.couleurTexte,
       fontSize: 16,
       fontWeight: 'bold',
       textTransform: 'uppercase',
@@ -83,7 +85,7 @@ export default function Index() {
               onChangeText={setCourriel}
               value={courriel}
               placeholder="courriel@entreprise.ca"
-              placeholderTextColor={colors.grisPrincipal}
+              placeholderTextColor={palette.grisPrincipal}
               keyboardType="email-address"
               autoCapitalize="none"
             />

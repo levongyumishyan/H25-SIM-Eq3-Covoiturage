@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { colors } from '../fonctionalites/Colors';
+import { couleurs } from '../fonctionalites/Couleurs';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import React from 'react';
@@ -7,18 +7,20 @@ import React from 'react';
 const { width } = Dimensions.get("window");
 const iconSize = width * 0.075; 
 
+const palette = couleurs();
+
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.couleurSurVert,
-        tabBarInactiveTintColor: colors.couleurSurVert,
+        tabBarActiveTintColor: palette.couleurSurVert,
+        tabBarInactiveTintColor: palette.couleurSurVert,
         headerTransparent: true,
         headerShown: false,
         headerTitleAlign: 'center',
         headerStyle: { backgroundColor: 'transparent' },
         tabBarStyle: {
-          backgroundColor: colors.vertPrincipal,
+          backgroundColor: palette.vertPrincipal,
           height: 80,
           position: 'absolute',
           elevation: 8,

@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './Styles';
-import { colors } from './Colors';
+import { couleurs } from '../fonctionalites/Couleurs';
 
 const SearchBox = () => {
   const [destination, setDestination] = useState('');
+  const palette = couleurs();
 
   return (
     <View style={styles.searchContainer}>
       <Ionicons
         name="search"
         size={20}
-        color={colors.blanc}
+        color={palette.blanc}
         style={styles.searchIcon}
       />
       <TextInput

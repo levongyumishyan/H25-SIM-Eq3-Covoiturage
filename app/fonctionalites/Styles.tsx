@@ -1,10 +1,12 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { colors } from "./Colors";
+import { couleurs } from '../fonctionalites/Couleurs';
+
+const palette = couleurs();
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.arrierePlan,
+    backgroundColor: palette.arrierePlan,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -24,6 +26,15 @@ export const styles = StyleSheet.create({
     height: "100%",
   },
 
+
+  /* SECTION PROFIL */
+  profilContainer: {
+    flex: 1,
+    backgroundColor: palette.arrierePlan,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+
   /** SEARCH BAR **/
   searchContainer: {
     position: "absolute",
@@ -31,7 +42,7 @@ export const styles = StyleSheet.create({
     left: 20,
     right: 20,
     width: "90%",
-    backgroundColor: colors.blanc,
+    backgroundColor: palette.blanc,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 10,
@@ -44,13 +55,13 @@ export const styles = StyleSheet.create({
 
   searchIcon: {
     marginRight: 10,
-    color: colors.noir,
+    color: palette.noir,
   },
 
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: colors.noir,
+    color: palette.noir,
     width: "100%",
     height: 50,
   },
@@ -59,21 +70,21 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     textAlign: "center",
     marginBottom: 15,
   },
 
   subtitle: {
     fontSize: 24,
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     textAlign: "left",
     marginTop: 10,
     paddingBottom: 10,
   },
 
   statText: {
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     fontSize: 14,
     fontWeight: "bold",
     marginTop: 5,
@@ -81,7 +92,7 @@ export const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: colors.blanc,
+    color: palette.blanc,
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "uppercase",
@@ -96,7 +107,7 @@ export const styles = StyleSheet.create({
   },
 
   statBox: {
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: palette.grisPrincipal,
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -113,7 +124,7 @@ export const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: colors.vertPrincipal,
+    backgroundColor: palette.vertPrincipal,
     paddingVertical: 14,
     paddingHorizontal: 30,
     borderRadius: 25,
@@ -127,24 +138,24 @@ export const styles = StyleSheet.create({
   outlineButton: {
     backgroundColor: "transparent",
     borderWidth: 2,
-    borderColor: colors.couleurTexte,
+    borderColor: palette.couleurTexte,
   },
 
   outlineButtonText: {
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
   },
 
   /** INPUT FIELDS **/
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: palette.grisPrincipal,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     borderWidth: 1,
-    borderColor: colors.grisPrincipal,
+    borderColor: palette.grisPrincipal,
     marginBottom: 12,
   },
 
@@ -157,7 +168,7 @@ export const styles = StyleSheet.create({
   },
 
   links: {
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     width: "60%",
     flexDirection: "row",
     marginBottom: 15,
@@ -171,7 +182,7 @@ export const styles = StyleSheet.create({
   rideItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: palette.grisPrincipal,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -186,13 +197,13 @@ export const styles = StyleSheet.create({
   },
 
   rideText: {
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
     fontSize: 16,
     fontWeight: "bold",
   },
 
   rideTime: {
-    color: colors.vertSecondaire,
+    color: palette.vertSecondaire,
     fontSize: 14,
   },
 
@@ -212,24 +223,24 @@ export const styles = StyleSheet.create({
   datePickerButton: {
     width: '100%',
     height: 50,
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: palette.grisPrincipal,
     borderRadius: 8,
     justifyContent: 'center',
     paddingHorizontal: 15,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: colors.grisPrincipal,
+    borderColor: palette.grisPrincipal,
   },
   datePickerText: {
     fontSize: 16,
-    color: colors.couleurTexte,
+    color: palette.couleurTexte,
   },
 
   locationButton: {
     position: 'absolute',
     bottom: 100,
     right: 20,
-    backgroundColor: colors.vertPrincipal,
+    backgroundColor: palette.vertPrincipal,
     padding: 12,
     borderRadius: 25,
     elevation: 5,
