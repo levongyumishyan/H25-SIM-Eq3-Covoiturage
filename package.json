@@ -22,6 +22,7 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@rnmapbox/maps": "^10.1.38",
+    "dotenv": "^16.5.0",
     "expo": "^52.0.44",
     "expo-blur": "~14.0.2",
     "expo-checkbox": "~4.0.1",

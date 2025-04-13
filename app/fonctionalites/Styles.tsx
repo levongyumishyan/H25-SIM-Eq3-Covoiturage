@@ -24,36 +24,66 @@ export const styles = StyleSheet.create({
     height: "100%",
   },
 
+
   /** SEARCH BAR **/
-  searchContainer: {
-    position: "absolute",
+
+  searchBoxWrapper: {
+    position: 'absolute',
     top: 70,
     left: 20,
     right: 20,
-    width: "90%",
+    width: '90%',
     backgroundColor: colors.blanc,
-    flexDirection: "row",
-    alignItems: "center",
     borderRadius: 10,
     padding: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    zIndex: 10, // Ensure it appears above map or background
   },
-
-  searchIcon: {
-    marginRight: 10,
-    color: colors.noir,
+  
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.grisPrincipal,
+    paddingBottom: 8,
   },
-
+  
   searchInput: {
     flex: 1,
     fontSize: 16,
     color: colors.noir,
-    width: "100%",
-    height: 50,
+    paddingVertical: 8,
   },
+  
+  suggestionsContainer: {
+    marginTop: 8,
+    maxHeight: 200,
+    backgroundColor: colors.blanc,  
+  },
+  
+  rideItem: {
+    paddingVertical: 10,
+    borderBottomColor: colors.grisPrincipal,
+    borderBottomWidth: 1,
+  },
+  
+  rideDetails: {
+    paddingHorizontal: 5,
+  },
+  
+  suggestionText: {
+    fontSize: 16,
+    color: colors.couleurTexte,
+  },
+  
+  suggestionSubText: {
+    fontSize: 12,
+    color: colors.grisPrincipal,
+  },
+  
 
   /** TEXT STYLES **/
   title: {
@@ -239,4 +269,9 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 999,
   },
+
+
+  
+
+
 });
