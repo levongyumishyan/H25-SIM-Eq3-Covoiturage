@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {styles} from './Styles'
 import Checkbox from 'expo-checkbox';
@@ -33,7 +33,7 @@ const SignUpInput = () => {
   const[urgenceNom, setUrgenceNom] = useState("");
   const[urgenceTelephone, setUrgenceTelephone] = useState("");
 
-  const palette = couleurs();
+  const palette = useCouleurs();
 
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === 'ios'); // On iOS, keep showing; on Android, hide after selection

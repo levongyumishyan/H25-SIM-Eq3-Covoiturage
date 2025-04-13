@@ -2,12 +2,12 @@ import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { couleurs } from './Couleurs';
+import { useCouleurs } from './Couleurs';
 import { styles } from './Styles';
 import { localIP_test } from './VariablesGlobales';
 
 const LoginInput = () => {
-  const palette = couleurs(); // ✅ Appel de la fonction couleurs()
+  const palette = useCouleurs();
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [estConnecte, setConnecte] = useState(false);

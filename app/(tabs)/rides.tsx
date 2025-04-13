@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Text, View, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 import {styles} from "../fonctionalites/Styles"
 
 export default function Rides() {
   
-  const palette = couleurs();
+  const palette = useCouleurs();
 
   const [rides, setRides] = useState([
     { id: "1", origin: "Centre-Ville", destination: "Aéroport", time: "12 min" },

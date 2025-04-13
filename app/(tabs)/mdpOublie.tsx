@@ -1,11 +1,11 @@
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native";
 import React, { useState } from "react";
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 
 export default function Index() {
   const [courriel, setCourriel] = useState('');
 
-  const palette = couleurs();
+  const palette = useCouleurs();
 
   const envoieCourrielVerif = () => { 
     {/*Envoie du courriel*/}

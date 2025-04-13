@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import React from 'react';
@@ -7,7 +7,7 @@ import React from 'react';
 const { width } = Dimensions.get("window");
 const iconSize = width * 0.075; 
 
-const palette = couleurs();
+const palette = useCouleurs();
 
 export default function TabLayout() {
   return (

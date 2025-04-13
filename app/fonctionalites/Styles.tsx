@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 
-const palette = couleurs();
+const palette = useCouleurs();
 
 export const styles = StyleSheet.create({
   container: {

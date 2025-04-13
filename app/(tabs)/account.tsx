@@ -1,10 +1,11 @@
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
-import { TextInput, Text, TouchableOpacity, View } from 'react-native';
+import { TextInput, Text, TouchableOpacity, View, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { couleurs } from '../fonctionalites/Couleurs';
+import { useCouleurs } from '../fonctionalites/Couleurs';
 import { styles } from '../fonctionalites/Styles';
 import { localIP_test } from '../fonctionalites/VariablesGlobales';
+import { useTheme } from '../fonctionalites/ThemeSysteme.js';
 
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
@@ -12,7 +13,9 @@ const LoginInput = () => {
   const [estConnecte, setConnecte] = useState(false);
   const [messageErreur, setMessageErreur] = useState("");
 
-  const palette = couleurs(); // Appel de la fonction couleurs()
+  const palette = useCouleurs(); // Appel de la fonction couleurs()
+  const { estModeSombre, basculerMode } = useTheme();
+
 
   const verifierConnection = async () => {
     try {
@@ -67,13 +70,21 @@ const LoginInput = () => {
   return (
     <SafeAreaView style={styles.textContainer}>
       {estConnecte ? (
-        <>
-          <Text style={styles.title}>Bienvenue!</Text>
-          <TouchableOpacity style={styles.button} onPress={deconnection}>
-            <Text style={styles.buttonText}>Se déconnecter</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
+    <>
+      <Text style={styles.title}>Bienvenue!</Text>
+      
+      <TouchableOpacity style={styles.button} onPress={deconnection}>
+        <Text style={styles.buttonText}>Se déconnecter</Text>
+      </TouchableOpacity>
+
+      <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={{ marginRight: 10 }}>
+          Mode {estModeSombre ? 'sombre' : 'clair'}
+        </Text>
+        <Switch value={estModeSombre} onValueChange={basculerMode} />
+      </View>
+    </>
+  ) : (
         <>
           <Text style={styles.title}>Ride/W</Text>
           <Text style={styles.subtitle}>Courriel</Text>
