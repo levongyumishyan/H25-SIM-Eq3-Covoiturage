@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useRouter } from 'expo-router';
 import {styles} from '../fonctionalites/Styles'
-import { getConnecte } from '~/fonctionalites/VariablesGlobales';
-
-
+import { useAuthStore } from '~/fonctionalites/VariablesGlobales';
+import '../fonctionalites/LoginInput.tsx';
+  
 
 export default function App() {
+  const estConnecte = useAuthStore((state) => state.value);
   
-  const [estConnecte, setConnecte] = useState(getConnecte());
+  //const [estConnecte, setConnecte] = useState(getConnecte());
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   useEffect(() => {

@@ -3,14 +3,16 @@ import { StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-nativ
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './Colors';
 import { styles } from './Styles';
-import { getConnecte, localIP } from './VariablesGlobales';
+import {  localIP, useAuthStore } from './VariablesGlobales';
 import { useState } from 'react';
+import React from 'react';
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState(""); // Ajout du state pour gérer l'erreur
 
-  const [estConnecte, setConnecte] = useState(getConnecte());
+  const estConnecte = useAuthStore((state) => state.value);
+  const setConnecte = useAuthStore((state) => state.setEstConnecte);
 
   const verifierConnection = async () => { 
     try {
@@ -34,6 +36,7 @@ const LoginInput = () => {
       console.log("Réponse du serveur :", data);
       setMessageErreur(""); // Effacer l'erreur si connexion réussie
       setConnecte(true);
+      
     } catch (error) {
       console.error("Erreur de connexion :", error.message);
       setMessageErreur(error.message); // Stocker l'erreur pour affichage
@@ -55,7 +58,7 @@ const LoginInput = () => {
 
       const data = await response2.json();
       console.log("Réponse du serveur :", data);
-      setConnecte(false);    
+      setConnecte(false); 
     } catch (error) {
       console.error("Erreur de déconnexion :", error);
     }
