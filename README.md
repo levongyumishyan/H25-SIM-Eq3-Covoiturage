@@ -52,6 +52,7 @@ npm install -g expo-cli
    ```sh
    npm install
    npm install expo-dev-client
+   npm install zustand
    ```
 3. Démarrer l'aplication avec Expo (non recommandé) :
   

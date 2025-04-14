@@ -1,20 +1,22 @@
-import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import { Link, useRouter } from 'expo-router';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './Colors';
 import { styles } from './Styles';
-import { localIP_test } from './VariablesGlobales';
-
+import {  localIP, useAuthStore } from './VariablesGlobales';
+import { useState } from 'react';
+import React from 'react';
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
-  const [estConnecte, setConnecte] = useState(false);
   const [messageErreur, setMessageErreur] = useState(""); // Ajout du state pour gérer l'erreur
+
+  const estConnecte = useAuthStore((state) => state.value);
+  const setConnecte = useAuthStore((state) => state.setEstConnecte);
 
   const verifierConnection = async () => { 
     try {
-      const response = await fetch(`http://${localIP_test}:5001/api/auth/login`, { 
+      const response = await fetch('http://' + localIP + ':5001/api/auth/login', { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,7 +36,7 @@ const LoginInput = () => {
       console.log("Réponse du serveur :", data);
       setMessageErreur(""); // Effacer l'erreur si connexion réussie
       setConnecte(true);
-  
+      
     } catch (error) {
       console.error("Erreur de connexion :", error.message);
       setMessageErreur(error.message); // Stocker l'erreur pour affichage
@@ -43,8 +45,7 @@ const LoginInput = () => {
 
   const deconnection = async () => { 
     try {
-      setConnecte(false);
-      const response2 = await fetch(`http://${localIP_test}:5001/api/auth/logout`, { 
+      const response2 = await fetch('http://' + localIP + ':5001/api/auth/logout', { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,6 +58,7 @@ const LoginInput = () => {
 
       const data = await response2.json();
       console.log("Réponse du serveur :", data);
+      setConnecte(false); 
     } catch (error) {
       console.error("Erreur de déconnexion :", error);
     }
