@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.arrierePlan,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
 
   scrollContainer: {
@@ -17,6 +17,7 @@ export const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     width: "100%",
+    flex: 10,
   },
 
   map: {
@@ -94,12 +95,20 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  subtitle: {
+  subtitleMoyen: {
     fontSize: 24,
     color: colors.couleurTexte,
     textAlign: "left",
     marginTop: 10,
     paddingBottom: 10,
+  },
+
+  subtitlePetit: {
+    fontSize: 14,
+    color: colors.couleurTexte,
+    textAlign: "left",
+    marginTop: 5,
+    paddingBottom: 5,
   },
 
   statText: {
@@ -166,16 +175,16 @@ export const styles = StyleSheet.create({
 
   /** INPUT FIELDS **/
   input: {
-    width: "100%",
-    height: 50,
+    width: "90%",
+    height: 40,
     backgroundColor: colors.grisPrincipal,
-    borderRadius: 8,
-    paddingHorizontal: 15,
+    borderRadius: 6,
+    paddingHorizontal: 20,
     fontSize: 16,
     color: colors.couleurTexte,
     borderWidth: 1,
     borderColor: colors.grisPrincipal,
-    marginBottom: 12,
+    marginBottom: 10,
   },
 
   /** LINKS **/
@@ -233,6 +242,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 20,
   },
 
+  
+
   icon: {
     marginRight: 15,
   },
@@ -241,12 +252,12 @@ export const styles = StyleSheet.create({
 
   datePickerButton: {
     width: '100%',
-    height: 50,
+    height: 40,
     backgroundColor: colors.grisPrincipal,
-    borderRadius: 8,
+    borderRadius: 6,
     justifyContent: 'center',
-    paddingHorizontal: 15,
-    marginBottom: 12,
+    paddingHorizontal: 20,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: colors.grisPrincipal,
   },

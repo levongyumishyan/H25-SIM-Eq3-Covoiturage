@@ -65,7 +65,8 @@ const LoginInput = () => {
   };
 
   return (
-    <SafeAreaView style={styles.textContainer}>
+    <SafeAreaView style= {styles.content}>
+      <SafeAreaView style={styles.textContainer}>
       {estConnecte ? (
         <>
           <Text style={styles.title}>Bienvenue!</Text>
@@ -76,7 +77,7 @@ const LoginInput = () => {
       ) : (
         <>
           <Text style={styles.title}>Ride/W</Text>
-          <Text style={styles.subtitle}>Courriel</Text>
+          <Text style={styles.subtitleMoyen}>Courriel</Text>
           <TextInput
             style={styles.input}
             onChangeText={setCourriel}
@@ -87,7 +88,7 @@ const LoginInput = () => {
             autoCapitalize="none"
           />
 
-          <Text style={styles.subtitle}>Mot de passe</Text>
+          <Text style={styles.subtitleMoyen}>Mot de passe</Text>
           <TextInput
             style={styles.input}
             onChangeText={setMdp}
@@ -111,6 +112,8 @@ const LoginInput = () => {
         </>
       )}
     </SafeAreaView>
+    </SafeAreaView>
+    
   );
 };
 

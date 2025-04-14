@@ -81,7 +81,7 @@ const SignUpInput = () => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.subtitle}>Prénom</Text>
+        <Text style={styles.subtitlePetit}>Prénom</Text>
         <TextInput
           style={styles.input}
           onChangeText={setPrenom}
@@ -92,7 +92,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Nom</Text>
+        <Text style={styles.subtitlePetit}>Nom</Text>
         <TextInput
           style={styles.input}
           onChangeText={setNom}
@@ -103,7 +103,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Date de naissance</Text>
+        <Text style={styles.subtitlePetit}>Date de naissance</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={() => setShowDatePicker(true)}
@@ -124,7 +124,7 @@ const SignUpInput = () => {
           />
         )}
 
-        <Text style={styles.subtitle}>Téléphone</Text>
+        <Text style={styles.subtitlePetit}>Téléphone</Text>
         <TextInput
           style={styles.input}
           onChangeText={setTelephone}
@@ -135,7 +135,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Courriel</Text>
+        <Text style={styles.subtitlePetit}>Courriel</Text>
         <TextInput
           style={styles.input}
           onChangeText={setCourriel}
@@ -146,7 +146,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Mot de passe</Text>
+        <Text style={styles.subtitlePetit}>Mot de passe</Text>
         <TextInput
           style={styles.input}
           onChangeText={setMdp}
@@ -156,7 +156,7 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitle}>Vérifier votre mot de passe</Text>
+        <Text style={styles.subtitlePetit}>Vérifier votre mot de passe</Text>
         <TextInput
           style={styles.input}
           onChangeText={setMdpVerif}
@@ -166,63 +166,6 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitle}>Sélectionner votre rôle</Text>
-        <Text style={styles.statText}>Vous pourrez toujours changer en cours de route :)</Text>
-
-        <View style={styles.container}>
-          <Text style={styles.subtitle}>Conducteur</Text>
-          <Checkbox
-            value={conducteur}
-            onValueChange={setConducteur}
-            color={conducteur ? colors.vertPrincipal : undefined}
-          />
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.subtitle}>Passager</Text>
-          <Checkbox
-            value={passager}
-            onValueChange={setPassager}
-            color={passager ? colors.vertPrincipal : undefined}
-          />
-        </View>
-
-        {conducteur && (
-          <SafeAreaView style={styles.container}>
-            <Text style={styles.subtitle}>Modèle de voiture</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setModeleVoiture}
-              value={modeleVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="default"
-              autoCapitalize="none"
-            />
-
-            <Text style={styles.subtitle}>Année</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setAnneeVoiture}
-              value={anneeVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="numeric"
-              autoCapitalize="none"
-            />
-
-            <Text style={styles.subtitle}>Consommation moyenne en carburant</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setConsommationVoiture}
-              value={consommationVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="numeric"
-              autoCapitalize="none"
-            />
-          </SafeAreaView>
-        )}
 
         <TouchableOpacity style={styles.button} onPress={verifierConnection}>
           <Text style={styles.buttonText}>S'inscrire</Text>

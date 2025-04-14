@@ -40,12 +40,12 @@ export default function App() {
             <>
               <Text style={styles.title}>Bienvenue sur RideW </Text>
               {/* À faire : utiliser la variable du prenom ou du nom de l'utilisateur*/}
-              <Text style={styles.subtitle}>nom d'utilisateur</Text>
+              <Text style={styles.subtitleMoyen}>nom d'utilisateur</Text>
             </>
           ) : (
             <>
             <Text style={styles.title}>Ride/w</Text>
-            <Text style={styles.subtitle}>Application de Covoiturage </Text>
+            <Text style={styles.subtitleMoyen}>Application de Covoiturage </Text>
             <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
             <TouchableOpacity 
               style={styles.button} 
@@ -66,6 +66,3 @@ export default function App() {
       </SafeAreaView>
     );
 }
-
-
-export default App;
