@@ -24,5 +24,5 @@ app.get("/", (req, res) => {
     res.send("API is running...");
 });
 
-const PORT = process.env.PORT || 5001; // run sur le port 5001, changer si le port est déjà utilisé sur votre machine
-app.listen(PORT, () => console.log(`Server marche sur le port : ${PORT}`));
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => console.log(`Server marche sur le port : ${PORT}`)); 

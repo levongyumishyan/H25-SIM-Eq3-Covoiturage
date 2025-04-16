@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 import { colors } from './Colors';
 import { styles } from './Styles';
-import { localIP, useAuthStore } from './VariablesGlobales';
+import { useAuthStore } from './VariablesGlobales';
+import { BASE_URL } from '../apiConfig'; // ✅ Using hosted backend
 
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
@@ -14,11 +15,11 @@ const LoginInput = () => {
 
   const estConnecte = useAuthStore((state) => state.value);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
-  const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur); // <-- déplacé ici ✅
+  const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
 
   const verifierConnection = async () => {
     try {
-      const response = await fetch(`http://${localIP}:5001/api/auth/login`, {
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: courriel, mdp }),
@@ -29,9 +30,8 @@ const LoginInput = () => {
 
       setMessageErreur('');
       setConnecte(true);
-      setNomUtilisateur(data.utilisateur?.nom || 'utilisateur'); 
+      setNomUtilisateur(data.utilisateur?.nom || 'utilisateur');
       setNomUtilisateurLocal(data.utilisateur?.nom || 'utilisateur');
-
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       setMessageErreur(error.message);
@@ -40,7 +40,7 @@ const LoginInput = () => {
 
   const deconnection = async () => {
     try {
-      const response = await fetch(`http://${localIP}:5001/api/auth/logout`, {
+      const response = await fetch(`${BASE_URL}/api/auth/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: courriel, mdp }),
@@ -85,7 +85,6 @@ const LoginInput = () => {
               onChangeText={setMdp}
               value={mdp}
               placeholder="**********"
-              textColor={colors.couleurTexteInverse}
               placeholderTextColor={colors.couleurTexteInverse}
               secureTextEntry
             />
