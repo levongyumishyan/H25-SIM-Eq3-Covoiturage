@@ -61,7 +61,7 @@ const SearchBox = () => {
         }}
       >
         <View>
-          <Text style={styles.label}>{place_name}</Text>
+          <Text style={styles.labelInverse}>{place_name}</Text>
         </View>
       </TouchableOpacity>
     );
