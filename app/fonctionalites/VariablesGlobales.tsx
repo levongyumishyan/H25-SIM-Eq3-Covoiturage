@@ -9,11 +9,15 @@ export var localIP = "10.0.2.2"; //Platforme locale de l'emulateur: IOS: 127.0.0
 //export var estConnecte = false;
 
 interface AuthState {
-    value: boolean;
-    setEstConnecte: (val: boolean) => void;
-  }
+  nomUtilisateur: string;
+  value: boolean;
+  setEstConnecte: (val: boolean) => void;
+  setNomUtilisateur: (nom: string) => void;
+}
 
 export const useAuthStore = create<AuthState>((set) => ({
-    value: false,
-    setEstConnecte: (val) => set({ value: val }),
-  }));
+  value: false,
+  nomUtilisateur: '',
+  setEstConnecte: (val) => set({ value: val }),
+  setNomUtilisateur: (nom) => set({ nomUtilisateur: nom }),
+}));

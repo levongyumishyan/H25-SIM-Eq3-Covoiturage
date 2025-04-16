@@ -33,16 +33,32 @@ router.post("/signup", [
         const mdpHash = await bcrypt.hash(mdp, seed); // hache le mdp
         
         let voiture;
-        if(conducteur == true){
-            voiture = new Voiture({modeleVoiture, anneeVoiture, consommationVoiture});
-            console.log("voiture créée");
+        if (conducteur == true) {
+          voiture = new Voiture({
+            modeleVoiture,
+            anneeVoiture,
+            consommationVoiture
+          });
+          await voiture.save();
+          console.log("voiture créée");
         }
-        await voiture.save();
 
         // créer et enregistrer utilisateur
-        utilisateur = new Utilisateur({prenom, nom, dateNaissance, telephone, email, mdp: mdpHash, conducteur, passager, estConnecte: true, voiture });
-        await utilisateur.save();
-        console.log("utilisateur créé");
+        // maintenant on peut l’utiliser dans Utilisateur, même s’il est undefined
+        utilisateur = new Utilisateur({
+        prenom,
+        nom,
+        dateNaissance,
+        telephone,
+        email,
+        mdp: mdpHash,
+        conducteur,
+        passager,
+        estConnecte: true,
+        voiture
+    });
+  await utilisateur.save();
+  console.log("utilisateur créé");
         // génèrer le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.json({ token, user: { id: utilisateur._id, nom, prenom, email, voiture} });

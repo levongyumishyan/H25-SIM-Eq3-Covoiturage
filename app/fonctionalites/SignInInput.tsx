@@ -43,7 +43,7 @@ const SignUpInput = () => {
   const [urgenceTelephone, setUrgenceTelephone] = useState('');
 
   const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === 'ios');
+    setShowDatePicker(Platform.OS === 'ios'); // Keep open on iOS
     if (selectedDate) {
       setDateNaissance(selectedDate);
     }
@@ -53,26 +53,30 @@ const SignUpInput = () => {
     try {
       const response = await fetch(`http://${localIP}:5001/api/auth/signup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          nom,
-          prenom,
+          nom: nom,
+          prenom: prenom,
           email: courriel,
-          mdp,
-          dateNaissance,
-          telephone,
-          conducteur,
-          passager,
-          modeleVoiture,
-          anneeVoiture,
-          consommationVoiture,
+          mdp: mdp,
+          dateNaissance: dateNaissance,
+          telephone: telephone,
+          conducteur: conducteur,
+          passager: passager,
+          modeleVoiture: modeleVoiture,
+          anneeVoiture: anneeVoiture,
+          consommationVoiture: consommationVoiture,
         }),
       });
 
       const data = await response.json();
+
       if (response === undefined) {
         alert('Une des données est vide. Veuillez les remplir.');
       }
+
       console.log('Réponse du serveur :', data);
     } catch (error) {
       console.error('Erreur de connexion :', error);
@@ -88,7 +92,7 @@ const SignUpInput = () => {
 
         <Text style={styles.subtitle}>Prénom</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setPrenom}
           value={prenom}
           placeholder=""
@@ -97,9 +101,9 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitlePetit}>Nom</Text>
+        <Text style={styles.subtitle}>Nom</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setNom}
           value={nom}
           placeholder=""
@@ -108,7 +112,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitlePetit}>Date de naissance</Text>
+        <Text style={styles.subtitle}>Date de naissance</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={() => setShowDatePicker(true)}
@@ -129,9 +133,9 @@ const SignUpInput = () => {
           />
         )}
 
-        <Text style={styles.subtitlePetit}>Téléphone</Text>
+        <Text style={styles.subtitle}>Téléphone</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setTelephone}
           value={telephone}
           placeholder="(514) 666-6666"
@@ -140,9 +144,9 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitlePetit}>Courriel</Text>
+        <Text style={styles.subtitle}>Courriel</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setCourriel}
           value={courriel}
           placeholder="courriel@entreprise.ca"
@@ -151,9 +155,9 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitlePetit}>Mot de passe</Text>
+        <Text style={styles.subtitle}>Mot de passe</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setMdp}
           value={mdp}
           placeholder="**********"
@@ -161,9 +165,9 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitlePetit}>Vérifier votre mot de passe</Text>
+        <Text style={styles.subtitle}>Vérifier votre mot de passe</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setMdpVerif}
           value={mdpVerif}
           placeholder="**********"
@@ -176,69 +180,68 @@ const SignUpInput = () => {
           Vous pourrez toujours changer en cours de route :)
         </Text>
 
-        <View style={[styles.centeredRow, { justifyContent: 'space-around', width: '100%', marginVertical: 12 }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Checkbox
-              value={conducteur}
-              onValueChange={setConducteur}
-              color={conducteur ? colors.vertPrincipal : undefined}
-            />
-            <Text style={[styles.label, { marginLeft: 8 }]}>Conducteur</Text>
-          </View>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.container}>
+          <Text style={styles.subtitle}>Conducteur</Text>
+          <Checkbox
+            value={conducteur}
+            onValueChange={setConducteur}
+            color={conducteur ? colors.vertPrincipal : undefined}
+          />
+        </View>
+        <View style={styles.centeredRow}>
+          <View style={styles.container}>
+            <Text style={styles.subtitle}>Passager</Text>
             <Checkbox
               value={passager}
               onValueChange={setPassager}
               color={passager ? colors.vertPrincipal : undefined}
             />
-            <Text style={[styles.label, { marginLeft: 8 }]}>Passager</Text>
           </View>
+
+          {conducteur && (
+            <SafeAreaView style={styles.container}>
+              <Text style={styles.subtitle}>Modèle de voiture</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setModeleVoiture}
+                value={modeleVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="default"
+                autoCapitalize="none"
+              />
+
+              <Text style={styles.subtitle}>Année</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setAnneeVoiture}
+                value={anneeVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="numeric"
+                autoCapitalize="none"
+              />
+
+              <Text style={styles.subtitle}>
+                Consommation moyenne en carburant
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setConsommationVoiture}
+                value={consommationVoiture}
+                placeholder=""
+                placeholderTextColor={colors.grisPrincipal}
+                keyboardType="numeric"
+                autoCapitalize="none"
+              />
+            </SafeAreaView>
+          )}
         </View>
-
-        {conducteur && (
-          <SafeAreaView style={styles.container}>
-            <Text style={styles.subtitle}>Modèle de voiture</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setModeleVoiture}
-              value={modeleVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="default"
-              autoCapitalize="none"
-            />
-
-            <Text style={styles.subtitle}>Année</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setAnneeVoiture}
-              value={anneeVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="numeric"
-              autoCapitalize="none"
-            />
-
-            <Text style={styles.subtitle}>Consommation moyenne en carburant</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setConsommationVoiture}
-              value={consommationVoiture}
-              placeholder=""
-              placeholderTextColor={colors.grisPrincipal}
-              keyboardType="numeric"
-              autoCapitalize="none"
-            />
-          </SafeAreaView>
-        )}
 
         <TouchableOpacity style={styles.button} onPress={verifierConnection}>
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
       </SafeAreaView>
-
-      {/* Bottom space */}
       <Text>{'\n'.repeat(10)}</Text>
     </ScrollView>
   );

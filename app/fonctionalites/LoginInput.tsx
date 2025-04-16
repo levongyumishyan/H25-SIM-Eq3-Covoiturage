@@ -10,9 +10,11 @@ const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState('');
+  const [nomUtilisateur, setNomUtilisateurLocal] = useState('');
 
   const estConnecte = useAuthStore((state) => state.value);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
+  const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur); // <-- déplacé ici ✅
 
   const verifierConnection = async () => {
     try {
@@ -27,6 +29,9 @@ const LoginInput = () => {
 
       setMessageErreur('');
       setConnecte(true);
+      setNomUtilisateur(data.utilisateur?.nom || 'utilisateur'); 
+      setNomUtilisateurLocal(data.utilisateur?.nom || 'utilisateur');
+
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       setMessageErreur(error.message);
@@ -50,38 +55,40 @@ const LoginInput = () => {
   };
 
   return (
-    <SafeAreaView style= {styles.content}>
-      <SafeAreaView style={styles.textContainer}>
-      {estConnecte ? (
-        <>
-          <Text style={styles.title}>Bienvenue!</Text>
-          <TouchableOpacity style={styles.button} onPress={deconnection}>
-            <Text style={styles.buttonText}>Se déconnecter</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <Text style={styles.title}>Ride/W</Text>
-          <Text style={styles.subtitleMoyen}>Courriel</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setCourriel}
-            value={courriel}
-            placeholder="courriel@entreprise.ca"
-            placeholderTextColor={colors.couleurTexte}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.centeredColumn}>
+        {estConnecte ? (
+          <>
+            <Text style={styles.subtitle}>Bienvenue! {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
+            <TouchableOpacity style={styles.button} onPress={deconnection}>
+              <Text style={styles.buttonText}>Se déconnecter</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <Text style={styles.title}>Ride/W</Text>
 
-          <Text style={styles.subtitleMoyen}>Mot de passe</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setMdp}
-            value={mdp}
-            placeholder="* * * * * * * * * *"
-            placeholderTextColor={colors.couleurTexte}
-            secureTextEntry
-          />
+            <Text style={styles.subtitle}>Courriel</Text>
+            <TextInput
+              style={[styles.input, { color: colors.couleurTexteInverse }]}
+              onChangeText={setCourriel}
+              value={courriel}
+              placeholder="courriel@entreprise.ca"
+              placeholderTextColor={colors.couleurTexteInverse}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            <Text style={styles.subtitle}>Mot de passe</Text>
+            <TextInput
+              style={[styles.input, { color: colors.couleurTexteInverse }]}
+              onChangeText={setMdp}
+              value={mdp}
+              placeholder="**********"
+              textColor={colors.couleurTexteInverse}
+              placeholderTextColor={colors.couleurTexteInverse}
+              secureTextEntry
+            />
 
             {messageErreur ? (
               <Text style={{ color: 'red', textAlign: 'center' }}>{messageErreur}</Text>
@@ -92,14 +99,13 @@ const LoginInput = () => {
               <Link href="../(tabs)/inscription" style={styles.linkText}>Se créer un compte</Link>
             </View>
 
-          <TouchableOpacity style={styles.button} onPress={verifierConnection}>
-            <Text style={styles.buttonText}>Se connecter</Text>
-          </TouchableOpacity>
-        </>
-      )}
+            <TouchableOpacity style={styles.button} onPress={verifierConnection}>
+              <Text style={styles.label}>Se connecter</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </SafeAreaView>
-    </SafeAreaView>
-    
   );
 };
 

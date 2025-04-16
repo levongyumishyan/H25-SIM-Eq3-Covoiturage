@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
   },
   subtitle: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: '600',
     color: colors.couleurTexte,
     marginBottom: 10,
