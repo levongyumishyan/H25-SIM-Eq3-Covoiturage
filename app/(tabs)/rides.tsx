@@ -24,11 +24,11 @@ export default function Rides() {
   };
 
   const renderRide = ({ item }) => (
-    <TouchableOpacity style={styles.rideItem}>
+    <TouchableOpacity style={styles.ridecontainer}>
       <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
-        <Text style={styles.rideText}>{item.origin} → {item.destination}</Text>
-        <Text style={styles.rideTime}>{item.time} • Terminé</Text>
+        <Text style={styles.label}>{item.origin} → {item.destination}</Text>
+        <Text style={styles.smallText}>{item.time} • Terminé</Text>
       </View>
     </TouchableOpacity>
   );
@@ -37,18 +37,18 @@ export default function Rides() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Statistics Section */}
-        <View style={styles.statsContainer}>
-          <View style={styles.statBox}>
+        <View style={styles.centeredRow}>
+          <View style={styles.centeredColumn}>
             <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.statText}>{stats.treesSaved} arbres sauvés</Text>
+            <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
           </View>
-          <View style={styles.statBox}>
+          <View style={styles.centeredColumn}>
             <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.statText}>{stats.co2Reduced} CO₂ réduit</Text>
+            <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
           </View>
-          <View style={styles.statBox}>
-            <Ionicons name="checkmark-circle-outline" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.statText}>{stats.ridesCompleted} trajets complétés</Text>
+          <View style={styles.centeredColumn}>
+            <Ionicons name="car" size={30} color={colors.vertSecondaire} />
+            <Text style={styles.labelCentered}>{stats.ridesCompleted} trajets complétés</Text>
           </View>
         </View>
 
@@ -58,7 +58,7 @@ export default function Rides() {
           data={rides}
           keyExtractor={(item) => item.id}
           renderItem={renderRide}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={styles.scrollContainer}
           scrollEnabled={false}
         />
       </ScrollView>

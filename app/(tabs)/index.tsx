@@ -1,71 +1,34 @@
-import {Text, TouchableOpacity, Animated, Button } from 'react-native';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useRouter } from 'expo-router';
-import {styles} from '../fonctionalites/Styles'
+import { router } from 'expo-router';
+import { styles } from '../fonctionalites/Styles';
 import { useAuthStore } from '~/fonctionalites/VariablesGlobales';
-import '../fonctionalites/LoginInput.tsx';
-  
 
 export default function App() {
   const estConnecte = useAuthStore((state) => state.value);
-  
-  //const [estConnecte, setConnecte] = useState(getConnecte());
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-    
-    Animated.timing(slideAnim, {
-      toValue: 0,
-      duration: 1000,
-      delay: 500,
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.centeredColumn}>
+        <Text style={styles.title}>
+          {estConnecte ? 'Bienvenue sur RideW' : 'Ride/W'}
+        </Text>
+        <Text style={styles.subtitle}>
+          {estConnecte ? 'nom d\'utilisateur' : 'Application de Covoiturage'}
+        </Text>
 
-
-  
-  // Page d'accueil en cours
-    return (
-      <SafeAreaView style={styles.container}>
-        <Animated.View style={[styles.content, { opacity: fadeAnim }]}> 
-          {/* Moved buttons directly below the text */}
-          {estConnecte ? (
-            <>
-              <Text style={styles.title}>Bienvenue sur RideW </Text>
-              {/* À faire : utiliser la variable du prenom ou du nom de l'utilisateur*/}
-              <Text style={styles.subtitle}>nom d'utilisateur</Text>
-            </>
-          ) : (
-            <>
-            <Text style={styles.title}>Ride/w</Text>
-            <Text style={styles.subtitle}>Application de Covoiturage </Text>
-            <Animated.View style={[styles.buttonContainer, { transform: [{ translateY: slideAnim }] }]}> 
-            <TouchableOpacity 
-              style={styles.button} 
-              onPress={() => router.push('/inscription')}
-            >
-              <Text style={styles.buttonText}>Sign Up</Text>
+        {!estConnecte && (
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={() => router.push('/inscription')}>
+              <Text style={styles.label}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.button, styles.outlineButton]} 
-              onPress={() => router.push('/account')}
-            >
-              <Text style={[styles.buttonText, styles.outlineButtonText]}>Login</Text>
+            <TouchableOpacity style={[styles.button, styles.outlineButton]} onPress={() => router.push('/account')}>
+              <Text style={[styles.label, styles.outlineButtonText]}>Login</Text>
             </TouchableOpacity>
-          </Animated.View>
-            </>
-          )}
-        </Animated.View>
-      </SafeAreaView>
-    );
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
+  );
 }
-
-
-export default App;

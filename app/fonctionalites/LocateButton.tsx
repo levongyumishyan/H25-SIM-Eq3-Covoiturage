@@ -23,7 +23,7 @@ const LocateButton: React.FC<LocateButtonProps> = ({ cameraRef, userCoords }) =>
 
   return (
     <TouchableOpacity style={styles.locationButton} onPress={centerOnUser}>
-      <Ionicons name="locate" size={24} color="white" />
+      <Ionicons name="compass" size={30} color="white" />
     </TouchableOpacity>
   );
 };

@@ -1,174 +1,135 @@
-import { StyleSheet, Dimensions } from "react-native";
-import { colors } from "./Colors";
+import { StyleSheet, Dimensions } from 'react-native';
+import { colors } from './Colors';
+
+const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
+  // ---------- Layout ----------
   container: {
     flex: 1,
+    alignItems: 'center',
     backgroundColor: colors.arrierePlan,
-    alignItems: "center",
-    justifyContent: "center",
     paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+
+  buttonContainer: {
+    marginTop: 30,
+    width: '100%',
+    alignItems: 'center',
+    gap: 12,
+  },
+
+  centeredColumn: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 20,
+  },
+
+  centeredRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   scrollContainer: {
+    flexGrow: 1,
     paddingBottom: 20,
+    
   },
 
-  content: {
-    alignItems: "center",
-    width: "100%",
-  },
-
-  map: {
-    width: "120%",
-    height: "100%",
-  },
-
-
-  /** SEARCH BAR **/
-
-  searchBoxWrapper: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    right: 20,
-    width: '90%',
-    backgroundColor: colors.blanc,
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    zIndex: 10, // Ensure it appears above map or background
-  },
-  
-  searchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.grisPrincipal,
-    paddingBottom: 8,
-  },
-  
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: colors.noir,
-    paddingVertical: 8,
-  },
-  
-  suggestionsContainer: {
-    marginTop: 8,
-    maxHeight: 200,
-    backgroundColor: colors.blanc,  
-  },
-  
-  rideItem: {
-    paddingVertical: 10,
-    borderBottomColor: colors.grisPrincipal,
-    borderBottomWidth: 1,
-  },
-  
-  rideDetails: {
-    paddingHorizontal: 5,
-  },
-  
-  suggestionText: {
-    fontSize: 16,
-    color: colors.couleurTexte,
-  },
-  
-  suggestionSubText: {
-    fontSize: 12,
-    color: colors.grisPrincipal,
-  },
-  
-
-  /** TEXT STYLES **/
+  // ---------- Typography ----------
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    fontSize: 50,
+    fontWeight: 'bold',
     color: colors.couleurTexte,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 15,
   },
-
   subtitle: {
-    fontSize: 24,
+    fontSize: 25,
+    fontWeight: '600',
     color: colors.couleurTexte,
-    textAlign: "left",
-    marginTop: 10,
-    paddingBottom: 10,
+    marginBottom: 10,
+    textAlign: 'left'
   },
-
-  statText: {
-    color: colors.couleurTexte,
+  smallText: {
     fontSize: 14,
-    fontWeight: "bold",
-    marginTop: 5,
-    textAlign: "center",
+    color: colors.couleurTexte,
+  },
+  label: {
+    fontSize: 19,
+    fontWeight: '500',
+    color: colors.couleurTexte,
+    marginBottom: 6,
   },
 
-  buttonText: {
-    color: colors.blanc,
-    fontSize: 16,
-    fontWeight: "bold",
-    textTransform: "uppercase",
+  labelCentered: {
+    fontSize: 19,
+    fontWeight: '500',
+    color: colors.couleurTexte,
+    textAlign: 'center',
+    marginBottom: 6,
   },
 
-  /** STATISTICS SECTION **/
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    width: "100%",
+  labelLeft: {
+    fontSize: 19,
+    fontWeight: '500',
+    color: colors.couleurTexte,
+    textAlign: 'left',
+    marginBottom: 6,
   },
 
-  statBox: {
-    backgroundColor: colors.grisPrincipal,
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    flex: 1,
-    marginHorizontal: 5,
+  labelInverse: {
+    fontSize: 19,
+    fontWeight: '500',
+    color: colors.couleurTexteInverse,
+    marginBottom: 6,
   },
 
-  /** BUTTONS **/
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    marginTop: 20,
+  labelInverseCentered: {
+    fontSize: 19,
+    fontWeight: '500',
+    color: colors.couleurTexteInverse,
+    marginBottom: 6,
+    textAlign: 'center',
   },
 
+  // ---------- Buttons ----------
   button: {
     backgroundColor: colors.vertPrincipal,
     paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
+    borderRadius: 19,
+    alignItems: 'center',
+    marginTop: 20,
+    minWidth: 200, 
+    shadowColor: colors.arrierePlan,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
-
+  buttonText: {
+    color: colors.blanc,
+    fontWeight: '600',
+    fontSize: 16,
+  },
   outlineButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: colors.couleurTexte,
   },
-
   outlineButtonText: {
     color: colors.couleurTexte,
   },
 
-  /** INPUT FIELDS **/
+  // ---------- Input Fields ----------
   input: {
-    width: "100%",
+    width: '100%',
     height: 50,
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: colors.blanc,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
@@ -176,73 +137,13 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.grisPrincipal,
     marginBottom: 12,
+    minWidth: 300,
   },
-
-  /** LINKS **/
-  linksContainer: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 15,
-  },
-
-  links: {
-    color: colors.couleurTexte,
-    width: "60%",
-    flexDirection: "row",
-    marginBottom: 15,
-  },
-
-  /** RIDES LIST **/
-  list: {
-    paddingBottom: 20,
-  },
-
-  rideItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.grisPrincipal,
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-
-  rideDetails: {
-    flex: 1,
-  },
-
-  rideText: {
-    color: colors.couleurTexte,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-
-  rideTime: {
-    color: colors.vertSecondaire,
-    fontSize: 14,
-  },
-
-  /** GENERAL ELEMENTS **/
-  textContainer: {
-    width: "100%",
-    alignItems: "flex-start",
-    paddingVertical: 20,
-  },
-
-  icon: {
-    marginRight: 15,
-  },
-
-  /** DATEPICKER */
 
   datePickerButton: {
     width: '100%',
     height: 50,
-    backgroundColor: colors.grisPrincipal,
+    backgroundColor: colors.blanc,
     borderRadius: 8,
     justifyContent: 'center',
     paddingHorizontal: 15,
@@ -252,9 +153,26 @@ export const styles = StyleSheet.create({
   },
   datePickerText: {
     fontSize: 16,
+    color: colors.couleurTexteInverse,
+  },
+
+  // ---------- Checkboxes ----------
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  checkboxLabel: {
+    fontSize: 16,
+    marginLeft: 10,
     color: colors.couleurTexte,
   },
 
+  // ---------- Map ----------
+  map: {
+    width: '100%',
+    height: height * 0.9,
+  },
   locationButton: {
     position: 'absolute',
     bottom: 100,
@@ -270,8 +188,62 @@ export const styles = StyleSheet.create({
     zIndex: 999,
   },
 
+  // ---------- Search ----------
+  searchBoxWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    top: 70,
+    left: 20,
+    right: 20,
+    backgroundColor: colors.blanc,
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: colors.arrierePlan,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
 
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.noir,
+    paddingVertical: 8,
+  },
+
+  // ---------- Rides ----------
+
+  ridecontainer: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: colors.grisPrincipal,
+    paddingHorizontal: 20,
+    padding: 10,
+    borderRadius: 20,
+    margin: 10,
+
+  },
+
+  rideItem: {
+    paddingVertical: 10,
+    borderBottomColor: colors.grisPrincipal,
+    borderBottomWidth: 1,
+  },
   
+  rideDetails: {
+    paddingHorizontal: 5,
+  },
 
-
+  // ---------- Links ----------
+  linksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 15,
+  },
+  linkText: {
+    fontSize: 14,
+    color: colors.vertPrincipal,
+  },
 });

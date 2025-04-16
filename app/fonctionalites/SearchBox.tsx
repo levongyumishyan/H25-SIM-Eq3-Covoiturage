@@ -27,7 +27,10 @@ const SearchBox = () => {
   }, []);
 
   useEffect(() => {
-    if (input.length < 2 || !location) return;
+    if (input.trim() === '') {
+      setSuggestions([]); // Clear suggestions if input is empty
+      return;
+    }
 
     const fetchSuggestions = async () => {
       const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
@@ -57,23 +60,16 @@ const SearchBox = () => {
           console.log(`Coords: ${coords[1]}, ${coords[0]}`);
         }}
       >
-        <View style={styles.rideDetails}>
-          <Text style={styles.suggestionText}>{place_name}</Text>
-          <Text style={styles.suggestionSubText}>
-            {properties?.feature_type ?? 'Unknown'} — Accuracy: {properties?.coordinates?.accuracy ?? 'N/A'}
-          </Text>
-          <Text style={styles.suggestionSubText}>
-            Lat: {coords[1]} | Lon: {coords[0]}
-          </Text>
+        <View>
+          <Text style={styles.label}>{place_name}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.searchBoxWrapper}>
-      {/* 🔍 Search Input */}
-      <View style={styles.searchBarContainer}>
+      <View style={styles.searchBoxWrapper}>
+        <View style={styles.centeredRow}>
         <Ionicons
           name="search"
           size={30}
@@ -81,16 +77,18 @@ const SearchBox = () => {
           style={styles.searchIcon}
         />
         <TextInput
-          style={styles.searchInput}
-          placeholder="Où allez-vous ?"
-          placeholderTextColor={colors.grisPrincipal}
+          style={styles.labelInverse}
+          placeholder={'Où allez-vous ?'}
+          placeholderTextColor={colors.couleurTexteInverse}
           value={input}
           onChangeText={setInput}
         />
       </View>
 
+
+
       {suggestions.length > 0 && (
-        <View style={styles.suggestionsContainer}>
+        <View style={styles.scrollContainer}>
           <FlatList
             data={suggestions}
             keyExtractor={(item, index) => item.id + index}

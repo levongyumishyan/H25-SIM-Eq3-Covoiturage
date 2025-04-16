@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView, Platform } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {styles} from './Styles'
+import { styles } from './Styles';
 import Checkbox from 'expo-checkbox';
 import { localIP } from './VariablesGlobales';
+
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
   const [nom, setNom] = useState('');
@@ -24,63 +33,59 @@ const SignUpInput = () => {
   const [anneeVoiture, setAnneeVoiture] = useState('');
   const [consommationVoiture, setConsommationVoiture] = useState('');
 
-  const[adresse, setAdresse] = useState("");
-  const[ville, setVille] = useState("");
-  const[province, setProvince] = useState("");
-  const[codePostal, setCodePostal] = useState("");
+  const [adresse, setAdresse] = useState('');
+  const [ville, setVille] = useState('');
+  const [province, setProvince] = useState('');
+  const [codePostal, setCodePostal] = useState('');
 
-  const[urgencePrenom, setUrgencePrenom] = useState("");
-  const[urgenceNom, setUrgenceNom] = useState("");
-  const[urgenceTelephone, setUrgenceTelephone] = useState("");
-
-
+  const [urgencePrenom, setUrgencePrenom] = useState('');
+  const [urgenceNom, setUrgenceNom] = useState('');
+  const [urgenceTelephone, setUrgenceTelephone] = useState('');
 
   const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === 'ios'); // On iOS, keep showing; on Android, hide after selection
+    setShowDatePicker(Platform.OS === 'ios');
     if (selectedDate) {
       setDateNaissance(selectedDate);
     }
   };
 
-  const verifierConnection = async () => { 
+  const verifierConnection = async () => {
     try {
-      const response = await fetch("http://" + localIP + ":5001/api/auth/signup", { //Changer à votre local IP /ipconfig sous Windows
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(`http://${localIP}:5001/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nom: nom,
-          prenom: prenom,
+          nom,
+          prenom,
           email: courriel,
-          mdp: mdp,
-          dateNaissance: dateNaissance,
-          telephone: telephone,
-          conducteur: conducteur,
-          passager: passager,
-          modeleVoiture: modeleVoiture,
-          anneeVoiture: anneeVoiture,
-          consommationVoiture: consommationVoiture
+          mdp,
+          dateNaissance,
+          telephone,
+          conducteur,
+          passager,
+          modeleVoiture,
+          anneeVoiture,
+          consommationVoiture,
         }),
       });
-  
+
       const data = await response.json();
-      
-      // Placeholder pour vérifier si un des données est vide
-      if (response == undefined)
-        {
-          alert("Une des données sont vides. Veuillez-les remplir. ")
-        }
-      //
-      console.log("Réponse du serveur :", data);
+      if (response === undefined) {
+        alert('Une des données est vide. Veuillez les remplir.');
+      }
+      console.log('Réponse du serveur :', data);
     } catch (error) {
-      console.error("Erreur de connexion :", error);
+      console.error('Erreur de connexion :', error);
     }
   };
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.scrollContainer}>
+      <SafeAreaView style={styles.centeredColumn}>
+        <View style={styles.centeredRow}>
+          <Text style={styles.title}>Créer un compte</Text>
+        </View>
+
         <Text style={styles.subtitle}>Prénom</Text>
         <TextInput
           style={styles.input}
@@ -167,24 +172,28 @@ const SignUpInput = () => {
         />
 
         <Text style={styles.subtitle}>Sélectionner votre rôle</Text>
-        <Text style={styles.statText}>Vous pourrez toujours changer en cours de route :)</Text>
+        <Text style={styles.labelLeft}>
+          Vous pourrez toujours changer en cours de route :)
+        </Text>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitle}>Conducteur</Text>
-          <Checkbox
-            value={conducteur}
-            onValueChange={setConducteur}
-            color={conducteur ? colors.vertPrincipal : undefined}
-          />
-        </View>
+        <View style={[styles.centeredRow, { justifyContent: 'space-around', width: '100%', marginVertical: 12 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Checkbox
+              value={conducteur}
+              onValueChange={setConducteur}
+              color={conducteur ? colors.vertPrincipal : undefined}
+            />
+            <Text style={[styles.label, { marginLeft: 8 }]}>Conducteur</Text>
+          </View>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitle}>Passager</Text>
-          <Checkbox
-            value={passager}
-            onValueChange={setPassager}
-            color={passager ? colors.vertPrincipal : undefined}
-          />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Checkbox
+              value={passager}
+              onValueChange={setPassager}
+              color={passager ? colors.vertPrincipal : undefined}
+            />
+            <Text style={[styles.label, { marginLeft: 8 }]}>Passager</Text>
+          </View>
         </View>
 
         {conducteur && (
@@ -228,7 +237,9 @@ const SignUpInput = () => {
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
       </SafeAreaView>
-      <Text>{"\n".repeat(10)}</Text>
+
+      {/* Bottom space */}
+      <Text>{'\n'.repeat(10)}</Text>
     </ScrollView>
   );
 };

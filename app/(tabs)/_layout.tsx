@@ -3,79 +3,73 @@ import { colors } from '../fonctionalites/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import React from 'react';
+import { useKeyboard } from 'react-native-use-keyboard';
 
 const { width } = Dimensions.get("window");
-const iconSize = width * 0.075; 
+const iconSize = width * 0.075;
 
 export default function TabLayout() {
+  const keyboard = useKeyboard();
+
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: colors.couleurSurVert,
         tabBarInactiveTintColor: colors.couleurSurVert,
-        headerTransparent: true,
         headerShown: false,
-        headerTitleAlign: 'center',
-        headerStyle: { backgroundColor: 'transparent' },
-        tabBarStyle: {
-          backgroundColor: colors.vertPrincipal,
-          height: 80,
-          position: 'absolute',
-          elevation: 8,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.3,
-          shadowRadius: 5,
-        },
+        tabBarStyle: [
+          {
+            backgroundColor: colors.vertPrincipal,
+            height: 80,
+            position: 'absolute',
+            elevation: 8,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.3,
+            shadowRadius: 5,
+          },
+          keyboard.isOpen ? { display: 'none' } : {},
+        ],
         tabBarShowLabel: false,
         tabBarIconStyle: {
-          marginTop: 15
+          marginTop: 15,
         },
-        
       }}
     >
-      <Tabs.Screen 
-        name="index" 
+      <Tabs.Screen
+        name="index"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "home" : "home-outline"} 
-            color={color} 
-            size={iconSize} />
+            <Ionicons name={focused ? 'home' : 'home-outline'} color={color} size={iconSize} />
           ),
         }}
       />
-      <Tabs.Screen 
-        name="map" 
+      <Tabs.Screen
+        name="map"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "map" : "map-outline"}
-            color={color} 
-            size={iconSize} />
+            <Ionicons name={focused ? 'map' : 'map-outline'} color={color} size={iconSize} />
           ),
         }}
       />
-      <Tabs.Screen 
-        name="rides" 
+      <Tabs.Screen
+        name="rides"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "car" : "car-outline"}
-            color={color} 
-            size={iconSize} />
+            <Ionicons name={focused ? 'car' : 'car-outline'} color={color} size={iconSize} />
           ),
         }}
       />
-      <Tabs.Screen 
-        name="account" 
+      <Tabs.Screen
+        name="account"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "person" : "person-outline" } 
-            color={color} 
-            size={iconSize} />
+            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={iconSize} />
           ),
         }}
       />
-      <Tabs.Screen name="inscription" options={{ href: null }} /> {/* Hidden Tab */}
-      <Tabs.Screen name="mdpOublie" options={{ href: null }} /> {/* Hidden Tab */}
+      <Tabs.Screen name="inscription" options={{ href: null }} />
+      <Tabs.Screen name="mdpOublie" options={{ href: null }} />
     </Tabs>
   );
 }
