@@ -97,7 +97,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Nom</Text>
+        <Text style={styles.subtitlePetit}>Nom</Text>
         <TextInput
           style={styles.input}
           onChangeText={setNom}
@@ -108,7 +108,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Date de naissance</Text>
+        <Text style={styles.subtitlePetit}>Date de naissance</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={() => setShowDatePicker(true)}
@@ -129,7 +129,7 @@ const SignUpInput = () => {
           />
         )}
 
-        <Text style={styles.subtitle}>Téléphone</Text>
+        <Text style={styles.subtitlePetit}>Téléphone</Text>
         <TextInput
           style={styles.input}
           onChangeText={setTelephone}
@@ -140,7 +140,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Courriel</Text>
+        <Text style={styles.subtitlePetit}>Courriel</Text>
         <TextInput
           style={styles.input}
           onChangeText={setCourriel}
@@ -151,7 +151,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Mot de passe</Text>
+        <Text style={styles.subtitlePetit}>Mot de passe</Text>
         <TextInput
           style={styles.input}
           onChangeText={setMdp}
@@ -161,7 +161,7 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitle}>Vérifier votre mot de passe</Text>
+        <Text style={styles.subtitlePetit}>Vérifier votre mot de passe</Text>
         <TextInput
           style={styles.input}
           onChangeText={setMdpVerif}

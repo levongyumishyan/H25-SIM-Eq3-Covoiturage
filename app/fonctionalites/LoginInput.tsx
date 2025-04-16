@@ -50,39 +50,38 @@ const LoginInput = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.centeredColumn}>
-        {estConnecte ? (
-          <>
-            <Text style={styles.title}>Bienvenue!</Text>
-            <TouchableOpacity style={styles.button} onPress={deconnection}>
-              <Text style={styles.buttonText}>Se déconnecter</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            <Text style={styles.title}>Ride/W</Text>
+    <SafeAreaView style= {styles.content}>
+      <SafeAreaView style={styles.textContainer}>
+      {estConnecte ? (
+        <>
+          <Text style={styles.title}>Bienvenue!</Text>
+          <TouchableOpacity style={styles.button} onPress={deconnection}>
+            <Text style={styles.buttonText}>Se déconnecter</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.title}>Ride/W</Text>
+          <Text style={styles.subtitleMoyen}>Courriel</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setCourriel}
+            value={courriel}
+            placeholder="courriel@entreprise.ca"
+            placeholderTextColor={colors.couleurTexte}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-            <Text style={styles.subtitle}>Courriel</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setCourriel}
-              value={courriel}
-              placeholder="courriel@entreprise.ca"
-              placeholderTextColor={colors.couleurTexteInverse}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <Text style={styles.subtitle}>Mot de passe</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setMdp}
-              value={mdp}
-              placeholder="**********"
-              placeholderTextColor={colors.couleurTexteInverse}
-              secureTextEntry
-            />
+          <Text style={styles.subtitleMoyen}>Mot de passe</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setMdp}
+            value={mdp}
+            placeholder="* * * * * * * * * *"
+            placeholderTextColor={colors.couleurTexte}
+            secureTextEntry
+          />
 
             {messageErreur ? (
               <Text style={{ color: 'red', textAlign: 'center' }}>{messageErreur}</Text>
@@ -93,13 +92,14 @@ const LoginInput = () => {
               <Link href="../(tabs)/inscription" style={styles.linkText}>Se créer un compte</Link>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={verifierConnection}>
-              <Text style={styles.label}>Se connecter</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
+          <TouchableOpacity style={styles.button} onPress={verifierConnection}>
+            <Text style={styles.buttonText}>Se connecter</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </SafeAreaView>
+    </SafeAreaView>
+    
   );
 };
 
