@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import { styles } from './Styles';
 import { Ionicons } from '@expo/vector-icons';
-import BottomSearchSheet from './BottomSearchSheet';
+import BottomSearchSheet from './BottomSearchSheet';  
 
 const [showSheet, setShowSheet] = useState(false);
 
