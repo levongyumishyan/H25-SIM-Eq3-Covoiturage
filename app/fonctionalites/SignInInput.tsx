@@ -13,7 +13,7 @@ import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './Styles';
 import Checkbox from 'expo-checkbox';
-import { localIP } from './VariablesGlobales';
+import { BASE_URL } from '../apiConfig'; // ✅ Live backend URL
 
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
@@ -33,15 +33,6 @@ const SignUpInput = () => {
   const [anneeVoiture, setAnneeVoiture] = useState('');
   const [consommationVoiture, setConsommationVoiture] = useState('');
 
-  const [adresse, setAdresse] = useState('');
-  const [ville, setVille] = useState('');
-  const [province, setProvince] = useState('');
-  const [codePostal, setCodePostal] = useState('');
-
-  const [urgencePrenom, setUrgencePrenom] = useState('');
-  const [urgenceNom, setUrgenceNom] = useState('');
-  const [urgenceTelephone, setUrgenceTelephone] = useState('');
-
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === 'ios'); // Keep open on iOS
     if (selectedDate) {
@@ -50,38 +41,50 @@ const SignUpInput = () => {
   };
 
   const verifierConnection = async () => {
+    if (mdp !== mdpVerif) {
+      alert('Les mots de passe ne correspondent pas.');
+      return;
+    }
+  
     try {
-      const response = await fetch(`http://${localIP}:5001/api/auth/signup`, {
+      const response = await fetch(`${BASE_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          nom: nom,
-          prenom: prenom,
+          nom,
+          prenom,
           email: courriel,
-          mdp: mdp,
-          dateNaissance: dateNaissance,
-          telephone: telephone,
-          conducteur: conducteur,
-          passager: passager,
-          modeleVoiture: modeleVoiture,
-          anneeVoiture: anneeVoiture,
-          consommationVoiture: consommationVoiture,
+          mdp,
+          dateNaissance,
+          telephone,
+          conducteur,
+          passager,
+          modeleVoiture,
+          anneeVoiture,
+          consommationVoiture,
         }),
       });
-
+  
       const data = await response.json();
-
-      if (response === undefined) {
-        alert('Une des données est vide. Veuillez les remplir.');
+  
+      console.log("🔍 Statut HTTP:", response.status);
+      console.log("📦 Réponse JSON:", data);
+  
+      if (!response.ok) {
+        // Afficher message d'erreur du backend s’il existe
+        const erreur = data.msg || JSON.stringify(data) || 'Erreur inconnue';
+        throw new Error(erreur);
       }
-
-      console.log('Réponse du serveur :', data);
+  
+      alert("✅ Inscription réussie !");
     } catch (error) {
-      console.error('Erreur de connexion :', error);
+      console.error("❌ Erreur attrapée :", error);
+      alert(`Erreur : ${error.message}`);
     }
   };
+  
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -188,6 +191,7 @@ const SignUpInput = () => {
             color={conducteur ? colors.vertPrincipal : undefined}
           />
         </View>
+
         <View style={styles.centeredRow}>
           <View style={styles.container}>
             <Text style={styles.subtitle}>Passager</Text>
