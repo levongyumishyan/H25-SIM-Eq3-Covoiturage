@@ -15,8 +15,14 @@ export default function App() {
 
   const ajouter = () =>
   {
-    setTrajet('trajet')
+    setTrajet('')
     setTrajets([...trajets, trajet])
+  }
+  const listeTrajets = (index) => 
+  {
+    let trajetsCopy = [...trajets]
+    trajetsCopy.splice(index, 1)
+    setTrajets(trajetsCopy)
   }
 
   return (
@@ -34,11 +40,11 @@ export default function App() {
       <View>
         {/*Code for the tasks */}
         {
-          trajets.map(() => 
+          trajets.map((trajet, index) => 
           {
             return (
-            <TouchableOpacity>
-              <Trajet/>
+            <TouchableOpacity key={index} onPress={() => listeTrajets(index)}>
+              <Trajet text={trajet}/>
             </TouchableOpacity>
             )
           })
