@@ -4,10 +4,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { styles } from '../fonctionalites/Styles';
 import { useAuthStore } from '~/fonctionalites/VariablesGlobales';
+import Trajet from '../fonctionalites/Trajet';
+import { useState } from 'react';
 
 export default function App() {
   const estConnecte = useAuthStore((state) => state.value);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
+  const [trajet, setTrajet] = useState('');
+  const [trajets, setTrajets] = useState([]);
+
+  const ajouter = () =>
+  {
+    setTrajet('trajet')
+    setTrajets([...trajets, trajet])
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,6 +28,29 @@ export default function App() {
       <Text style={styles.subtitle}>
           {estConnecte ? 'Bon retour !' : 'Application de Covoiturage'}
       </Text>
+      <Text style={styles.subtitle}>
+        {estConnecte ? 'Vos trajets :' : ''}
+      </Text>
+      <View>
+        {/*Code for the tasks */}
+        {
+          trajets.map(() => 
+          {
+            return (
+            <TouchableOpacity>
+              <Trajet/>
+            </TouchableOpacity>
+            )
+          })
+        }
+      </View>
+
+      <TouchableOpacity onPress={() => ajouter()}>
+        <View style={styles.ajouterTrajet} >
+          <Text style={styles.elementText}>+
+          </Text>
+        </View>
+      </TouchableOpacity>
 
         {!estConnecte && (
           <View style={styles.buttonContainer}>

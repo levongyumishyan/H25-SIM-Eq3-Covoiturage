@@ -5,6 +5,30 @@ const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   // ---------- Layout ----------
+  element:
+  {
+    backgroundColor: '#FFF',
+    padding: 0,
+    borderRadius: 7,
+    width: 350,
+    height: 75,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingTop: 10,
+  },
+
+  ajouterTrajet:
+  {
+    backgroundColor: '#41a44f',
+    width: 60,
+    height: 60,
+    borderRadius: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#41a44f',
+    borderWidth: 1,
+  },
+
   container: {
     flex: 1,
     alignItems: 'center',
@@ -59,6 +83,11 @@ export const styles = StyleSheet.create({
   smallText: {
     fontSize: 14,
     color: colors.couleurTexte,
+  },
+  elementText:
+  {
+    fontSize:17,
+    color: '#000000',
   },
   label: {
     fontSize: 19,
