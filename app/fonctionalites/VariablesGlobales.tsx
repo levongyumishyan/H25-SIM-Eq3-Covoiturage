@@ -21,3 +21,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   setEstConnecte: (val) => set({ value: val }),
   setNomUtilisateur: (nom) => set({ nomUtilisateur: nom }),
 }));
+
+
+export default function VariablesGlobales() {
+  return null;
+}

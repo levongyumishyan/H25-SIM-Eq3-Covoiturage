@@ -5,6 +5,26 @@ const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   // ---------- Layout ----------
+  card:
+  {
+    width:"90%",
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 8,
+  },
+  element:
+   {
+     backgroundColor: '#FFF',
+     padding: 0,
+     borderRadius: 7,
+     width: 350,
+     height: 75,
+     marginBottom: 10,
+     paddingLeft: 10,
+     paddingTop: 10,
+   },
+
+   
   container: {
     flex: 1,
     alignItems: 'center',
@@ -60,6 +80,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.couleurTexte,
   },
+  elementText:
+   {
+     fontSize:17,
+     color: '#000000',
+   },
   label: {
     fontSize: 19,
     fontWeight: '500',
@@ -188,6 +213,23 @@ export const styles = StyleSheet.create({
     zIndex: 999,
   },
 
+  trajetButton: {
+    position: 'absolute',
+    bottom: 100,
+    right: 180,
+    backgroundColor: colors.vertPrincipal,
+    padding: 12,
+    borderRadius: 25,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    zIndex: 999,
+  },
+
+
+
   // ---------- Search ----------
   searchBoxWrapper: {
     position: 'absolute',
@@ -247,3 +289,8 @@ export const styles = StyleSheet.create({
     color: colors.vertPrincipal,
   },
 });
+
+
+export default function Styles() {
+  return null;
+}

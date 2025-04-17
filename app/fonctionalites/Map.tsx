@@ -18,6 +18,10 @@ import { colors } from './Colors';
 import { estDarkMode } from './VariablesGlobales';
 import LocateButton from './LocateButton';
 import SearchBox from './SearchBox';
+import { styles } from './Styles';
+import { TouchableOpacity, Text } from 'react-native';
+import { Button } from './Button';
+import Trajet from './Trajet';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
@@ -51,11 +55,6 @@ export default function Map() {
         attributionEnabled={false}
         localizeLabels
       >
-        <Camera
-          ref={cameraRef}
-          zoomLevel={14}
-          centerCoordinate={[-73.844955, 45.571122]}
-        />
 
         <UserLocation
           onUpdate={(location) => {
@@ -67,6 +66,12 @@ export default function Map() {
           }}
         />
 
+        <Camera
+          ref={cameraRef}
+          zoomLevel={14}
+          centerCoordinate={userCoords}
+        />
+
         <LocationPuck
           puckBearingEnabled
           puckBearing="heading"
@@ -74,7 +79,6 @@ export default function Map() {
         />
 
         <ShapeSource id="scooters" cluster clusterRadius={50} shape={points}>
-          {/* Clusters */}
           <CircleLayer
             id="clusters"
             filter={['has', 'point_count']}
@@ -86,8 +90,7 @@ export default function Map() {
               circleStrokeColor: colors.blanc,
               circleStrokeWidth: 2,
             }}
-          />
-          
+          />  
           <SymbolLayer
             id="cluster-count"
             filter={['has', 'point_count']}
@@ -99,8 +102,6 @@ export default function Map() {
               textAllowOverlap: true,
             }}
           />
-
-          {/* Individual scooter icons */}
           <SymbolLayer
             id="scooter-icons"
             filter={['!', ['has', 'point_count']]}
@@ -112,13 +113,10 @@ export default function Map() {
             }}
           />
         </ShapeSource>
-
-        {/* Register Images (must be outside ShapeSource) */}
         <Images images={{ pin }} />
       </MapView>
-
-      <SearchBox />
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
+      <Trajet/>
     </View>
   );
 }
