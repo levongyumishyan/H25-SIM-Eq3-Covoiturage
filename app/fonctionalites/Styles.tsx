@@ -164,6 +164,19 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     minWidth: 300,
   },
+  inputSettings: {
+    width: '50%',
+    height: 50,
+    backgroundColor: colors.blanc,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: colors.couleurTexte,
+    borderWidth: 1,
+    borderColor: colors.grisPrincipal,
+    marginBottom: 12,
+    minWidth: 100,
+  },
 
   datePickerButton: {
     width: '100%',

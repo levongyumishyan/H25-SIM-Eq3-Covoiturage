@@ -18,6 +18,12 @@ const LoginInput = () => {
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
+  const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
+  const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
+  const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
+  const setTelephoneUtilisateur = useAuthStore((state) => state.setTelephoneUtilisateur); 
+  const userId = useAuthStore((state) => state.userId);
+  const setUserId = useAuthStore((state) => state.setUserId); 
 
   const verifierConnection = async () => {
     try {
@@ -31,10 +37,18 @@ const LoginInput = () => {
       if (!response.ok) throw new Error(data.msg || 'Une erreur est survenue');
 
       setMessageErreur('');
+      
+      //Attribution des variables globales
       setConnecte(true);
-      setNomUtilisateur(data.utilisateur?.nom || 'utilisateur');
+      setNomUtilisateur(data.utilisateur?.nom || 'erreur user');
+      setCourrielUtilisateur(data.utilisateur?.email || "erreur email");
+      setTelephoneUtilisateur(data.utilisateur?.telephone || "erreur telephone");
+      setUserId(data.utilisateur?.id);
+
+
       console.log('Réponse du serveur :', data);
-      console.log(nomUtilisateur);
+      console.log(courrielUtilisateur, nomUtilisateur, data.utilisateur?.telephone);
+      console.log(userId);
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       setMessageErreur(error.message);

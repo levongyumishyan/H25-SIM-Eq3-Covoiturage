@@ -13,7 +13,7 @@ import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './Styles';
 import Checkbox from 'expo-checkbox';
-import { BASE_URL } from '../apiConfig'; // ✅ Live backend URL
+import { BASE_URL } from '../apiConfig';
 import { Link } from 'expo-router';
 
 const SignUpInput = () => {
@@ -70,8 +70,7 @@ const SignUpInput = () => {
   
       const data = await response.json();
   
-      console.log("🔍 Statut HTTP:", response.status);
-      console.log("📦 Réponse JSON:", data);
+      console.log("Réponse serveur:", data);
   
       if (!response.ok) {
         // Afficher message d'erreur du backend s’il existe
@@ -79,9 +78,9 @@ const SignUpInput = () => {
         throw new Error(erreur);
       }
   
-      alert("✅ Inscription réussie !");
+      alert("Inscription réussie !");
     } catch (error) {
-      console.error("❌ Erreur attrapée :", error);
+      console.error("Erreur:", error);
       alert(`Erreur : ${error.message}`);
     }
   };

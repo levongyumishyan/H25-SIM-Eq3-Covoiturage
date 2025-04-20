@@ -2,24 +2,36 @@ import { create } from "zustand";
 
 
 export var estDarkMode = true;
-// Pour le 'localIP_test', vous pouvez
-// soit le changer à votre local IP avec la commande 'ipconfig' sous CommandPrompt (Sur Windows);
-// soit le changer à l'adresse IP de Expo lorsque le projet est démarré
-export var localIP = "10.0.2.2"; //Platforme locale de l'emulateur: IOS: 127.0.0.1 ANDROID: 10.0.2.2
-//export var estConnecte = false;
+
 
 interface AuthState {
-  nomUtilisateur: string;
   estConnecte: boolean;
   setEstConnecte: (val: boolean) => void;
+  nomUtilisateur: string;
   setNomUtilisateur: (nom: string) => void;
+  prenomUtilisateur: string;
+  setPrenomUtilisateur: (prenom: string) => void;
+  telephoneUtilisateur: string;
+  setTelephoneUtilisateur: (telephone: string) => void;
+  courrielUtilisateur: string;
+  setCourrielUtilisateur: (courriel: string) => void;
+  userId: string;
+  setUserId: (id: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   estConnecte: false,
-  nomUtilisateur: '',
   setEstConnecte: (val) => set({ estConnecte: val }),
+  nomUtilisateur: '',
   setNomUtilisateur: (nom) => set({ nomUtilisateur: nom }),
+  prenomUtilisateur: '',
+  setPrenomUtilisateur: (prenom) => set({ prenomUtilisateur: prenom }),
+  telephoneUtilisateur: '',
+  setTelephoneUtilisateur: (telephone) => set({ telephoneUtilisateur: telephone }),
+  courrielUtilisateur: '',
+  setCourrielUtilisateur: (courriel) => set({ courrielUtilisateur: courriel }),
+  userId:"",
+  setUserId: (id)  => set({ userId: id }),
 }));
 
 

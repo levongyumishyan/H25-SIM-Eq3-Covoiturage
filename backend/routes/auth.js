@@ -91,7 +91,7 @@ router.post("/login", [
           );
         // génère le token JWT et le stocker
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: !utilisateur.estConnecte } });
+        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: true, prenom: utilisateur.prenom, telephone: utilisateur.telephone, email: utilisateur.email } });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Erreur server" });
@@ -120,6 +120,40 @@ router.post("/logout",[], async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Erreur server" });
+    }
+});
+
+
+
+// METTRE À JOUR INFOS UTILISATEUR
+router.post("/updateUserInfos", [
+    body("nom").notEmpty().withMessage("Nom est requis"),
+    body("email").isEmail().withMessage("Email invalide"),
+
+    // ici on peut rajouter des conditions pour le mot de passe, on devrait faire une fonction
+    //body("mdp").isLength({ min: mdpTailleMin }).withMessage(`Mot de passe doit contenir au moins ${mdpTailleMin} caractères`)
+], async (req, res) => {
+
+    // traitement de l'inscription
+    const erreurs = validationResult(req);
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
+
+    const { id, nom, telephone, email } = req.body;
+    try {
+        let utilisateur = await Utilisateur.findById(id);  // cherche si l'utilisateur est déjà dans la base de données
+        if (!utilisateur) return res.status(400).json({ msg: "Erreur utilisateur introuvable" });  // retourner message d'erreur
+
+
+        utilisateur.nom = nom;
+        utilisateur.telephone = telephone;
+        utilisateur.email = email;
+
+        await utilisateur.save();
+        console.log("informations mises à jour");
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: err});  // en cas d'erreur
     }
 });
 
