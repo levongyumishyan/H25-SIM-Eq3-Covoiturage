@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Settings from "./Settings";
 import { Link } from 'expo-router';
 import { colors } from './Colors';
 import { styles } from './Styles';
@@ -11,10 +12,11 @@ const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState('');
-  const [nomUtilisateur, setNomUtilisateurLocal] = useState('');
 
-  const estConnecte = useAuthStore((state) => state.value);
+
+  const estConnecte = useAuthStore((state) => state.estConnecte);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
+  const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
 
   const verifierConnection = async () => {
@@ -31,7 +33,8 @@ const LoginInput = () => {
       setMessageErreur('');
       setConnecte(true);
       setNomUtilisateur(data.utilisateur?.nom || 'utilisateur');
-      setNomUtilisateurLocal(data.utilisateur?.nom || 'utilisateur');
+      console.log('Réponse du serveur :', data);
+      console.log(nomUtilisateur);
     } catch (error) {
       console.error('Erreur de connexion :', error.message);
       setMessageErreur(error.message);
@@ -63,6 +66,7 @@ const LoginInput = () => {
             <TouchableOpacity style={styles.button} onPress={deconnection}>
               <Text style={styles.buttonText}>Se déconnecter</Text>
             </TouchableOpacity>
+            <Settings/>
           </>
         ) : (
           <>

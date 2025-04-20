@@ -8,14 +8,14 @@ import Trajet from '../fonctionalites/Trajet';
 import { useState } from 'react';
 
 export default function App() {
-  const estConnecte = useAuthStore((state) => state.value);
+  const estConnecte = useAuthStore((state) => state.estConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.centeredColumn}>
       <Text style={styles.title}>
-          {estConnecte ? `Bienvenue, ${nomUtilisateur}` : 'Ride/W'}
+          {estConnecte ? `Bienvenue,\n ${nomUtilisateur}` : 'Ride/W'}
       </Text>
       <Text style={styles.subtitle}>
           {estConnecte ? 'Bon retour !' : 'Application de Covoiturage'}

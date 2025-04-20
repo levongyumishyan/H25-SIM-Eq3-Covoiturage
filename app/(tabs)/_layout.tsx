@@ -12,7 +12,7 @@ const iconSize = width * 0.075;
 
 export default function TabLayout() {
   const keyboard = useKeyboard();
-  const estConnecte = useAuthStore((state) => state.value);
+  const estConnecte = useAuthStore((state) => state.estConnecte);
 
   return (
 

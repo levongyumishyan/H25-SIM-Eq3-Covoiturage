@@ -14,6 +14,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './Styles';
 import Checkbox from 'expo-checkbox';
 import { BASE_URL } from '../apiConfig'; // ✅ Live backend URL
+import { Link } from 'expo-router';
 
 const SignUpInput = () => {
   const [prenom, setPrenom] = useState('');
@@ -91,6 +92,10 @@ const SignUpInput = () => {
       <SafeAreaView style={styles.centeredColumn}>
         <View style={styles.centeredRow}>
           <Text style={styles.title}>Créer un compte</Text>
+        </View>
+        <View style={styles.linksContainer}>
+          <Link href="../(tabs)/account" style={styles.linkText}>J'ai déjà un compte!</Link>
+          <Link href="../(tabs)/" style={styles.linkText}>Retour</Link>
         </View>
 
         <Text style={styles.subtitle}>Prénom</Text>
