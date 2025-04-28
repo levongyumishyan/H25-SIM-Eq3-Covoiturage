@@ -34,24 +34,27 @@ export default function MapScreen() {
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
   const [drivers, setDrivers] = useState([]);
 
+  const fetchDrivers = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/trajets`);
+      const data = await response.json();
+      setDrivers(data);
+    } catch (error) {
+      console.error('Error fetching drivers:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchDrivers = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/trajets`);
-        const data = await response.json();
-        setDrivers(data);
-      } catch (error) {
-        console.error('Error fetching drivers:', error);
-      }
-    };
-  
-    fetchDrivers();
+    fetchDrivers(); // Fetch once immediately
+
+    const interval = setInterval(fetchDrivers, 10000); // 🔥 Fetch every 10 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
   }, []);
-  
+
   const points = useMemo(() => featureCollection(
     drivers.map((driver, index) => point([driver.long, driver.lat], { ...driver, id: index }))
   ), [drivers]);
-  
 
   useEffect(() => {
     const requestPermission = async () => {
@@ -65,8 +68,8 @@ export default function MapScreen() {
 
   const fetchRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
-
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=50;50&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+  
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -77,6 +80,7 @@ export default function MapScreen() {
       return null;
     }
   };
+  
 
   const reverseGeocode = async ([lng, lat]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
@@ -101,7 +105,7 @@ export default function MapScreen() {
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
-
+  
     if (feature.properties?.point_count) {
       const [longitude, latitude] = feature.geometry.coordinates;
       cameraRef.current?.setCamera({
@@ -111,8 +115,17 @@ export default function MapScreen() {
       });
     } else {
       const rideCoords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]];
-      const targetCoords = [feature.properties.targetLong, feature.properties.targetLat];
-
+      const targetLong = feature.properties.targetLong;
+      const targetLat = feature.properties.targetLat;
+  
+      // 🛑 Safety Check
+      if (typeof targetLong !== 'number' || typeof targetLat !== 'number') {
+        console.warn('Target coordinates missing');
+        return;
+      }
+  
+      const targetCoords = [targetLong, targetLat];
+  
       const route = await fetchRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
@@ -125,10 +138,10 @@ export default function MapScreen() {
             },
           ],
         });
-
+  
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
-
+  
         setPickupStreet(pickupAddress);
         setTargetStreet(targetAddress);
         setSelectedRide(feature.properties);
@@ -136,11 +149,11 @@ export default function MapScreen() {
       }
     }
   };
+  
 
   return (
     <View style={{ flex: 1 }}>
       
-      {/* Green Banner if a ride is ongoing */}
       {upcomingRide && (
         <View style={{
           position: 'absolute',
@@ -158,7 +171,6 @@ export default function MapScreen() {
         </View>
       )}
 
-      {/* Mapbox Map */}
       <MapView
         style={{ flex: 1 }}
         styleURL={estDarkMode ? Mapbox.StyleURL.Dark : Mapbox.StyleURL.Street}
