@@ -1,20 +1,9 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import Mapbox, {
-  MapView,
-  ShapeSource,
-  SymbolLayer,
-  CircleLayer,
-  Camera,
-  UserLocation,
-  Images,
-  LineLayer,
-  LocationPuck,
-} from '@rnmapbox/maps';
+import { View } from 'react-native';
+import Mapbox, { MapView, ShapeSource, SymbolLayer, CircleLayer, Camera, UserLocation, Images, LineLayer, LocationPuck } from '@rnmapbox/maps';
 import { featureCollection, point } from '@turf/helpers';
 import * as Location from 'expo-location';
 import { LogBox } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from './Colors';
 import { styles } from './Styles';
@@ -40,22 +29,24 @@ export default function MapScreen() {
   const [routeGeoJSON, setRouteGeoJSON] = useState(null);
   const [pickupStreet, setPickupStreet] = useState('');
   const [targetStreet, setTargetStreet] = useState('');
-  const [isAnySheetOpen, setIsAnySheetOpen] = useState(false);
-
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
+  
   const points = useMemo(() => featureCollection(
-    scooters.map((scooter, index) =>
-      point([scooter.long, scooter.lat], { ...scooter, id: index })
-    )
+    scooters.map((scooter, index) => point([scooter.long, scooter.lat], { ...scooter, id: index }))
   ), []);
 
   useEffect(() => {
-    (async () => {
+    const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.warn('Location permission denied');
       }
-    })();
+    };
+  
+    requestPermission(); // ✅ Call it after defining
   }, []);
+  
 
   const fetchRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
@@ -95,7 +86,7 @@ export default function MapScreen() {
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
-
+  
     if (feature.properties?.point_count) {
       const [longitude, latitude] = feature.geometry.coordinates;
       cameraRef.current?.setCamera({
@@ -106,7 +97,7 @@ export default function MapScreen() {
     } else {
       const rideCoords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]];
       const targetCoords = [feature.properties.targetLong, feature.properties.targetLat];
-
+  
       const route = await fetchRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
@@ -116,19 +107,20 @@ export default function MapScreen() {
               type: 'Feature',
               geometry: route,
               properties: {},
-            }
+            },
           ],
         });
+  
+        // Replace these with actual values or fetch them dynamically
+        const pickupAddress = await reverseGeocode(rideCoords);
+        const targetAddress = await reverseGeocode(targetCoords);
+  
+        setPickupStreet(pickupAddress);
+        setTargetStreet(targetAddress);
+  
+        setSelectedRide(feature.properties);
+        setShowTrajet(true);
       }
-
-      const pickupAddress = await reverseGeocode(rideCoords);
-      const targetAddress = await reverseGeocode(targetCoords);
-
-      setPickupStreet(pickupAddress);
-      setTargetStreet(targetAddress);
-
-      setSelectedRide(feature.properties);
-      setShowTrajet(true);
     }
   };
 
@@ -223,18 +215,18 @@ export default function MapScreen() {
       {/* Locate Button */}
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
 
-      {/* Trajet Search Box */}
-      <TrajetSearch onSheetChange={setIsAnySheetOpen} />
+      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} />
 
-      {/* Trajet Ride Details */}
       <Trajet
         visible={showTrajet}
         onClose={closeTrajet}
         selectedRide={selectedRide}
         pickupStreet={pickupStreet}
         targetStreet={targetStreet}
-        onSheetChange={setIsAnySheetOpen}
+        onSheetChange={setIsRideDetailsOpen}
       />
+
     </View>
   );
-}
+  }
+  
