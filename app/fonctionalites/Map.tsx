@@ -4,10 +4,9 @@ import Mapbox, { MapView, ShapeSource, SymbolLayer, CircleLayer, Camera, UserLoc
 import { featureCollection, point } from '@turf/helpers';
 import * as Location from 'expo-location';
 import { LogBox } from 'react-native';
-
 import { colors } from './Colors';
 import LocateButton from './LocateButton';
-import scooters from '../data/drivers.json';
+import drivers from '../data/drivers.json';
 import pin from "../assets/images/pin.png";
 import { estDarkMode } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
@@ -23,7 +22,7 @@ LogBox.ignoreLogs([
 
 export default function MapScreen() {
   const cameraRef = useRef<Camera>(null);
-  const { upcomingRide } = useRideStore(); // ✅ Moved HERE at the top level
+  const { upcomingRide } = useRideStore();
 
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
   const [selectedRide, setSelectedRide] = useState(null);
@@ -35,7 +34,7 @@ export default function MapScreen() {
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
 
   const points = useMemo(() => featureCollection(
-    scooters.map((scooter, index) => point([scooter.long, scooter.lat], { ...scooter, id: index }))
+    drivers.map((driver, index) => point([driver.long, driver.lat], { ...driver, id: index }))
   ), []);
 
   useEffect(() => {
@@ -167,7 +166,7 @@ export default function MapScreen() {
         <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
         <ShapeSource
-          id="scooters"
+          id="drivers"
           cluster
           clusterRadius={50}
           shape={points}
@@ -204,7 +203,7 @@ export default function MapScreen() {
             }}
           />
           <SymbolLayer
-            id="scooter-icons"
+            id="drivers-icons"
             filter={['!', ['has', 'point_count']]}
             style={{
               iconImage: 'pin',
@@ -230,10 +229,7 @@ export default function MapScreen() {
         )}
       </MapView>
 
-      {/* Locate Button */}
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
-
-      {/* Bottom sheets */}
       <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} />
       <Trajet
         visible={showTrajet}

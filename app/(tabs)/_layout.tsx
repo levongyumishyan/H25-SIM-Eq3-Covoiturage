@@ -49,15 +49,6 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          tabBarButton: estConnecte ? undefined : () => null,
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} color={color} size={iconSize} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="map"
         options={{
           tabBarButton: estConnecte ? undefined : () => null,
@@ -96,6 +87,14 @@ export default function TabLayout() {
           href: null,
         }}
       />
+
+  <Tabs.Screen
+    name="index"
+    options={{
+      href: null, // ✅ no direct navigation
+    }}
+    />
+
     </Tabs>
     </GestureHandlerRootView>
   );

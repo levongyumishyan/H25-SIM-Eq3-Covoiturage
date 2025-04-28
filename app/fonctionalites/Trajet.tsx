@@ -8,7 +8,28 @@ import { Ionicons } from '@expo/vector-icons';
 const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, onSheetChange }) => {
   const sheetRef = useRef<BottomSheet>(null);
   const { setUpcomingRide } = useRideStore();
-
+  function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of Earth in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // distance in kilometers
+  }
+  const distanceKm = selectedRide
+  ? calculateDistance(
+      selectedRide.lat,
+      selectedRide.long,
+      selectedRide.targetLat,
+      selectedRide.targetLong
+    ).toFixed(2)
+  : null;
+  
   useEffect(() => {
     if (visible) {
       onSheetChange(true);
@@ -25,7 +46,7 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
         id: selectedRide.id,
         origin: pickupStreet,
         destination: targetStreet,
-        distance: 4.5,
+        distance: selectedRide.distance,
       };
       setUpcomingRide(rideToStart);
       onClose();
@@ -42,25 +63,33 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
       enablePanDownToClose
       onClose={onClose}
     >
-      <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-        <Ionicons name="bicycle-outline" size={30} color={colors.vertPrincipal} />
-        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
-        <Text style={{ marginTop: 10, fontSize: 16 }}>{pickupStreet}</Text>
-        <Text style={{ fontSize: 16 }}>➔</Text>
-        <Text style={{ marginBottom: 20, fontSize: 16 }}>{targetStreet}</Text>
+     <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+    <Ionicons name="footsteps-outline" size={30} color={colors.vertPrincipal} />
+    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
 
-        <TouchableOpacity
-          onPress={handleJoindre}
-          style={{
-            backgroundColor: colors.vertPrincipal,
-            padding: 12,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Joindre</Text>
-        </TouchableOpacity>
-      </BottomSheetView>
+    <Text style={{ marginTop: 10, fontSize: 16 }}>{pickupStreet}</Text>
+    <Text style={{ fontSize: 16 }}>➔</Text>
+    <Text style={{ marginBottom: 10, fontSize: 16 }}>{targetStreet}</Text>
+
+    {distanceKm && (
+      <Text style={{ fontSize: 16, marginBottom: 10 }}>
+      Distance: {distanceKm} km
+    </Text>
+    )}
+
+    <TouchableOpacity
+      onPress={handleJoindre}
+      style={{
+      backgroundColor: colors.vertPrincipal,
+      padding: 12,
+      borderRadius: 10,
+      marginTop: 10,
+      }}
+      >
+      <Text style={{ color: 'white', fontWeight: 'bold' }}>Joindre</Text>
+    </TouchableOpacity>
+    </BottomSheetView>
+
     </BottomSheet>
   );
 };

@@ -11,13 +11,29 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { styles } from './Styles';
 import { colors } from './Colors';
+import { BASE_URL } from '~/apiConfig';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
+
+
+
+
 
 const SearchBox = () => {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [location, setLocation] = useState(null);
+
+const ajouterTrajet = async ({ place_name, geometry, properties }, coords) =>
+{
+  console.log('AAA');
+  const response = await fetch(`${BASE_URL}/api/auth/trajet`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application.json' },
+      body: JSON.stringify(nomPlace: place_name, ),
+    });
+};
 
   useEffect(() => {
     (async () => {
@@ -56,6 +72,8 @@ const SearchBox = () => {
       <TouchableOpacity
         style={styles.rideItem}
         onPress={() => {
+          // TODO: Work
+          ajouterTrajet(item, coords);
           console.log(`Selected: ${place_name}`);
           console.log(`Coords: ${coords[1]}, ${coords[0]}`);
         }}

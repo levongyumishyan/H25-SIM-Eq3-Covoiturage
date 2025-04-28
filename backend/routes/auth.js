@@ -124,6 +124,30 @@ router.post("/logout",[], async (req, res) => {
 });
 
 
+// TODO:
+router.post("/trajet", [], async (req, res) => 
+{
+    const { nomPlace, coordonnees} = req.body;
+    try
+    {
+        const trajet = await Trajet.findOne({ nomPlace });
+        await Utilisateur.updateOne
+        (
+            {nomPlace: nomPlace},
+            {coordonnees: coordonnees}
+        );
+
+        res.json({ trajet })
+
+    }
+    catch (err)
+    {
+        console.error(err);
+        res.status(500).json({ msg: "Erreur server" });
+    }
+})
+
+
 
 // METTRE À JOUR INFOS UTILISATEUR
 router.post("/updateUserInfos", [
