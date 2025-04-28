@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './Styles';
 import SearchBox from './SearchBox';
+import { colors } from './Colors';
 
 const Trajet = ({ visible, onClose, onManualOpen, selectedRide, pickupStreet, targetStreet }) => {
   const sheetRef = useRef<BottomSheet>(null);
@@ -41,14 +42,14 @@ const Trajet = ({ visible, onClose, onManualOpen, selectedRide, pickupStreet, ta
         <BottomSheetView style={{ flex: 1, padding: 16, justifyContent: 'space-between' }}>
           {selectedRide ? (
             <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Départ:</Text>
-              <Text style={styles.subtitle}>{pickupStreet || "Chargement..."}</Text>
+              <Text style={styles.subtitle}>Départ:</Text>
+              <Text style={styles.label}>{pickupStreet || "Chargement..."}</Text>
 
-              <Text style={[styles.title, { marginTop: 20 }]}>Destination:</Text>
-              <Text style={styles.subtitle}>{targetStreet || "Chargement..."}</Text>
+              <Text style={[styles.subtitle, { marginTop: 20 }]}>Destination:</Text>
+              <Text style={styles.label}>{targetStreet || "Chargement..."}</Text>
 
               <View style={{ marginTop: 30 }}>
-                <TouchableOpacity style={styles.joinButton} onPress={handleJoindre}>
+                <TouchableOpacity style={styles.button} onPress={handleJoindre}>
                   <Text style={styles.buttonText}>Joindre</Text>
                 </TouchableOpacity>
               </View>
