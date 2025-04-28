@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator"); // sert à vér
 const Utilisateur = require("../models/Utilisateur");
 const Voiture = require("../models/Voiture"); 
 require("dotenv").config();
+const Trajet = require("../models/Trajet")
 
 const router = express.Router();
 const mdpTailleMin = 6;
@@ -127,16 +128,18 @@ router.post("/logout",[], async (req, res) => {
 // TODO:
 router.post("/trajet", [], async (req, res) => 
 {
-    const { nomPlace, coordonnees} = req.body;
+    const { id, long, lat, targetLong, targetLat } = req.body;
     try
     {
-        const trajet = await Trajet.findOne({ nomPlace });
-        await Utilisateur.updateOne
+        const trajet = await Trajet.findOne({ id, long, lat, targetLong, targetLat });
+        await Trajet.updateOne
         (
-            {nomPlace: nomPlace},
-            {coordonnees: coordonnees}
+            {id: id},
+            {long: long},
+            {lat: lat},
+            {targetLong: targetLong},
+            {targetLat: targetLat},
         );
-
         res.json({ trajet })
 
     }

@@ -15,25 +15,38 @@ import { BASE_URL } from '~/apiConfig';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
-
-
-
-
 const SearchBox = () => {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [location, setLocation] = useState(null);
 
-const ajouterTrajet = async ({ place_name, geometry, properties }, coords) =>
-{
-  console.log('AAA');
-  const response = await fetch(`${BASE_URL}/api/auth/trajet`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application.json' },
-      body: JSON.stringify(nomPlace: place_name, ),
-    });
-};
+
+  const ajouterTrajet = async (currentCoords, targetCoords) => {
+    try {
+      const body = {
+        id: Math.floor(Math.random() * 1000000), // Random id for the ride
+        long: currentCoords.longitude,
+        lat: currentCoords.latitude,
+        targetLong: targetCoords[0],
+        targetLat: targetCoords[1],
+      };
+  
+      const response = await fetch(`${BASE_URL}/api/trajets`, { // <-- now /api/trajets
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+  
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.msg || 'Une erreur est survenue');
+  
+      console.log('✅ Trajet ajouté:', data);
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout du trajet:', error.message);
+    }
+  };
+  
+  
 
   useEffect(() => {
     (async () => {
@@ -72,11 +85,10 @@ const ajouterTrajet = async ({ place_name, geometry, properties }, coords) =>
       <TouchableOpacity
         style={styles.rideItem}
         onPress={() => {
-          // TODO: Work
-          ajouterTrajet(item, coords);
+          ajouterTrajet(location, coords); 
           console.log(`Selected: ${place_name}`);
-          console.log(`Coords: ${coords[1]}, ${coords[0]}`);
         }}
+        
       >
         <View>
           <Text style={styles.labelInverse}>{place_name}</Text>

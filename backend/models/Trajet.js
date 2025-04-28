@@ -1,12 +1,29 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const schemaTrajet = new mongoose.Schema
-(
-    {
-        nomPlace: {type: any, required: true},
-        coordonnees: {type: any, required: true}
-    },
-    {timestamps: true}
-);
+// Define the schema
+const TrajetSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  long: {
+    type: Number,
+    required: true
+  },
+  lat: {
+    type: Number,
+    required: true
+  },
+  targetLong: {
+    type: Number,
+    required: true
+  },
+  targetLat: {
+    type: Number,
+    required: true
+  }
+});
 
-module.exports = mongoose.model("Trajet", schemaTrajet);
+// Export the model
+module.exports = mongoose.model('Trajet', TrajetSchema);

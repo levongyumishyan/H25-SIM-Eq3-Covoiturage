@@ -6,8 +6,8 @@ import * as Location from 'expo-location';
 import { LogBox } from 'react-native';
 import { colors } from './Colors';
 import LocateButton from './LocateButton';
-import drivers from '../data/drivers.json';
 import pin from "../assets/images/pin.png";
+import { BASE_URL } from '../apiConfig';
 import { estDarkMode } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './Trajet';
@@ -32,10 +32,26 @@ export default function MapScreen() {
   const [targetStreet, setTargetStreet] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
+  const [drivers, setDrivers] = useState([]);
 
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/trajets`);
+        const data = await response.json();
+        setDrivers(data);
+      } catch (error) {
+        console.error('Error fetching drivers:', error);
+      }
+    };
+  
+    fetchDrivers();
+  }, []);
+  
   const points = useMemo(() => featureCollection(
     drivers.map((driver, index) => point([driver.long, driver.lat], { ...driver, id: index }))
-  ), []);
+  ), [drivers]);
+  
 
   useEffect(() => {
     const requestPermission = async () => {
