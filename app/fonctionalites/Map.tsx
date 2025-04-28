@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View } from 'react-native';
 import Mapbox, {
   Camera,
@@ -10,6 +10,13 @@ import Mapbox, {
   SymbolLayer,
   UserLocation,
 } from '@rnmapbox/maps';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'ViewTagResolver',          // Hide all "ViewTagResolver" warnings
+  'Mapbox [error] ViewTagResolver',  // More specific if needed
+]);
+
 import * as Location from 'expo-location';
 import { featureCollection, point } from '@turf/helpers';
 import pin from "../assets/images/pin.png";
@@ -17,10 +24,6 @@ import scooters from "../data/drivers.json";
 import { colors } from './Colors';
 import { estDarkMode } from './VariablesGlobales';
 import LocateButton from './LocateButton';
-import SearchBox from './SearchBox';
-import { styles } from './Styles';
-import { TouchableOpacity, Text } from 'react-native';
-import { Button } from './Button';
 import Trajet from './Trajet';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
@@ -28,8 +31,8 @@ Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 export default function Map() {
   const cameraRef = useRef<Camera>(null);
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
+  const [showTrajet, setShowTrajet] = useState(false);
 
-  // Convert scooters to valid GeoJSON FeatureCollection
   const points = featureCollection(
     scooters.map((scooter, index) =>
       point([scooter.long, scooter.lat], { id: index })
@@ -45,6 +48,14 @@ export default function Map() {
     })();
   }, []);
 
+  const openTrajet = useCallback(() => {
+    setShowTrajet(true);
+  }, []);
+
+  const closeTrajet = useCallback(() => {
+    setShowTrajet(false);
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -55,7 +66,6 @@ export default function Map() {
         attributionEnabled={false}
         localizeLabels
       >
-
         <UserLocation
           onUpdate={(location) => {
             const coords: [number, number] = [
@@ -78,7 +88,18 @@ export default function Map() {
           pulsing={{ isEnabled: true }}
         />
 
-        <ShapeSource id="scooters" cluster clusterRadius={50} shape={points}>
+        <ShapeSource
+          id="scooters"
+          cluster
+          clusterRadius={50}
+          shape={points}
+          onPress={(event) => {
+            const feature = event.features?.[0];
+            if (feature && !feature.properties?.point_count) {
+              openTrajet();
+            }
+          }}
+        >
           <CircleLayer
             id="clusters"
             filter={['has', 'point_count']}
@@ -90,7 +111,7 @@ export default function Map() {
               circleStrokeColor: colors.blanc,
               circleStrokeWidth: 2,
             }}
-          />  
+          />
           <SymbolLayer
             id="cluster-count"
             filter={['has', 'point_count']}
@@ -113,10 +134,12 @@ export default function Map() {
             }}
           />
         </ShapeSource>
+
         <Images images={{ pin }} />
       </MapView>
+
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
-      <Trajet/>
+      <Trajet visible={showTrajet} onClose={closeTrajet} />
     </View>
   );
 }

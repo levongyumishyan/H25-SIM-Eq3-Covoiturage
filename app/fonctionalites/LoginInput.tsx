@@ -55,31 +55,13 @@ const LoginInput = () => {
     }
   };
 
-  const deconnection = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/auth/logout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: courriel, mdp }),
-      });
-
-      const data = await response.json();
-      console.log('Réponse du serveur :', data);
-      setConnecte(false);
-    } catch (error) {
-      console.error('Erreur de déconnexion :', error);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.centeredColumn}>
         {estConnecte ? (
           <>
-            <Text style={styles.subtitle}>Bienvenue! {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
-            <TouchableOpacity style={styles.button} onPress={deconnection}>
-              <Text style={styles.buttonText}>Se déconnecter</Text>
-            </TouchableOpacity>
+            <Text style={styles.title}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
             <Settings/>
           </>
         ) : (
