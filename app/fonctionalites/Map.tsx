@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import Mapbox, {
   MapView,
   ShapeSource,
@@ -14,13 +14,16 @@ import Mapbox, {
 import { featureCollection, point } from '@turf/helpers';
 import * as Location from 'expo-location';
 import { LogBox } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from './Colors';
+import { styles } from './Styles';
 import LocateButton from './LocateButton';
-import Trajet from './Trajet';
 import scooters from '../data/drivers.json';
 import pin from "../assets/images/pin.png";
 import { estDarkMode } from './VariablesGlobales';
+import TrajetSearch from './TrajetSearch';
+import Trajet from './Trajet';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
@@ -37,6 +40,7 @@ export default function MapScreen() {
   const [routeGeoJSON, setRouteGeoJSON] = useState(null);
   const [pickupStreet, setPickupStreet] = useState('');
   const [targetStreet, setTargetStreet] = useState('');
+  const [isAnySheetOpen, setIsAnySheetOpen] = useState(false);
 
   const points = useMemo(() => featureCollection(
     scooters.map((scooter, index) =>
@@ -80,21 +84,13 @@ export default function MapScreen() {
     }
   };
 
-  const openTrajet = useCallback(() => {
-    setSelectedRide(null);
-    setShowTrajet(true);
-    setRouteGeoJSON(null);
-    setPickupStreet('');
-    setTargetStreet('');
-  }, []);
-
-  const closeTrajet = useCallback(() => {
+  const closeTrajet = () => {
     setShowTrajet(false);
     setSelectedRide(null);
     setRouteGeoJSON(null);
     setPickupStreet('');
     setTargetStreet('');
-  }, []);
+  };
 
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
@@ -111,7 +107,6 @@ export default function MapScreen() {
       const rideCoords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]];
       const targetCoords = [feature.properties.targetLong, feature.properties.targetLat];
 
-      // 🚨 Only route from scooter to target
       const route = await fetchRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
@@ -147,7 +142,6 @@ export default function MapScreen() {
         attributionEnabled={false}
         localizeLabels
       >
-        {/* User location puck */}
         <UserLocation
           onUpdate={(location) => {
             const coords: [number, number] = [
@@ -158,21 +152,10 @@ export default function MapScreen() {
           }}
         />
 
-        {/* Camera */}
-        <Camera
-          ref={cameraRef}
-          zoomLevel={14}
-          centerCoordinate={userCoords}
-        />
+        <Camera ref={cameraRef} zoomLevel={14} centerCoordinate={userCoords} />
 
-        {/* Location Puck */}
-        <LocationPuck
-          puckBearingEnabled
-          puckBearing="heading"
-          pulsing={{ isEnabled: true }}
-        />
+        <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
-        {/* Scooters */}
         <ShapeSource
           id="scooters"
           cluster
@@ -184,12 +167,17 @@ export default function MapScreen() {
             id="clusters"
             filter={['has', 'point_count']}
             style={{
-              circlePitchAlignment: 'map',
               circleColor: colors.vertPrincipal,
-              circleRadius: 20,
-              circleOpacity: 1,
+              circleRadius: [
+                'step',
+                ['get', 'point_count'],
+                20,
+                10, 25,
+                25, 30,
+              ],
               circleStrokeColor: colors.blanc,
-              circleStrokeWidth: 2,
+              circleStrokeWidth: 3,
+              circleOpacity: 0.9,
             }}
           />
           <SymbolLayer
@@ -197,8 +185,10 @@ export default function MapScreen() {
             filter={['has', 'point_count']}
             style={{
               textField: ['get', 'point_count'],
-              textSize: 18,
+              textSize: 16,
               textColor: colors.blanc,
+              textHaloColor: colors.vertPrincipal,
+              textHaloWidth: 1.5,
               textIgnorePlacement: true,
               textAllowOverlap: true,
             }}
@@ -217,7 +207,6 @@ export default function MapScreen() {
 
         <Images images={{ pin }} />
 
-        {/* Route */}
         {routeGeoJSON && (
           <ShapeSource id="route" shape={routeGeoJSON}>
             <LineLayer
@@ -234,14 +223,17 @@ export default function MapScreen() {
       {/* Locate Button */}
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
 
-      {/* Trajet BottomSheet */}
+      {/* Trajet Search Box */}
+      <TrajetSearch onSheetChange={setIsAnySheetOpen} />
+
+      {/* Trajet Ride Details */}
       <Trajet
         visible={showTrajet}
         onClose={closeTrajet}
-        onManualOpen={openTrajet}
         selectedRide={selectedRide}
         pickupStreet={pickupStreet}
         targetStreet={targetStreet}
+        onSheetChange={setIsAnySheetOpen}
       />
     </View>
   );

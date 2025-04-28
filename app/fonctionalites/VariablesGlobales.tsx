@@ -34,7 +34,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUserId: (id)  => set({ userId: id }),
 }));
 
-
 export default function VariablesGlobales() {
   return null;
 }

@@ -1,26 +1,73 @@
-import React, { useState } from "react";
-import { Text, View, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, View, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../fonctionalites/Colors";
-import {styles} from "../fonctionalites/Styles"
+import { styles } from "../fonctionalites/Styles";
+import { useAuthStore } from "../fonctionalites/VariablesGlobales";
+import { useRideStore } from "../fonctionalites/useRideStore";
+import { BASE_URL } from "../apiConfig";
 
 export default function Rides() {
-  
-  const [rides, setRides] = useState([
-    { id: "1", origin: "Centre-Ville", destination: "Aéroport", time: "12 min" },
-    { id: "2", origin: "Université", destination: "Maison", time: "18 min" },
-    { id: "3", origin: "Bureau", destination: "Gym", time: "10 min" },
-    { id: "4", origin: "Parc Jean-Drapeau", destination: "Stade", time: "8 min" },
-    { id: "5", origin: "Marché Central", destination: "Maison", time: "15 min" },
-    { id: "6", origin: "Gare Centrale", destination: "Parc", time: "20 min" },
-  ]);
+  const userId = useAuthStore((state) => state.userId);
+  const upcomingRide = useRideStore((state) => state.upcomingRide);
+  const clearUpcomingRide = useRideStore((state) => state.clearUpcomingRide);
+  const [rides, setRides] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock Statistics
-  const stats = {
-    treesSaved: 42,
-    co2Reduced: "150kg",
-    ridesCompleted: 320,
+  const calculateStats = (rides) => {
+    const totalDistance = rides.reduce((sum, ride) => sum + (ride.distance || 0), 0);
+    const co2Saved = totalDistance * 0.21;
+    const treesSaved = co2Saved / 21;
+    return {
+      totalDistance: totalDistance.toFixed(1),
+      co2Reduced: `${co2Saved.toFixed(1)} kg`,
+      treesSaved: treesSaved.toFixed(2),
+      ridesCompleted: rides.length,
+    };
+  };
+
+  const fetchRides = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/users/${userId}/rides`);
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.warn('Response not JSON, injecting mock.');
+        data = { rides: [] };
+      }
+
+      let userRides = Array.isArray(data.rides) ? data.rides : Array.isArray(data) ? data : [];
+
+      if (userRides.length === 0) {
+        userRides = [
+          { id: "mock1", origin: "Université", destination: "Maison", distance: 4.2 },
+          { id: "mock2", origin: "Centre Commercial", destination: "Parc", distance: 2.8 },
+        ];
+      }
+
+      setRides(userRides);
+      const calculatedStats = calculateStats(userRides);
+      setStats(calculatedStats);
+    } catch (error) {
+      console.error('Erreur en récupérant les trajets:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) fetchRides();
+  }, [userId]);
+
+  const completeRide = () => {
+    if (upcomingRide) {
+      setRides((prev) => [upcomingRide, ...prev]);
+      clearUpcomingRide();
+    }
   };
 
   const renderRide = ({ item }) => (
@@ -28,35 +75,60 @@ export default function Rides() {
       <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
         <Text style={styles.label}>{item.origin} → {item.destination}</Text>
-        <Text style={styles.smallText}>{item.time} • Terminé</Text>
+        <Text style={styles.smallText}>{item.distance} km • Terminé</Text>
       </View>
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color={colors.vertPrincipal} />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Statistics Section */}
-        <View style={styles.centeredRow}>
-          <View style={styles.centeredColumn}>
-            <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
-          </View>
-          <View style={styles.centeredColumn}>
-            <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
-          </View>
-          <View style={styles.centeredColumn}>
-            <Ionicons name="car" size={30} color={colors.vertSecondaire} />
-            <Text style={styles.labelCentered}>{stats.ridesCompleted} trajets complétés</Text>
-          </View>
-        </View>
 
-        {/* Recent Rides Section */}
+        {stats && (
+          <View style={styles.centeredRow}>
+            <View style={styles.centeredColumn}>
+              <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
+              <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
+            </View>
+            <View style={styles.centeredColumn}>
+              <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
+              <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
+            </View>
+            <View style={styles.centeredColumn}>
+              <Ionicons name="bicycle" size={30} color={colors.vertSecondaire} />
+              <Text style={styles.labelCentered}>{stats.totalDistance} km parcourus</Text>
+            </View>
+          </View>
+        )}
+
+        {upcomingRide && (
+          <View style={styles.upcomingRideContainer}>
+            <Text style={styles.title}>Trajet en Cours</Text>
+            <View style={styles.ridecontainer}>
+              <Ionicons name="car-sport-outline" size={24} color={colors.vertPrincipal} style={styles.icon} />
+              <View style={styles.rideDetails}>
+                <Text style={styles.label}>{upcomingRide.origin} → {upcomingRide.destination}</Text>
+                <Text style={styles.smallText}>{upcomingRide.distance} km • En cours...</Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.button} onPress={completeRide}>
+              <Text style={styles.buttonText}>Terminer le trajet</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <Text style={styles.title}>Trajets Récents</Text>
         <FlatList
           data={rides}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderRide}
           contentContainerStyle={styles.scrollContainer}
           scrollEnabled={false}
@@ -65,5 +137,3 @@ export default function Rides() {
     </SafeAreaView>
   );
 }
-
-export default Rides;
