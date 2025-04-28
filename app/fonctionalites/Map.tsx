@@ -1,18 +1,18 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import Mapbox, { MapView, ShapeSource, SymbolLayer, CircleLayer, Camera, UserLocation, Images, LineLayer, LocationPuck } from '@rnmapbox/maps';
 import { featureCollection, point } from '@turf/helpers';
 import * as Location from 'expo-location';
 import { LogBox } from 'react-native';
 
 import { colors } from './Colors';
-import { styles } from './Styles';
 import LocateButton from './LocateButton';
 import scooters from '../data/drivers.json';
 import pin from "../assets/images/pin.png";
 import { estDarkMode } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './Trajet';
+import { useRideStore } from './useRideStore';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
@@ -23,6 +23,8 @@ LogBox.ignoreLogs([
 
 export default function MapScreen() {
   const cameraRef = useRef<Camera>(null);
+  const { upcomingRide } = useRideStore(); // ✅ Moved HERE at the top level
+
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
   const [selectedRide, setSelectedRide] = useState(null);
   const [showTrajet, setShowTrajet] = useState(false);
@@ -31,7 +33,7 @@ export default function MapScreen() {
   const [targetStreet, setTargetStreet] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
-  
+
   const points = useMemo(() => featureCollection(
     scooters.map((scooter, index) => point([scooter.long, scooter.lat], { ...scooter, id: index }))
   ), []);
@@ -43,10 +45,8 @@ export default function MapScreen() {
         console.warn('Location permission denied');
       }
     };
-  
-    requestPermission(); // ✅ Call it after defining
+    requestPermission();
   }, []);
-  
 
   const fetchRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
@@ -86,7 +86,7 @@ export default function MapScreen() {
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
-  
+
     if (feature.properties?.point_count) {
       const [longitude, latitude] = feature.geometry.coordinates;
       cameraRef.current?.setCamera({
@@ -97,7 +97,7 @@ export default function MapScreen() {
     } else {
       const rideCoords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]];
       const targetCoords = [feature.properties.targetLong, feature.properties.targetLat];
-  
+
       const route = await fetchRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
@@ -110,14 +110,12 @@ export default function MapScreen() {
             },
           ],
         });
-  
-        // Replace these with actual values or fetch them dynamically
+
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
-  
+
         setPickupStreet(pickupAddress);
         setTargetStreet(targetAddress);
-  
         setSelectedRide(feature.properties);
         setShowTrajet(true);
       }
@@ -126,6 +124,26 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
+      
+      {/* Green Banner if a ride is ongoing */}
+      {upcomingRide && (
+        <View style={{
+          position: 'absolute',
+          top: 50,
+          alignSelf: 'center',
+          backgroundColor: colors.vertPrincipal,
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+          borderRadius: 20,
+          zIndex: 10,
+        }}>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+            🚴‍♂️ Trajet en cours: {upcomingRide.origin} ➔ {upcomingRide.destination}
+          </Text>
+        </View>
+      )}
+
+      {/* Mapbox Map */}
       <MapView
         style={{ flex: 1 }}
         styleURL={estDarkMode ? Mapbox.StyleURL.Dark : Mapbox.StyleURL.Street}
@@ -215,8 +233,8 @@ export default function MapScreen() {
       {/* Locate Button */}
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
 
+      {/* Bottom sheets */}
       <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} />
-
       <Trajet
         visible={showTrajet}
         onClose={closeTrajet}
@@ -225,8 +243,6 @@ export default function MapScreen() {
         targetStreet={targetStreet}
         onSheetChange={setIsRideDetailsOpen}
       />
-
     </View>
   );
-  }
-  
+}
