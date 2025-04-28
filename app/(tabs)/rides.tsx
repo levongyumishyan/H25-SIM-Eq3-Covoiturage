@@ -42,13 +42,6 @@ export default function Rides() {
 
       let userRides = Array.isArray(data.rides) ? data.rides : Array.isArray(data) ? data : [];
 
-      if (userRides.length === 0) {
-        userRides = [
-          { id: "mock1", origin: "Université", destination: "Maison", distance: 4.2 },
-          { id: "mock2", origin: "Centre Commercial", destination: "Parc", distance: 2.8 },
-        ];
-      }
-
       setRides(userRides);
       const calculatedStats = calculateStats(userRides);
       setStats(calculatedStats);

@@ -31,20 +31,25 @@ const SearchBox = () => {
         targetLat: targetCoords[1],
       };
   
-      const response = await fetch(`${BASE_URL}/api/trajets`, { // <-- now /api/trajets
+      const response = await fetch(`${BASE_URL}/api/trajets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
   
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.msg || 'Une erreur est survenue');
+      if (!response.ok) {
+        const errorText = await response.text(); // read as text first
+        throw new Error(`Erreur HTTP ${response.status}: ${errorText}`);
+      }
   
+      const data = await response.json(); // ✅ now safe to call
       console.log('✅ Trajet ajouté:', data);
+  
     } catch (error) {
       console.error('Erreur lors de l\'ajout du trajet:', error.message);
     }
   };
+  
   
   
 
