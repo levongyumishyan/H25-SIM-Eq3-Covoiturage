@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { couleurs } from './Couleurs';
+import { colors } from './Colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: couleurs.arrierePlan,
+    backgroundColor: colors.arrierePlan,
     paddingHorizontal: 20,
     paddingBottom: 40,
   },
@@ -65,20 +65,20 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 50,
     fontWeight: 'bold',
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     textAlign: 'center',
     marginBottom: 15,
   },
   subtitle: {
     fontSize: 30,
     fontWeight: '600',
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     marginBottom: 10,
     textAlign: 'left'
   },
   smallText: {
     fontSize: 14,
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
   },
   elementText:
    {
@@ -88,14 +88,14 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 19,
     fontWeight: '500',
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     marginBottom: 6,
   },
 
   labelCentered: {
     fontSize: 19,
     fontWeight: '500',
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     textAlign: 'center',
     marginBottom: 6,
   },
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
   labelLeft: {
     fontSize: 19,
     fontWeight: '500',
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     textAlign: 'left',
     marginBottom: 6,
   },
@@ -111,69 +111,69 @@ export const styles = StyleSheet.create({
   labelInverse: {
     fontSize: 19,
     fontWeight: '500',
-    color: couleurs.couleurTexteInverse,
+    color: colors.couleurTexteInverse,
     marginBottom: 6,
   },
 
   labelInverseCentered: {
     fontSize: 19,
     fontWeight: '500',
-    color: couleurs.couleurTexteInverse,
+    color: colors.couleurTexteInverse,
     marginBottom: 6,
     textAlign: 'center',
   },
 
   // ---------- Buttons ----------
   button: {
-    backgroundColor: couleurs.vertPrincipal,
+    backgroundColor: colors.vertPrincipal,
     paddingVertical: 14,
     borderRadius: 19,
     alignItems: 'center',
     marginTop: 20,
     minWidth: 200, 
-    shadowColor: couleurs.arrierePlan,
+    shadowColor: colors.arrierePlan,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
   buttonText: {
-    color: couleurs.blanc,
+    color: colors.blanc,
     fontWeight: '600',
     fontSize: 16,
   },
   outlineButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: couleurs.couleurTexte,
+    borderColor: colors.couleurTexte,
   },
   outlineButtonText: {
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
   },
 
   // ---------- Input Fields ----------
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: couleurs.blanc,
+    backgroundColor: colors.blanc,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     borderWidth: 1,
-    borderColor: couleurs.grisPrincipal,
+    borderColor: colors.grisPrincipal,
     marginBottom: 12,
     minWidth: 300,
   },
   inputSettings: {
     width: '50%',
     height: 50,
-    backgroundColor: couleurs.blanc,
+    backgroundColor: colors.blanc,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
     borderWidth: 1,
-    borderColor: couleurs.grisPrincipal,
+    borderColor: colors.grisPrincipal,
     marginBottom: 12,
     minWidth: 100,
   },
@@ -181,17 +181,17 @@ export const styles = StyleSheet.create({
   datePickerButton: {
     width: '100%',
     height: 50,
-    backgroundColor: couleurs.blanc,
+    backgroundColor: colors.blanc,
     borderRadius: 8,
     justifyContent: 'center',
     paddingHorizontal: 15,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: couleurs.grisPrincipal,
+    borderColor: colors.grisPrincipal,
   },
   datePickerText: {
     fontSize: 16,
-    color: couleurs.couleurTexteInverse,
+    color: colors.couleurTexteInverse,
   },
 
   // ---------- Checkboxes ----------
@@ -203,7 +203,7 @@ export const styles = StyleSheet.create({
   checkboxLabel: {
     fontSize: 16,
     marginLeft: 10,
-    color: couleurs.couleurTexte,
+    color: colors.couleurTexte,
   },
 
   // ---------- Map ----------
@@ -215,7 +215,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 100,
     right: 20,
-    backgroundColor: couleurs.vertPrincipal,
+    backgroundColor: colors.vertPrincipal,
     padding: 12,
     borderRadius: 25,
     elevation: 5,
@@ -230,7 +230,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 100,
     right: 180,
-    backgroundColor: couleurs.vertPrincipal,
+    backgroundColor: colors.vertPrincipal,
     padding: 12,
     borderRadius: 25,
     elevation: 5,
@@ -250,10 +250,10 @@ export const styles = StyleSheet.create({
     top: 70,
     left: 20,
     right: 20,
-    backgroundColor: couleurs.blanc,
+    backgroundColor: colors.blanc,
     borderRadius: 10,
     padding: 10,
-    shadowColor: couleurs.arrierePlan,
+    shadowColor: colors.arrierePlan,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -262,7 +262,7 @@ export const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: couleurs.noir,
+    color: colors.noir,
     paddingVertical: 8,
   },
 
@@ -272,7 +272,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: couleurs.grisPrincipal,
+    backgroundColor: colors.grisPrincipal,
     paddingHorizontal: 20,
     padding: 10,
     borderRadius: 20,
@@ -282,7 +282,7 @@ export const styles = StyleSheet.create({
 
   rideItem: {
     paddingVertical: 10,
-    borderBottomColor: couleurs.grisPrincipal,
+    borderBottomColor: colors.grisPrincipal,
     borderBottomWidth: 1,
   },
   
@@ -299,7 +299,7 @@ export const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: couleurs.vertPrincipal,
+    color: colors.vertPrincipal,
   },
 });
 

@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native";
 import React, { useState } from "react";
-import { couleurs } from "../fonctionalites/Couleurs";
+import { colors } from "../fonctionalites/Colors";
 import { styles } from "../fonctionalites/Styles";
 
 export default function Index() {
@@ -18,7 +18,7 @@ export default function Index() {
               onChangeText={setCourriel}
               value={courriel}
               placeholder="courriel@entreprise.ca"
-              placeholderTextColor={couleurs.grisPrincipal}
+              placeholderTextColor={colors.grisPrincipal}
               keyboardType="email-address"
               autoCapitalize="none"
             />

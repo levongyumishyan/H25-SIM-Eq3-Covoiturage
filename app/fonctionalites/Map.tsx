@@ -12,7 +12,7 @@ import Mapbox, {
   LocationPuck
 } from '@rnmapbox/maps';
 import * as Location from 'expo-location';
-import { couleurs } from './Couleurs';
+import { colors } from './Colors';
 import LocateButton from './LocateButton';
 import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { couleurs } from '../fonctionalites/Couleurs';
+import { colors } from '../fonctionalites/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
 import React from 'react';
@@ -19,12 +19,12 @@ export default function TabLayout() {
     <GestureHandlerRootView>
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: couleurs.couleurSurVert,
-        tabBarInactiveTintColor: couleurs.couleurSurVert,
+        tabBarActiveTintColor: colors.couleurSurVert,
+        tabBarInactiveTintColor: colors.couleurSurVert,
         headerShown: false,
         tabBarStyle: estConnecte
           ? {
-              backgroundColor: couleurs.vertPrincipal,
+              backgroundColor: colors.vertPrincipal,
               height: 80,
               position: 'absolute',
               elevation: 8,

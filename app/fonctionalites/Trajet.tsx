@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { couleurs } from './Couleurs';
+import { colors } from './Colors';
 import { useRideStore } from './useRideStore';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -66,7 +66,7 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
       onClose={onClose}
     >
       <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-        <Ionicons name="footsteps-outline" size={30} color={couleurs.vertPrincipal} />
+        <Ionicons name="footsteps-outline" size={30} color={colors.vertPrincipal} />
         <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
 
         <TouchableOpacity onPress={onAddressPress}>
@@ -88,7 +88,7 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
         <TouchableOpacity
           onPress={handleJoindre}
           style={{
-            backgroundColor: couleurs.vertPrincipal,
+            backgroundColor: colors.vertPrincipal,
             padding: 12,
             borderRadius: 10,
             marginTop: 10,

@@ -3,7 +3,7 @@ import { useAuthStore } from "./VariablesGlobales";
 import { SafeAreaView, TouchableOpacity, View, Text, TextInput } from "react-native";
 import { styles } from "./Styles";
 import React from "react";
-import { couleurs } from "./Couleurs";
+import { colors } from "./Colors";
 import { BASE_URL } from "~/apiConfig";
 
 const Settings = () => {
@@ -75,11 +75,11 @@ const Settings = () => {
             <TouchableOpacity onPress={() => setEditingNom(true)}>
               {editingNom ? (
                 <TextInput
-                  style={[styles.inputSettings, { color: couleurs.couleurTexteInverse }]}
+                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
                   onChangeText={setNomUtilisateur}
                   value={nomUtilisateur}
                   placeholder="Nom"
-                  placeholderTextColor={couleurs.grisPrincipal}
+                  placeholderTextColor={colors.grisPrincipal}
                   onBlur={() => setEditingNom(false)}
                   autoFocus
                 />
@@ -92,11 +92,11 @@ const Settings = () => {
             <TouchableOpacity onPress={() => setEditingCourriel(true)}>
               {editingCourriel ? (
                 <TextInput
-                  style={[styles.inputSettings, { color: couleurs.couleurTexteInverse }]}
+                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
                   onChangeText={setCourrielUtilisateur}
                   value={courrielUtilisateur}
                   placeholder="Courriel"
-                  placeholderTextColor={couleurs.grisPrincipal}
+                  placeholderTextColor={colors.grisPrincipal}
                   keyboardType="email-address"
                   onBlur={() => setEditingCourriel(false)}
                   autoFocus
@@ -110,11 +110,11 @@ const Settings = () => {
             <TouchableOpacity onPress={() => setEditingTelephone(true)}>
               {editingTelephone ? (
                 <TextInput
-                  style={[styles.inputSettings, { color: couleurs.couleurTexteInverse }]}
+                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
                   onChangeText={setTelephoneUtilisateur}
                   value={telephoneUtilisateur}
                   placeholder="Téléphone"
-                  placeholderTextColor={couleurs.grisPrincipal}
+                  placeholderTextColor={colors.grisPrincipal}
                   keyboardType="phone-pad"
                   onBlur={() => setEditingTelephone(false)}
                   autoFocus
