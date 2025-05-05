@@ -8,7 +8,7 @@ import SignUpInput from "../fonctionalites/SignInInput";
 export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View style={styles.container}>
         <SignUpInput />        
       </View>
     </SafeAreaView>

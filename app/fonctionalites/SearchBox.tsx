@@ -63,7 +63,6 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     onSelect?.();
   };
   
-  //INUTILEEEEEEEEEEEEEEEeeeeee
   const confirmSchedule = async (schedule) => {
     if (!location || !pendingTargetCoords) return;
     try {
@@ -72,17 +71,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
         lat: location.latitude,
         targetLong: pendingTargetCoords[0],
         targetLat: pendingTargetCoords[1],
-        scheduleDays: schedule.days,
-        scheduleTime: schedule.time,
       };
-      console.log("📤 Sending to backend:", {
-        long: location.longitude,
-        lat: location.latitude,
-        targetLong: pendingTargetCoords[0],
-        targetLat: pendingTargetCoords[1],
-        scheduleDays: schedule.days,
-        scheduleTime: schedule.time,
-      });
       
       const response = await fetch(`${BASE_URL}/api/trajets`, {
         method: 'POST',
@@ -115,7 +104,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
           <Text
             style={{
               ...styles.labelInverse,
-              color: isSelected ? colors.link : colors.noir,
+              color: isSelected ? colors.g : colors.noir,
               textDecorationLine: isSelected ? 'underline' : 'none'
             }}
           >
@@ -127,27 +116,33 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   };
 
   return (
-    <View style={[styles.searchBoxWrapper, { backgroundColor: '#fff', borderRadius: 12, elevation: 5, padding: 10 }]}>
-      <View style={styles.ligneCentree}>
-        <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
-        <TextInput
-          style={styles.labelInverse}
-          placeholder={'Où allez-vous ?'}
-          placeholderTextColor={colors.couleurTexteInverse}
-          value={input}
-          onChangeText={setInput}
-        />
-      </View>
-      {suggestions.length > 0 && (
-        <View style={[styles.scrollContainer, { backgroundColor: '#f9f9f9', borderRadius: 8 }]}>
-          <FlatList
-            data={suggestions}
-            keyExtractor={(item, index) => item.id + index}
-            renderItem={renderSuggestions}
-          />
-        </View>
-      )}
-    </View>
+<View style={[styles.searchBoxWrapper, {
+  backgroundColor: colors.blanc,
+  borderRadius: 12,
+  elevation: 5,
+  padding: 10,
+  }]}>
+  <View style={styles.ligneCentree}>
+    <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
+    <TextInput
+      style={styles.labelInverse}
+      placeholder={'Où allez-vous ?'}
+      placeholderTextColor={colors.noir}
+      value={input}
+      onChangeText={setInput}
+    />
+  </View>
+
+  {suggestions.length > 0 && (
+    <FlatList
+      style={{ marginTop: 10, maxHeight: 180 }} // limit size if needed
+      data={suggestions}
+      keyExtractor={(item, index) => item.id + index}
+      renderItem={renderSuggestions}
+    />
+  )}
+</View>
+
   );
 });
 

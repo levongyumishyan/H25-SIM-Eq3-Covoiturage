@@ -13,7 +13,7 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
 
-  const snapPoints = useMemo(() => ['30%', '60%'], []);
+  const snapPoints = useMemo(() => ['20%', '20%'], []);
 
   const openBottomSheet = () => {
     setIsSheetOpen(true);

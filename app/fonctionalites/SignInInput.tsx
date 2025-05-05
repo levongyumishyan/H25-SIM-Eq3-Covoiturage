@@ -193,7 +193,7 @@ const SignUpInput = () => {
         <View style={styles.checkboxContainer}>
           {!passager && (
             <View style={styles.checkboxItem}>
-              <Text style={styles.subtitle}>Conducteur</Text>
+              <Text style={styles.sousTitre}>Conducteur</Text>
               <Checkbox
                 value={conducteur}
                 onValueChange={(val) => {
@@ -207,7 +207,7 @@ const SignUpInput = () => {
 
           {!conducteur && (
             <View style={styles.checkboxItem}>
-              <Text style={styles.subtitle}>Passager</Text>
+              <Text style={styles.sousTitre}>Passager</Text>
               <Checkbox
                 value={passager}
                 onValueChange={(val) => {
@@ -221,7 +221,7 @@ const SignUpInput = () => {
 
           {conducteur && (
             <View style={styles.voitureContainer}>
-              <Text style={styles.subtitle}>Modèle de voiture</Text>
+              <Text style={styles.sousTitre}>Modèle de voiture</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setModeleVoiture}
