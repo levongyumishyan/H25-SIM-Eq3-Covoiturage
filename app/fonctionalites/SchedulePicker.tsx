@@ -43,7 +43,6 @@ export default function SchedulePicker({ coordinates = {} }) {
 
   const handleConfirm = async () => {
     const payload = {
-      id: Math.floor(Math.random() * 1000000),
       userId: userId,
       long: userLong,
       lat: userLat,

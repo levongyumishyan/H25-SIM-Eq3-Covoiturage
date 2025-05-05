@@ -62,7 +62,8 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     setSuggestions([]);
     onSelect?.();
   };
-
+  
+  //INUTILEEEEEEEEEEEEEEEeeeeee
   const confirmSchedule = async (schedule) => {
     if (!location || !pendingTargetCoords) return;
     try {
