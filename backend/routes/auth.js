@@ -1,27 +1,50 @@
-const express = require("express"); // créer le routeur et gérer les routes API
-const bcrypt = require("bcryptjs"); // sert à hacher les mots de passe pour la sécurité
-const jwt = require("jsonwebtoken"); // sert à génèrer un token d’authentification après la connexion ou l’inscription
-const { body, validationResult } = require("express-validator"); // sert à vérifier que les entrées utilisateur sont valides
+/**
+ * Module de gestion des utilisateurs et des trajets.
+ * Ce module permet de gérer l'inscription, la connexion, la déconnexion,
+ * la mise à jour des informations utilisateur et la gestion des trajets.
+ *
+ * @module routes
+ */
+
+const express = require("express"); 
+const bcrypt = require("bcryptjs"); 
+const jwt = require("jsonwebtoken"); 
+const { body, validationResult } = require("express-validator"); 
 const Utilisateur = require("../models/Utilisateur");
 const Voiture = require("../models/Voiture"); 
 const { verifierMotDePasse } = require("../utils/validation");
 require("dotenv").config();
-const Trajet = require("../models/Trajet")
+const Trajet = require("../models/Trajet");
 
 const router = express.Router();
 
-// signup route
-
-// validation entrées
+/**
+ * Route pour l'inscription d'un utilisateur.
+ * Valide les données envoyées et enregistre un utilisateur dans la base de données,
+ * en générant un hash pour le mot de passe et un token JWT.
+ *
+ * @route POST /signup
+ * @param {string} nom - Le nom de l'utilisateur.
+ * @param {string} prenom - Le prénom de l'utilisateur.
+ * @param {string} email - L'email de l'utilisateur.
+ * @param {string} mdp - Le mot de passe de l'utilisateur.
+ * @param {string} dateNaissance - La date de naissance de l'utilisateur.
+ * @param {string} telephone - Le numéro de téléphone de l'utilisateur.
+ * @param {boolean} conducteur - Si l'utilisateur est conducteur ou passager.
+ * @param {boolean} passager - Si l'utilisateur est passager ou conducteur.
+ * @param {string} modeleVoiture - Le modèle de la voiture du conducteur.
+ * @param {string} anneeVoiture - L'année du modèle de voiture.
+ * @param {string} consommationVoiture - La consommation de carburant de la voiture.
+ *
+ * @returns {Object} - L'objet utilisateur avec un token JWT.
+ */
 router.post("/signup", [
     body("nom").notEmpty().withMessage("Nom est requis"),
     body("email").isEmail().withMessage("Email invalide"),
     body("mdp").notEmpty().withMessage("Mot de passe requis")
 ], async (req, res) => {
-
-    // traitement de l'inscription
     const erreurs = validationResult(req);
-    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
     const { mdp } = req.body;
     const erreursMdp = verifierMotDePasse(mdp);
@@ -29,73 +52,74 @@ router.post("/signup", [
         return res.status(400).json({ errors: erreursMdp.map(msg => ({ msg })) });
     }
 
-
     const { prenom, nom, dateNaissance, telephone, email, conducteur, passager, modeleVoiture, anneeVoiture, consommationVoiture } = req.body;
     try {
-        let utilisateur = await Utilisateur.findOne({ email });  // cherche si l'utilisateur est déjà dans la base de données
-        if (utilisateur) return res.status(400).json({ msg: "Cet utilisateur est déjà existant" });  // retourner message d'erreur
+        let utilisateur = await Utilisateur.findOne({ email: email.toLowerCase() });
+        if (utilisateur) return res.status(400).json({ msg: "Cet utilisateur est déjà existant" });
 
-        const seed = await bcrypt.genSalt(10); // random seed pour l'inscription
-        const mdpHash = await bcrypt.hash(mdp, seed); // hache le mdp
+        const seed = await bcrypt.genSalt(10);
+        const mdpHash = await bcrypt.hash(mdp, seed);
         
         let voiture;
         if (conducteur == true) {
-          voiture = new Voiture({
-            modeleVoiture,
-            anneeVoiture,
-            consommationVoiture
-          });
-          await voiture.save();
-          console.log("voiture créée");
+            voiture = new Voiture({
+                modeleVoiture,
+                anneeVoiture,
+                consommationVoiture
+            });
+            await voiture.save();
         }
 
-        // créer et enregistrer utilisateur
-        // maintenant on peut l’utiliser dans Utilisateur, même s’il est undefined
         utilisateur = new Utilisateur({
-        prenom,
-        nom,
-        dateNaissance,
-        telephone,
-        email,
-        mdp: mdpHash,
-        conducteur,
-        passager,
-        estConnecte: true,
-        voiture
-    });
-  await utilisateur.save();
-  console.log("utilisateur créé");
-        // génèrer le token JWT et le stocker
+            prenom,
+            nom,
+            dateNaissance,
+            telephone,
+            email,
+            mdp: mdpHash,
+            conducteur,
+            passager,
+            estConnecte: true,
+            voiture
+        });
+        await utilisateur.save();
+
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.json({ token, user: { id: utilisateur._id, nom, prenom, email, voiture} });
-
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msg: err});  // en cas d'erreur
+        res.status(500).json({ msg: err });
     }
 });
 
-// login route
+/**
+ * Route pour la connexion d'un utilisateur.
+ * Vérifie les informations d'identification de l'utilisateur, et génère un token JWT s'il est valide.
+ *
+ * @route POST /login
+ * @param {string} email - L'email de l'utilisateur.
+ * @param {string} mdp - Le mot de passe de l'utilisateur.
+ *
+ * @returns {Object} - L'objet utilisateur avec un token JWT.
+ */
 router.post("/login", [
     body("email").isEmail().withMessage("Email invalide"),
     body("mdp").exists().withMessage("Mot de passe requis")
 ], async (req, res) => {
-
-    // traitement de la connexion
     const erreurs = validationResult(req);
-    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });  // retourner erreurs
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
-    const { email, mdp } = req.body;
+    const email = req.body.email.toLowerCase();
+    const { mdp } = req.body;
     try {
         const utilisateur = await Utilisateur.findOne({ email });
         if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
+
         const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
         if (!isMatch) return res.status(400).json({ msg: "Email ou mot de passe invalide" });
-        await Utilisateur.updateOne(
-            { email: email }, 
-            { $set: { estConnecte: true } }
-          );
-        // génère le token JWT et le stocker
+
+        await Utilisateur.updateOne({ email: email }, { $set: { estConnecte: true } });
+
         const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: true, prenom: utilisateur.prenom, telephone: utilisateur.telephone, email: utilisateur.email } });
     } catch (err) {
@@ -103,78 +127,78 @@ router.post("/login", [
         res.status(500).json({ msg: "Erreur server" });
     }
 });
-router.post("/logout",[], async (req, res) => {
 
-    // traitement de la connexion
+/**
+ * Route pour la déconnexion d'un utilisateur.
+ * Déconnecte un utilisateur en mettant à jour son statut de connexion.
+ *
+ * @route POST /logout
+ * @param {string} email - L'email de l'utilisateur.
+ * @param {string} mdp - Le mot de passe de l'utilisateur.
+ *
+ * @returns {Object} - L'objet utilisateur mis à jour avec le statut de connexion.
+ */
+router.post("/logout", [], async (req, res) => {
     const erreurs = validationResult(req);
-    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });  // retourner erreurs
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
     const { email, mdp } = req.body;
     try {
         const utilisateur = await Utilisateur.findOne({ email });
         if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
+
         const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
         if (!isMatch) return res.status(400).json({ msg: "Email ou mot de passe invalide" });
-        await Utilisateur.updateOne(
-            { email: email }, 
-            { $set: { estConnecte: false } }
-          );
-        // génère le token JWT et le stocker
-        const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: !utilisateur.estConnecte } });
 
+        await Utilisateur.updateOne({ email: email }, { $set: { estConnecte: false } });
+
+        const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        res.json({ token, utilisateur: { id: utilisateur._id, nom: utilisateur.nom, estConnecte: false } });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Erreur server" });
     }
 });
 
-
-// TODO:
-router.post("/trajet", [], async (req, res) => 
-{
+// TODO: Route pour gérer les trajets
+router.post("/trajet", [], async (req, res) => {
     const { id, long, lat, targetLong, targetLat } = req.body;
-    try
-    {
+    try {
         const trajet = await Trajet.findOne({ id, long, lat, targetLong, targetLat });
-        await Trajet.updateOne
-        (
-            {id: id},
-            {long: long},
-            {lat: lat},
-            {targetLong: targetLong},
-            {targetLat: targetLat},
+        await Trajet.updateOne(
+            { id: id },
+            { long: long, lat: lat, targetLong: targetLong, targetLat: targetLat },
         );
-        res.json({ trajet })
-
-    }
-    catch (err)
-    {
+        res.json({ trajet });
+    } catch (err) {
         console.error(err);
         res.status(500).json({ msg: "Erreur server" });
     }
-})
+});
 
-
-
-// METTRE À JOUR INFOS UTILISATEUR
+/**
+ * Route pour mettre à jour les informations utilisateur.
+ * Permet de mettre à jour le nom, téléphone et email de l'utilisateur.
+ *
+ * @route POST /updateUserInfos
+ * @param {string} id - L'identifiant unique de l'utilisateur.
+ * @param {string} nom - Le nom de l'utilisateur.
+ * @param {string} email - L'email de l'utilisateur.
+ * @param {string} telephone - Le numéro de téléphone de l'utilisateur.
+ *
+ * @returns {Object} - L'utilisateur avec les informations mises à jour.
+ */
 router.post("/updateUserInfos", [
     body("nom").notEmpty().withMessage("Nom est requis"),
     body("email").isEmail().withMessage("Email invalide"),
-
-    // ici on peut rajouter des conditions pour le mot de passe, on devrait faire une fonction
-    //body("mdp").isLength({ min: mdpTailleMin }).withMessage(`Mot de passe doit contenir au moins ${mdpTailleMin} caractères`)
 ], async (req, res) => {
-
-    // traitement de l'inscription
     const erreurs = validationResult(req);
-    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
+    if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
     const { id, nom, telephone, email } = req.body;
     try {
-        let utilisateur = await Utilisateur.findById(id);  // cherche si l'utilisateur est déjà dans la base de données
-        if (!utilisateur) return res.status(400).json({ msg: "Erreur utilisateur introuvable" });  // retourner message d'erreur
-
+        let utilisateur = await Utilisateur.findById(id);
+        if (!utilisateur) return res.status(400).json({ msg: "Erreur utilisateur introuvable" });
 
         utilisateur.nom = nom;
         utilisateur.telephone = telephone;
@@ -182,12 +206,10 @@ router.post("/updateUserInfos", [
 
         await utilisateur.save();
         console.log("informations mises à jour");
-
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msg: err});  // en cas d'erreur
+        res.status(500).json({ msg: err });
     }
 });
-
 
 module.exports = router;

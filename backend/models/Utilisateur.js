@@ -5,7 +5,7 @@ const schemaUtilisateur = new mongoose.Schema({
     prenom: { type: String, required: true },
     nom: { type: String, required: true },
     telephone: { type: String, required: true},
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, lowercase: true, },
     mdp: { type: String, required: true },
     estConnecte: { type: Boolean, required: false},
     dateNaissance: {type: Date, required: true},
