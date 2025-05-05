@@ -16,7 +16,7 @@ import { couleurs } from './Couleurs';
 import LocateButton from './LocateButton';
 import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';
-import { estDarkMode } from './VariablesGlobales';
+import { estDarkMode, useAuthStore } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './Trajet';
 import SchedulePicker from './SchedulePicker';
@@ -43,6 +43,11 @@ export default function MapScreen() {
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
   const [showSchedulePicker, setShowSchedulePicker] = useState(false);
   const [drivers, setDrivers] = useState([]);
+
+const userLat = useAuthStore((state) => state.userLat);
+  const setUserLat = useAuthStore((state) => state.setUserLat); 
+  const setUserLong = useAuthStore((state) => state.setUserLong); 
+
 
   const fetchDrivers = async () => {
     try {
@@ -136,6 +141,7 @@ export default function MapScreen() {
       });
     } else {
       const rideCoords = feature.geometry.coordinates;
+      console.log(rideCoords + "!!!!!!!!!!!")
       const targetLong = feature.properties.targetLong;
       const targetLat = feature.properties.targetLat;
 
@@ -154,6 +160,7 @@ export default function MapScreen() {
 
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
+        console.log(targetCoords);
 
         setPickupStreet(pickupAddress);
         setTargetStreet(targetAddress);
@@ -197,6 +204,8 @@ export default function MapScreen() {
               location.coords.latitude,
             ];
             setUserCoords(coords);
+            setUserLat(location.coords.latitude);
+            setUserLong(location.coords.longitude);
           }}
         />
 

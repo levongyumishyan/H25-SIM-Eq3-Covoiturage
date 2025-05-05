@@ -13,6 +13,7 @@ import Constants from 'expo-constants';
 import { styles } from './Styles';
 import { couleurs } from './Couleurs';
 import { BASE_URL } from '~/apiConfig';
+import { useAuthStore } from './VariablesGlobales';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
@@ -23,6 +24,9 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
+    const setTargetLat = useAuthStore((state) => state.setTargetLat); 
+    const setTargetLong = useAuthStore((state) => state.setTargetLong); 
+
   useImperativeHandle(ref, () => ({
     confirmSchedule,
   }));
@@ -31,6 +35,8 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     (async () => {
       const loc = await Location.getCurrentPositionAsync({});
       setLocation(loc.coords);
+      console.log("coordonnées actuelles raw: " + location);
+      S
     })();
   }, []);
 
@@ -50,6 +56,9 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   const handleSelect = (place_name, coords) => {
     setSelectedAddress(place_name);
     setPendingTargetCoords(coords);
+    console.log(coords[1]);
+    setTargetLong(coords[0]);
+    setTargetLat(coords[1]);
     setSuggestions([]);
     onSelect?.();
   };

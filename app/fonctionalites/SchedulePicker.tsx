@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from 'app/apiConfig.js'; // Adjust path if needed
+import { useAuthStore } from './VariablesGlobales';
 
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
+
+
 
 export default function SchedulePicker({ coordinates = {} }) {
   const [time, setTime] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([]);
+  const userLat = useAuthStore((state) => state.userLat);
+  const userLong = useAuthStore((state) => state.userLong);
+  const targetLat = useAuthStore((state) => state.targetLat);
+  const targetLong = useAuthStore((state) => state.targetLong);
 
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
@@ -36,10 +43,10 @@ export default function SchedulePicker({ coordinates = {} }) {
   const handleConfirm = async () => {
     const payload = {
       id: Math.floor(Math.random() * 1000000),
-      long: coordinates.long ?? -73.5673,
-      lat: coordinates.lat ?? 45.5017,
-      targetLong: coordinates.targetLong ?? -73.5671,
-      targetLat: coordinates.targetLat ?? 45.5025,
+      long: userLong,
+      lat: userLat,
+      targetLong: targetLong,
+      targetLat: targetLat,
       scheduleDays: selectedDays,
       scheduleTime: formatTime(time),
     };

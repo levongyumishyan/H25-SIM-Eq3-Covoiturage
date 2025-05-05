@@ -31,6 +31,8 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
     if (searchBoxRef.current) {
       searchBoxRef.current.confirmSchedule(schedule);
       console.log("🚀 Sending schedule to SearchBox:", schedule);
+    } else {
+      console.log("else handleScheduleconfirm");
     }
     setShowSchedule(false);
     handleSheetChange(-1);
@@ -48,11 +50,14 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
         onChange={handleSheetChange}
       >
         <BottomSheetView style={{ flex: 1, padding: 20 }}>
+          <>
           {!showSchedule ? (
             <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
           ) : (
             <SchedulePicker onClose={handleScheduleConfirm} />
           )}
+          </>
+          
         </BottomSheetView>
       </BottomSheet>
 
