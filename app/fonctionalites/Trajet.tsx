@@ -5,11 +5,12 @@ import { colors } from './Colors';
 import { useRideStore } from './useRideStore';
 import { Ionicons } from '@expo/vector-icons';
 
-const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, onSheetChange }) => {
+const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, onSheetChange, onAddressPress }) => {
   const sheetRef = useRef<BottomSheet>(null);
   const { setUpcomingRide } = useRideStore();
+
   function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of Earth in km
+    const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a =
@@ -19,17 +20,18 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // distance in kilometers
+    return R * c;
   }
+
   const distanceKm = selectedRide
-  ? calculateDistance(
-      selectedRide.lat,
-      selectedRide.long,
-      selectedRide.targetLat,
-      selectedRide.targetLong
-    ).toFixed(2)
-  : null;
-  
+    ? calculateDistance(
+        selectedRide.lat,
+        selectedRide.long,
+        selectedRide.targetLat,
+        selectedRide.targetLong
+      ).toFixed(2)
+    : null;
+
   useEffect(() => {
     if (visible) {
       onSheetChange(true);
@@ -63,33 +65,38 @@ const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, on
       enablePanDownToClose
       onClose={onClose}
     >
-     <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-    <Ionicons name="footsteps-outline" size={30} color={colors.vertPrincipal} />
-    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
+      <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+        <Ionicons name="footsteps-outline" size={30} color={colors.vertPrincipal} />
+        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
 
-    <Text style={{ marginTop: 10, fontSize: 16 }}>{pickupStreet}</Text>
-    <Text style={{ fontSize: 16 }}>➔</Text>
-    <Text style={{ marginBottom: 10, fontSize: 16 }}>{targetStreet}</Text>
+        <TouchableOpacity onPress={onAddressPress}>
+          <Text style={{ marginTop: 10, fontSize: 16 }}>{pickupStreet}</Text>
+        </TouchableOpacity>
 
-    {distanceKm && (
-      <Text style={{ fontSize: 16, marginBottom: 10 }}>
-      Distance: {distanceKm} km
-    </Text>
-    )}
+        <Text style={{ fontSize: 16 }}>➔</Text>
 
-    <TouchableOpacity
-      onPress={handleJoindre}
-      style={{
-      backgroundColor: colors.vertPrincipal,
-      padding: 12,
-      borderRadius: 10,
-      marginTop: 10,
-      }}
-      >
-      <Text style={{ color: 'white', fontWeight: 'bold' }}>Joindre</Text>
-    </TouchableOpacity>
-    </BottomSheetView>
+        <TouchableOpacity onPress={onAddressPress}>
+          <Text style={{ marginBottom: 10, fontSize: 16 }}>{targetStreet}</Text>
+        </TouchableOpacity>
 
+        {distanceKm && (
+          <Text style={{ fontSize: 16, marginBottom: 10 }}>
+            Distance: {distanceKm} km
+          </Text>
+        )}
+
+        <TouchableOpacity
+          onPress={handleJoindre}
+          style={{
+            backgroundColor: colors.vertPrincipal,
+            padding: 12,
+            borderRadius: 10,
+            marginTop: 10,
+          }}
+        >
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>Joindre</Text>
+        </TouchableOpacity>
+      </BottomSheetView>
     </BottomSheet>
   );
 };

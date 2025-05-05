@@ -1,0 +1,139 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { BASE_URL } from 'app/apiConfig.js'; // Adjust path if needed
+
+const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
+
+export default function SchedulePicker({ coordinates = {} }) {
+  const [time, setTime] = useState(new Date());
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  const formatTime = (date) => {
+    const h = date.getHours().toString().padStart(2, '0');
+    const m = date.getMinutes().toString().padStart(2, '0');
+    return `${h}:${m}`;
+  };
+
+  const incrementTime = () => {
+    const next = new Date(time);
+    next.setMinutes(time.getMinutes() + 30);
+    setTime(next);
+  };
+
+  const decrementTime = () => {
+    const prev = new Date(time);
+    prev.setMinutes(time.getMinutes() - 30);
+    setTime(prev);
+  };
+
+  const toggleDay = (day) => {
+    setSelectedDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
+  };
+
+  const handleConfirm = async () => {
+    const payload = {
+      id: Math.floor(Math.random() * 1000000),
+      long: coordinates.long ?? -73.5673,
+      lat: coordinates.lat ?? 45.5017,
+      targetLong: coordinates.targetLong ?? -73.5671,
+      targetLat: coordinates.targetLat ?? 45.5025,
+      scheduleDays: selectedDays,
+      scheduleTime: formatTime(time),
+    };
+
+    console.log("📅 Selected days:", selectedDays);
+    console.log("📦 Sending to backend:", payload);
+
+    Alert.alert("Envoi", "Tentative d'envoi du trajet...");
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/trajets`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Saved:", result);
+        Alert.alert("Succès", "Trajet enregistré !");
+      } else {
+        console.error("❌ Server error:", result);
+        Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
+      }
+    } catch (err) {
+      console.error("❌ Network error:", err);
+      Alert.alert("Erreur", "Impossible de se connecter au serveur");
+    }
+  };
+
+  return (
+    <View
+      style={{
+        padding: 24,
+        backgroundColor: '#fff',
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
+        elevation: 30,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      }}
+    >
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' }}>
+        Choisissez l'heure
+      </Text>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+        <TouchableOpacity onPress={decrementTime} style={{ marginHorizontal: 20 }}>
+          <Ionicons name="remove-circle-outline" size={36} color="#2ecc71" />
+        </TouchableOpacity>
+
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#333' }}>
+          {formatTime(time)}
+        </Text>
+
+        <TouchableOpacity onPress={incrementTime} style={{ marginHorizontal: 20 }}>
+          <Ionicons name="add-circle-outline" size={36} color="#2ecc71" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
+        {weekdays.map((day, idx) => (
+          <TouchableOpacity
+            key={idx}
+            onPress={() => toggleDay(day)}
+            style={{
+              backgroundColor: selectedDays.includes(day) ? '#2ecc71' : '#ccc',
+              borderRadius: 20,
+              margin: 4,
+              paddingVertical: 8,
+              paddingHorizontal: 12,
+            }}
+          >
+            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 11 }}>{day}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        onPress={handleConfirm}
+        style={{
+          backgroundColor: '#2ecc71',
+          padding: 12,
+          borderRadius: 10,
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Confirmer</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}

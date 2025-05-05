@@ -6,30 +6,26 @@ const cors = require("cors");
 const app = express();
 
 // Middleware
-app.use(express.json()); // Parses incoming JSON data
-app.use(cors()); // Allow frontend to communicate with backend
+app.use(express.json());
+app.use(cors());
 
-// Import your routes
+// Import routes
 const authRoutes = require("./routes/auth");
-const trajetRoutes = require("./routes/trajet"); // <-- ✅ Add this
+const trajetRoutes = require('./routes/trajet'); 
 
-// Use routes
+app.use('/api/trajets', trajetRoutes);         
 app.use("/api/auth", authRoutes);
-app.use("/api/trajets", trajetRoutes); // <-- ✅ Mount the trajet routes
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB est connecté"))
-.catch(err => console.error(err));
 
-// Test route
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB est connecté"))
+  .catch(err => console.error("❌ Erreur MongoDB:", err));
+
+// Default test route
 app.get("/", (req, res) => {
-    res.send("API is running...");
+  res.send("API is running...");
 });
 
 // Start server
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server marche sur le port : ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server marche sur le port : ${PORT}`));

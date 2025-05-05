@@ -1,9 +1,17 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
-import { View, Text } from 'react-native';
-import Mapbox, { MapView, ShapeSource, SymbolLayer, CircleLayer, Camera, UserLocation, Images, LineLayer, LocationPuck } from '@rnmapbox/maps';
-import { featureCollection, point } from '@turf/helpers';
+import React, { useRef, useState, useEffect } from 'react';
+import { View, Text, LogBox } from 'react-native';
+import Mapbox, {
+  MapView,
+  ShapeSource,
+  SymbolLayer,
+  CircleLayer,
+  Camera,
+  UserLocation,
+  Images,
+  LineLayer,
+  LocationPuck
+} from '@rnmapbox/maps';
 import * as Location from 'expo-location';
-import { LogBox } from 'react-native';
 import { colors } from './Colors';
 import LocateButton from './LocateButton';
 import pin from "../assets/images/pin.png";
@@ -11,6 +19,8 @@ import { BASE_URL } from '../apiConfig';
 import { estDarkMode } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './Trajet';
+import SchedulePicker from './SchedulePicker';
+
 import { useRideStore } from './useRideStore';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
@@ -23,7 +33,6 @@ LogBox.ignoreLogs([
 export default function MapScreen() {
   const cameraRef = useRef<Camera>(null);
   const { upcomingRide } = useRideStore();
-
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
   const [selectedRide, setSelectedRide] = useState(null);
   const [showTrajet, setShowTrajet] = useState(false);
@@ -32,29 +41,44 @@ export default function MapScreen() {
   const [targetStreet, setTargetStreet] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
+  const [showSchedulePicker, setShowSchedulePicker] = useState(false);
   const [drivers, setDrivers] = useState([]);
 
   const fetchDrivers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
-      const data = await response.json();
-      setDrivers(data);
+      const text = await response.text();
+  
+      try {
+        const data = JSON.parse(text);
+        setDrivers(data);
+      } catch (parseError) {
+        console.error('❌ Failed to parse response as JSON:', text);
+      }
+  
     } catch (error) {
       console.error('Error fetching drivers:', error);
     }
   };
+  
 
   useEffect(() => {
-    fetchDrivers(); // Fetch once immediately
-
-    const interval = setInterval(fetchDrivers, 10000); // 🔥 Fetch every 10 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
+    fetchDrivers();
+    const interval = setInterval(fetchDrivers, 10000);
+    return () => clearInterval(interval);
   }, []);
 
-  const points = useMemo(() => featureCollection(
-    drivers.map((driver, index) => point([driver.long, driver.lat], { ...driver, id: index }))
-  ), [drivers]);
+  const points = {
+    type: 'FeatureCollection',
+    features: drivers.map((driver, index) => ({
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [driver.long, driver.lat],
+      },
+      properties: { ...driver, id: index },
+    })),
+  };
 
   useEffect(() => {
     const requestPermission = async () => {
@@ -69,18 +93,15 @@ export default function MapScreen() {
   const fetchRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
     const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=50;50&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
-  
     try {
       const response = await fetch(url);
       const json = await response.json();
-      const route = json.routes[0].geometry;
-      return route;
+      return json.routes[0]?.geometry || null;
     } catch (error) {
       console.error('Error fetching route:', error);
       return null;
     }
   };
-  
 
   const reverseGeocode = async ([lng, lat]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
@@ -105,7 +126,7 @@ export default function MapScreen() {
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
-  
+
     if (feature.properties?.point_count) {
       const [longitude, latitude] = feature.geometry.coordinates;
       cameraRef.current?.setCamera({
@@ -114,34 +135,26 @@ export default function MapScreen() {
         animationDuration: 500,
       });
     } else {
-      const rideCoords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]];
+      const rideCoords = feature.geometry.coordinates;
       const targetLong = feature.properties.targetLong;
       const targetLat = feature.properties.targetLat;
-  
-      // 🛑 Safety Check
+
       if (typeof targetLong !== 'number' || typeof targetLat !== 'number') {
         console.warn('Target coordinates missing');
         return;
       }
-  
+
       const targetCoords = [targetLong, targetLat];
-  
       const route = await fetchRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
           type: 'FeatureCollection',
-          features: [
-            {
-              type: 'Feature',
-              geometry: route,
-              properties: {},
-            },
-          ],
+          features: [{ type: 'Feature', geometry: route, properties: {} }],
         });
-  
+
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
-  
+
         setPickupStreet(pickupAddress);
         setTargetStreet(targetAddress);
         setSelectedRide(feature.properties);
@@ -149,11 +162,9 @@ export default function MapScreen() {
       }
     }
   };
-  
 
   return (
     <View style={{ flex: 1 }}>
-      
       {upcomingRide && (
         <View style={{
           position: 'absolute',
@@ -208,9 +219,7 @@ export default function MapScreen() {
               circleRadius: [
                 'step',
                 ['get', 'point_count'],
-                20,
-                10, 25,
-                25, 30,
+                20, 10, 25, 25, 30,
               ],
               circleStrokeColor: colors.blanc,
               circleStrokeWidth: 3,
@@ -257,16 +266,10 @@ export default function MapScreen() {
         )}
       </MapView>
 
-      <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
-      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} />
-      <Trajet
-        visible={showTrajet}
-        onClose={closeTrajet}
-        selectedRide={selectedRide}
-        pickupStreet={pickupStreet}
-        targetStreet={targetStreet}
-        onSheetChange={setIsRideDetailsOpen}
-      />
+      <LocateButton cameraRef={cameraRef} userCoords={userCoords} />  
+
+      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} onAddressSelect={() => setShowSchedulePicker(true)}/>
+
     </View>
   );
 }

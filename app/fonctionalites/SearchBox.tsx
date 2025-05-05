@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import {
   View,
   TextInput,
@@ -15,43 +16,16 @@ import { BASE_URL } from '~/apiConfig';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
-const SearchBox = () => {
+const SearchBox = forwardRef(({ onSelect }, ref) => {
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [location, setLocation] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
-
-  const ajouterTrajet = async (currentCoords, targetCoords) => {
-    try {
-      const body = {
-        id: Math.floor(Math.random() * 1000000), // Random id for the ride
-        long: currentCoords.longitude,
-        lat: currentCoords.latitude,
-        targetLong: targetCoords[0],
-        targetLat: targetCoords[1],
-      };
-  
-      const response = await fetch(`${BASE_URL}/api/trajets`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-  
-      if (!response.ok) {
-        const errorText = await response.text(); // read as text first
-        throw new Error(`Erreur HTTP ${response.status}: ${errorText}`);
-      }
-  
-      const data = await response.json(); // ✅ now safe to call
-      console.log('✅ Trajet ajouté:', data);
-  
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout du trajet:', error.message);
-    }
-  };
-  
-  
-  
+  useImperativeHandle(ref, () => ({
+    confirmSchedule,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -61,56 +35,92 @@ const SearchBox = () => {
   }, []);
 
   useEffect(() => {
-    if (input.trim() === '') {
-      setSuggestions([]); // Clear suggestions if input is empty
-      return;
-    }
-
+    if (input.trim() === '') return setSuggestions([]);
     const fetchSuggestions = async () => {
       const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         input
-      )}.json?proximity=${location.longitude},${location.latitude}&autocomplete=true&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
-
-    
+      )}.json?proximity=${location?.longitude},${location?.latitude}&autocomplete=true&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
       const res = await fetch(url);
       const data = await res.json();
       setSuggestions(data.features || []);
-      console.log('Suggestions:', data.features);
-    
     };
-
-    fetchSuggestions();
+    if (location) fetchSuggestions();
   }, [input, location]);
 
-  const renderSuggestions = ({ item }) => {
-    const { place_name, geometry, properties } = item;
-    const coords = geometry?.coordinates ?? [];
+  const handleSelect = (place_name, coords) => {
+    setSelectedAddress(place_name);
+    setPendingTargetCoords(coords);
+    setSuggestions([]);
+    onSelect?.();
+  };
 
+  const confirmSchedule = async (schedule) => {
+    if (!location || !pendingTargetCoords) return;
+    try {
+      const body = {
+        id: Math.floor(Math.random() * 1000000),
+        long: location.longitude,
+        lat: location.latitude,
+        targetLong: pendingTargetCoords[0],
+        targetLat: pendingTargetCoords[1],
+        scheduleDays: schedule.days,
+        scheduleTime: schedule.time,
+      };
+      console.log("📤 Sending to backend:", {
+        long: location.longitude,
+        lat: location.latitude,
+        targetLong: pendingTargetCoords[0],
+        targetLat: pendingTargetCoords[1],
+        scheduleDays: schedule.days,
+        scheduleTime: schedule.time,
+      });
+      
+      const response = await fetch(`${BASE_URL}/api/trajets`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Server error ${response.status}: ${text}`);
+      }
+
+      const result = await response.json();
+      console.log("✅ Trajet ajouté:", result);
+    } catch (error) {
+      console.error("❌ Erreur ajout trajet:", error.message);
+    }
+  };
+
+  const renderSuggestions = ({ item }) => {
+    const { place_name, geometry } = item;
+    const coords = geometry?.coordinates ?? [];
+    const isSelected = selectedAddress === place_name;
     return (
       <TouchableOpacity
         style={styles.rideItem}
-        onPress={() => {
-          ajouterTrajet(location, coords); 
-          console.log(`Selected: ${place_name}`);
-        }}
-        
+        onPress={() => handleSelect(place_name, coords)}
       >
         <View>
-          <Text style={styles.labelInverse}>{place_name}</Text>
+          <Text
+            style={{
+              ...styles.labelInverse,
+              color: isSelected ? colors.link : colors.noir,
+              textDecorationLine: isSelected ? 'underline' : 'none'
+            }}
+          >
+            {place_name}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-      <View style={styles.searchBoxWrapper}>
-        <View style={styles.centeredRow}>
-        <Ionicons
-          name="search"
-          size={30}
-          color={colors.noir}
-          style={styles.searchIcon}
-        />
+    <View style={[styles.searchBoxWrapper, { backgroundColor: '#fff', borderRadius: 12, elevation: 5, padding: 10 }]}>
+      <View style={styles.centeredRow}>
+        <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
         <TextInput
           style={styles.labelInverse}
           placeholder={'Où allez-vous ?'}
@@ -119,11 +129,8 @@ const SearchBox = () => {
           onChangeText={setInput}
         />
       </View>
-
-
-
       {suggestions.length > 0 && (
-        <View style={styles.scrollContainer}>
+        <View style={[styles.scrollContainer, { backgroundColor: '#f9f9f9', borderRadius: 8 }]}>
           <FlatList
             data={suggestions}
             keyExtractor={(item, index) => item.id + index}
@@ -133,6 +140,6 @@ const SearchBox = () => {
       )}
     </View>
   );
-};
+});
 
 export default SearchBox;

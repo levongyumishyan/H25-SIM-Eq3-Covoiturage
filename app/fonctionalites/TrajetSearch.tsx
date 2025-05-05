@@ -1,16 +1,19 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React, { useRef, useMemo, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from './Colors';
 import { styles } from './Styles';
 import SearchBox from './SearchBox';
+import SchedulePicker from './SchedulePicker';
 
 export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
-  const sheetRef = useRef<BottomSheet>(null);
+  const sheetRef = useRef(null);
+  const searchBoxRef = useRef(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false);
 
-  const snapPoints = useMemo(() => ['30%', '50%'], []);
+  const snapPoints = useMemo(() => ['30%', '60%'], []);
 
   const openBottomSheet = () => {
     setIsSheetOpen(true);
@@ -18,14 +21,22 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
     sheetRef.current?.expand();
   };
 
-  const handleSheetChange = (index: number) => {
-    if (index === -1) {
-      setIsSheetOpen(false);
-      onSheetChange(false);
-    }
+  const handleSheetChange = (index) => {
+    const closed = index === -1;
+    setIsSheetOpen(!closed);
+    onSheetChange(!closed);
   };
 
-  const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen;
+  const handleScheduleConfirm = (schedule) => {
+    if (searchBoxRef.current) {
+      searchBoxRef.current.confirmSchedule(schedule);
+      console.log("🚀 Sending schedule to SearchBox:", schedule);
+    }
+    setShowSchedule(false);
+    handleSheetChange(-1);
+  };
+
+  const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen && !showSchedule;
 
   return (
     <>
@@ -36,16 +47,19 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
         enablePanDownToClose
         onChange={handleSheetChange}
       >
-        <BottomSheetView style={{ flex: 1 }}>
-          <SearchBox />
+        <BottomSheetView style={{ flex: 1, padding: 20 }}>
+          {!showSchedule ? (
+            <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
+          ) : (
+            <SchedulePicker onClose={handleScheduleConfirm} />
+          )}
         </BottomSheetView>
       </BottomSheet>
 
-      {/* Plus button (only show if no bottom sheet at all is open) */}
       {shouldShowPlusButton && (
-          <TouchableOpacity style={styles.trajetButton} onPress={openBottomSheet}>
-            <Ionicons name="add" size={30} color={colors.blanc} />
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.trajetButton} onPress={openBottomSheet}>
+          <Ionicons name="add" size={30} color={colors.blanc} />
+        </TouchableOpacity>
       )}
     </>
   );
