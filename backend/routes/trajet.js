@@ -16,11 +16,11 @@ router.get('/', async (req, res) => {
 // ADD A TRAJET
 router.post('/', async (req, res) => {
   try {
-    const { id, long, lat, targetLong, targetLat, scheduleDays, scheduleTime } = req.body;
+    const { id, userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime } = req.body;
 
     console.log("🛬 Reçu POST:", req.body); // 👈 DEBUG here
 
-    const trajet = new Trajet({ id, long, lat, targetLong, targetLat, scheduleDays, scheduleTime });
+    const trajet = new Trajet({ id, userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime });
     await trajet.save();
 
     return res.json({ message: "Trajet enregistré", trajet });

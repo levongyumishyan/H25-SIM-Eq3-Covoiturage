@@ -15,6 +15,7 @@ export default function SchedulePicker({ coordinates = {} }) {
   const userLong = useAuthStore((state) => state.userLong);
   const targetLat = useAuthStore((state) => state.targetLat);
   const targetLong = useAuthStore((state) => state.targetLong);
+  const userId = useAuthStore((state) => state.userId);
 
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
@@ -43,6 +44,7 @@ export default function SchedulePicker({ coordinates = {} }) {
   const handleConfirm = async () => {
     const payload = {
       id: Math.floor(Math.random() * 1000000),
+      userId: userId,
       long: userLong,
       lat: userLat,
       targetLong: targetLong,
