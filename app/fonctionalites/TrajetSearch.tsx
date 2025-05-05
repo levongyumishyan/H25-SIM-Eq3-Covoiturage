@@ -25,21 +25,29 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
     const closed = index === -1;
     setIsSheetOpen(!closed);
     onSheetChange(!closed);
+    if (closed) {
+      setShowSchedule(false); // ✅ Hide schedule picker when sheet is closed
+    }
   };
 
   const handleScheduleConfirm = (schedule) => {
     if (searchBoxRef.current) {
       searchBoxRef.current.confirmSchedule(schedule);
       console.log("🚀 Sending schedule to SearchBox:", schedule);
-    } else {
-      console.log("else handleScheduleconfirm");
     }
     setShowSchedule(false);
-    handleSheetChange(-1);
+    setIsSheetOpen(false);
+    onSheetChange(false);
+    sheetRef.current?.close(); // ✅ Explicitly closes the bottom sheet
   };
+  
 
   const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen && !showSchedule;
-
+  console.log("shouldShowPlusButton", shouldShowPlusButton);
+  console.log("isSheetOpen", isSheetOpen);
+  console.log("isAnotherSheetOpen", isAnotherSheetOpen);
+  console.log("showSchedule", showSchedule);
+  
   return (
     <>
       <BottomSheet

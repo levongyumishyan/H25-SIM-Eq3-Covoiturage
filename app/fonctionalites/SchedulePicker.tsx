@@ -8,7 +8,7 @@ const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
 
 
-export default function SchedulePicker({ coordinates = {} }) {
+export default function SchedulePicker({ onClose }) {
   const [time, setTime] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([]);
   const userLat = useAuthStore((state) => state.userLat);
@@ -51,12 +51,12 @@ export default function SchedulePicker({ coordinates = {} }) {
       scheduleDays: selectedDays,
       scheduleTime: formatTime(time),
     };
-
+  
     console.log("📅 Selected days:", selectedDays);
     console.log("📦 Sending to backend:", payload);
-
+  
     Alert.alert("Envoi", "Tentative d'envoi du trajet...");
-
+  
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`, {
         method: "POST",
@@ -65,12 +65,17 @@ export default function SchedulePicker({ coordinates = {} }) {
         },
         body: JSON.stringify(payload),
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         console.log("✅ Saved:", result);
         Alert.alert("Succès", "Trajet enregistré !");
+        // ✅ Call onClose AFTER successful save
+        onClose?.({
+          days: selectedDays,
+          time: formatTime(time),
+        });
       } else {
         console.error("❌ Server error:", result);
         Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
@@ -80,6 +85,7 @@ export default function SchedulePicker({ coordinates = {} }) {
       Alert.alert("Erreur", "Impossible de se connecter au serveur");
     }
   };
+  
 
   return (
     <View

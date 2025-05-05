@@ -277,7 +277,7 @@ const userLat = useAuthStore((state) => state.userLat);
 
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />  
 
-      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen} onAddressSelect={() => setShowSchedulePicker(true)}/>
+      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen}/>
 
     </View>
   );
