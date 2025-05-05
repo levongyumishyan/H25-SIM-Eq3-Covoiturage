@@ -67,7 +67,6 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     if (!location || !pendingTargetCoords) return;
     try {
       const body = {
-        id: Math.floor(Math.random() * 1000000),
         long: location.longitude,
         lat: location.latitude,
         targetLong: pendingTargetCoords[0],
