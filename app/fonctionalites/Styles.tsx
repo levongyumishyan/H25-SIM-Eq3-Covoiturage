@@ -206,6 +206,22 @@ export const styles = StyleSheet.create({
     color: colors.couleurTexte,
   },
 
+  checkboxContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  
+  checkboxItem: {
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  
+  voitureContainer: {
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+
   // ---------- Map ----------
   map: {
     width: '100%',
@@ -240,6 +256,9 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 999,
   },
+
+  // ---------- Inscription ----------
+  
 
 
 

@@ -17,25 +17,25 @@ import { BASE_URL } from '../apiConfig';
 import { Link } from 'expo-router';
 
 const SignUpInput = () => {
-  const [prenom, setPrenom] = useState('');
-  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
   const [dateNaissance, setDateNaissance] = useState(new Date(1970, 0, 1));
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [telephone, setTelephone] = useState('');
-  const [courriel, setCourriel] = useState('');
-  const [mdp, setMdp] = useState('');
-  const [mdpVerif, setMdpVerif] = useState('');
+  const [telephone, setTelephone] = useState("");
+  const [courriel, setCourriel] = useState("");
+  const [mdp, setMdp] = useState("");
+  const [mdpVerif, setMdpVerif] = useState("");
 
   const [conducteur, setConducteur] = useState(false);
   const [passager, setPassager] = useState(false);
 
-  const [modeleVoiture, setModeleVoiture] = useState('');
-  const [anneeVoiture, setAnneeVoiture] = useState('');
-  const [consommationVoiture, setConsommationVoiture] = useState('');
+  const [modeleVoiture, setModeleVoiture] = useState("");
+  const [anneeVoiture, setAnneeVoiture] = useState("");
+  const [consommationVoiture, setConsommationVoiture] = useState("");
 
   const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === 'ios'); // Keep open on iOS
+    setShowDatePicker(Platform.OS === "ios"); // Keep open on iOS
     if (selectedDate) {
       setDateNaissance(selectedDate);
     }
@@ -43,15 +43,15 @@ const SignUpInput = () => {
 
   const verifierConnection = async () => {
     if (mdp !== mdpVerif) {
-      alert('Les mots de passe ne correspondent pas.');
+      alert("Les mots de passe ne correspondent pas.");
       return;
     }
-  
+
     try {
       const response = await fetch(`${BASE_URL}/api/auth/signup`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           nom,
@@ -67,24 +67,23 @@ const SignUpInput = () => {
           consommationVoiture,
         }),
       });
-  
+
       const data = await response.json();
-  
+
       console.log("Réponse serveur:", data);
-  
+
       if (!response.ok) {
         // Afficher message d'erreur du backend s’il existe
-        const erreur = data.msg || JSON.stringify(data) || 'Erreur inconnue';
+        const erreur = data.msg || JSON.stringify(data) || "Erreur inconnue";
         throw new Error(erreur);
       }
-  
+
       alert("Inscription réussie !");
     } catch (error) {
       console.error("Erreur:", error);
       alert(`Erreur : ${error.message}`);
     }
   };
-  
 
   return (
     <ScrollView style={styles.scrollContainer}>
@@ -93,8 +92,12 @@ const SignUpInput = () => {
           <Text style={styles.title}>Créer un compte</Text>
         </View>
         <View style={styles.linksContainer}>
-          <Link href="../(tabs)/account" style={styles.linkText}>J'ai déjà un compte!</Link>
-          <Link href="../(tabs)/" style={styles.linkText}>Retour</Link>
+          <Link href="../(tabs)/account" style={styles.linkText}>
+            J'ai déjà un compte!
+          </Link>
+          <Link href="../(tabs)/" style={styles.linkText}>
+            Retour
+          </Link>
         </View>
 
         <Text style={styles.subtitle}>Prénom</Text>
@@ -187,27 +190,37 @@ const SignUpInput = () => {
           Vous pourrez toujours changer en cours de route :)
         </Text>
 
-        <View style={styles.container}>
-          <Text style={styles.subtitle}>Conducteur</Text>
-          <Checkbox
-            value={conducteur}
-            onValueChange={setConducteur}
-            color={conducteur ? colors.vertPrincipal : undefined}
-          />
-        </View>
+        <View style={styles.checkboxContainer}>
+          {!passager && (
+            <View style={styles.checkboxItem}>
+              <Text style={styles.subtitle}>Conducteur</Text>
+              <Checkbox
+                value={conducteur}
+                onValueChange={(val) => {
+                  setConducteur(val);
+                  if (val) setPassager(false);
+                }}
+                color={conducteur ? colors.vertPrincipal : undefined}
+              />
+            </View>
+          )}
 
-        <View style={styles.centeredRow}>
-          <View style={styles.container}>
-            <Text style={styles.subtitle}>Passager</Text>
-            <Checkbox
-              value={passager}
-              onValueChange={setPassager}
-              color={passager ? colors.vertPrincipal : undefined}
-            />
-          </View>
+          {!conducteur && (
+            <View style={styles.checkboxItem}>
+              <Text style={styles.subtitle}>Passager</Text>
+              <Checkbox
+                value={passager}
+                onValueChange={(val) => {
+                  setPassager(val);
+                  if (val) setConducteur(false);
+                }}
+                color={passager ? colors.vertPrincipal : undefined}
+              />
+            </View>
+          )}
 
           {conducteur && (
-            <SafeAreaView style={styles.container}>
+            <View style={styles.voitureContainer}>
               <Text style={styles.subtitle}>Modèle de voiture</Text>
               <TextInput
                 style={styles.input}
@@ -215,8 +228,6 @@ const SignUpInput = () => {
                 value={modeleVoiture}
                 placeholder=""
                 placeholderTextColor={colors.grisPrincipal}
-                keyboardType="default"
-                autoCapitalize="none"
               />
 
               <Text style={styles.subtitle}>Année</Text>
@@ -227,7 +238,6 @@ const SignUpInput = () => {
                 placeholder=""
                 placeholderTextColor={colors.grisPrincipal}
                 keyboardType="numeric"
-                autoCapitalize="none"
               />
 
               <Text style={styles.subtitle}>
@@ -240,9 +250,8 @@ const SignUpInput = () => {
                 placeholder=""
                 placeholderTextColor={colors.grisPrincipal}
                 keyboardType="numeric"
-                autoCapitalize="none"
               />
-            </SafeAreaView>
+            </View>
           )}
         </View>
 
@@ -250,7 +259,7 @@ const SignUpInput = () => {
           <Text style={styles.buttonText}>S'inscrire</Text>
         </TouchableOpacity>
       </SafeAreaView>
-      <Text>{'\n'.repeat(10)}</Text>
+      <Text>{"\n".repeat(10)}</Text>
     </ScrollView>
   );
 };
