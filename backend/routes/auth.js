@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken"); // sert à génèrer un token d’authentif
 const { body, validationResult } = require("express-validator"); // sert à vérifier que les entrées utilisateur sont valides
 const Utilisateur = require("../models/Utilisateur");
 const Voiture = require("../models/Voiture"); 
+const { verifierMotDePasse } = require("../utils/validation");
 require("dotenv").config();
 const Trajet = require("../models/Trajet")
 
 const router = express.Router();
-const mdpTailleMin = 6;
 
 // signup route
 
@@ -16,16 +16,21 @@ const mdpTailleMin = 6;
 router.post("/signup", [
     body("nom").notEmpty().withMessage("Nom est requis"),
     body("email").isEmail().withMessage("Email invalide"),
-
-    // ici on peut rajouter des conditions pour le mot de passe, on devrait faire une fonction
-    body("mdp").isLength({ min: mdpTailleMin }).withMessage(`Mot de passe doit contenir au moins ${mdpTailleMin} caractères`)
+    body("mdp").notEmpty().withMessage("Mot de passe requis")
 ], async (req, res) => {
 
     // traitement de l'inscription
     const erreurs = validationResult(req);
     if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
 
-    const { prenom, nom, dateNaissance, telephone, email, mdp, conducteur, passager, modeleVoiture, anneeVoiture, consommationVoiture } = req.body;
+    const { mdp } = req.body;
+    const erreursMdp = verifierMotDePasse(mdp);
+    if (erreursMdp.length > 0) {
+        return res.status(400).json({ errors: erreursMdp.map(msg => ({ msg })) });
+    }
+
+
+    const { prenom, nom, dateNaissance, telephone, email, conducteur, passager, modeleVoiture, anneeVoiture, consommationVoiture } = req.body;
     try {
         let utilisateur = await Utilisateur.findOne({ email });  // cherche si l'utilisateur est déjà dans la base de données
         if (utilisateur) return res.status(400).json({ msg: "Cet utilisateur est déjà existant" });  // retourner message d'erreur
