@@ -8,6 +8,7 @@ import { BASE_URL } from "~/apiConfig";
 
 const Settings = () => {
   const [editingNom, setEditingNom] = useState(false);
+  const [editingPrenom, setEditingPrenom] = useState(false);
   const [editingCourriel, setEditingCourriel] = useState(false);
   const [editingTelephone, setEditingTelephone] = useState(false);
 
@@ -15,6 +16,8 @@ const Settings = () => {
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
+  const prenomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
+  const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
   const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
   const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
   const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
@@ -45,6 +48,7 @@ const Settings = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: userId,
+          prenom: prenomUtilisateur,
           nom: nomUtilisateur,
           email: courrielUtilisateur,
           telephone: telephoneUtilisateur,
@@ -71,6 +75,22 @@ const Settings = () => {
           <>
             <Text style={styles.sousTitre}>Réglages utilisateur</Text>
 
+            {/* PRENOM */}
+            <TouchableOpacity onPress={() => setEditingPrenom(true)}>
+              {editingPrenom ? (
+                <TextInput
+                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
+                  onChangeText={setPrenomUtilisateur}
+                  value={prenomUtilisateur}
+                  placeholder="Prenom"
+                  placeholderTextColor={colors.grisPrincipal}
+                  onBlur={() => setEditingPrenom(false)}
+                  autoFocus
+                />
+              ) : (
+                <Text style={styles.sousTitre}>Prénom: {prenomUtilisateur || "(Cliquez pour ajouter)"}</Text>
+              )}
+            </TouchableOpacity>
             {/* NOM */}
             <TouchableOpacity onPress={() => setEditingNom(true)}>
               {editingNom ? (

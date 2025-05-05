@@ -18,6 +18,7 @@ const LoginInput = () => {
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
+  const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
   const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
   const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
   const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
@@ -40,6 +41,7 @@ const LoginInput = () => {
       
       //Attribution des variables globales
       setConnecte(true);
+      setPrenomUtilisateur(data.utilisateur?.prenom || 'erreur user');
       setNomUtilisateur(data.utilisateur?.nom || 'erreur user');
       setCourrielUtilisateur(data.utilisateur?.email || "erreur email");
       setTelephoneUtilisateur(data.utilisateur?.telephone || "erreur telephone");

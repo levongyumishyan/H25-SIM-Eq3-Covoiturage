@@ -125,33 +125,6 @@ router.post("/logout",[], async (req, res) => {
 });
 
 
-// TODO:
-router.post("/trajet", [], async (req, res) => 
-{
-    const { id, long, lat, targetLong, targetLat } = req.body;
-    try
-    {
-        const trajet = await Trajet.findOne({ id, long, lat, targetLong, targetLat });
-        await Trajet.updateOne
-        (
-            {id: id},
-            {long: long},
-            {lat: lat},
-            {targetLong: targetLong},
-            {targetLat: targetLat},
-        );
-        res.json({ trajet })
-
-    }
-    catch (err)
-    {
-        console.error(err);
-        res.status(500).json({ msg: "Erreur server" });
-    }
-})
-
-
-
 // METTRE À JOUR INFOS UTILISATEUR
 router.post("/updateUserInfos", [
     body("nom").notEmpty().withMessage("Nom est requis"),
@@ -165,12 +138,12 @@ router.post("/updateUserInfos", [
     const erreurs = validationResult(req);
     if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() }); // retourner erreurs
 
-    const { id, nom, telephone, email } = req.body;
+    const { id, prenom, nom, telephone, email } = req.body;
     try {
         let utilisateur = await Utilisateur.findById(id);  // cherche si l'utilisateur est déjà dans la base de données
         if (!utilisateur) return res.status(400).json({ msg: "Erreur utilisateur introuvable" });  // retourner message d'erreur
 
-
+        utilisateur.prenom = prenom;
         utilisateur.nom = nom;
         utilisateur.telephone = telephone;
         utilisateur.email = email;
