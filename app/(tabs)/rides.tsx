@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../fonctionalites/Colors";
+import { couleurs } from "../fonctionalites/Couleurs";
 import { styles } from "../fonctionalites/Styles";
 import { useAuthStore } from "../fonctionalites/VariablesGlobales";
 import { useRideStore } from "../fonctionalites/useRideStore";
@@ -65,7 +65,7 @@ export default function Rides() {
 
   const renderRide = ({ item }) => (
     <TouchableOpacity style={styles.ridecontainer}>
-      <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
+      <Ionicons name="car-outline" size={24} color={couleurs.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
         <Text style={styles.label}>{item.origin} → {item.destination}</Text>
         <Text style={styles.smallText}>{item.distance} km • Terminé</Text>
@@ -76,7 +76,7 @@ export default function Rides() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={colors.vertPrincipal} />
+        <ActivityIndicator size="large" color={couleurs.vertPrincipal} />
       </SafeAreaView>
     );
   }
@@ -88,15 +88,15 @@ export default function Rides() {
         {stats && (
           <View style={styles.centeredRow}>
             <View style={styles.centeredColumn}>
-              <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="leaf-outline" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
             </View>
             <View style={styles.centeredColumn}>
-              <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="cloud-outline" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
             </View>
             <View style={styles.centeredColumn}>
-              <Ionicons name="bicycle" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="bicycle" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.totalDistance} km parcourus</Text>
             </View>
           </View>
@@ -106,7 +106,7 @@ export default function Rides() {
           <View style={styles.upcomingRideContainer}>
             <Text style={styles.title}>Trajet en Cours</Text>
             <View style={styles.ridecontainer}>
-              <Ionicons name="car-sport-outline" size={24} color={colors.vertPrincipal} style={styles.icon} />
+              <Ionicons name="car-sport-outline" size={24} color={couleurs.vertPrincipal} style={styles.icon} />
               <View style={styles.rideDetails}>
                 <Text style={styles.label}>{upcomingRide.origin} → {upcomingRide.destination}</Text>
                 <Text style={styles.smallText}>{upcomingRide.distance} km • En cours...</Text>

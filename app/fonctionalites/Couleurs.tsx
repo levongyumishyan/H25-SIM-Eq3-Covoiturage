@@ -1,7 +1,7 @@
 import {estDarkMode} from "./VariablesGlobales";
 
 
-export const colors = ({  //   dark        light
+export const couleurs = ({  //   dark        light
     arrierePlan: estDarkMode ? "#1c1c1c" : "#ebefeb",
     couleurSurVert: estDarkMode ? "#ebefeb" : "#ebefeb",
     couleurTexte: estDarkMode ? "#ebefeb" : "#121212",

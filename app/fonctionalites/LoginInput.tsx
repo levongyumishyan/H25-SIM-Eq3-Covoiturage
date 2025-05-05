@@ -3,7 +3,7 @@ import { TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Settings from "./Settings";
 import { Link } from 'expo-router';
-import { colors } from './Colors';
+import { couleurs } from './Couleurs';
 import { styles } from './Styles';
 import { useAuthStore } from './VariablesGlobales';
 import { BASE_URL } from '../apiConfig'; // ✅ Using hosted backend
@@ -70,22 +70,22 @@ const LoginInput = () => {
 
             <Text style={styles.subtitle}>Courriel</Text>
             <TextInput
-              style={[styles.input, { color: colors.couleurTexteInverse }]}
+              style={[styles.input, { color: couleurs.couleurTexteInverse }]}
               onChangeText={setCourriel}
               value={courriel}
               placeholder="courriel@entreprise.ca"
-              placeholderTextColor={colors.couleurTexteInverse}
+              placeholderTextColor={couleurs.couleurTexteInverse}
               keyboardType="email-address"
               autoCapitalize="none"
             />
 
             <Text style={styles.subtitle}>Mot de passe</Text>
             <TextInput
-              style={[styles.input, { color: colors.couleurTexteInverse }]}
+              style={[styles.input, { color: couleurs.couleurTexteInverse }]}
               onChangeText={setMdp}
               value={mdp}
               placeholder="**********"
-              placeholderTextColor={colors.couleurTexteInverse}
+              placeholderTextColor={couleurs.couleurTexteInverse}
               secureTextEntry
             />
 

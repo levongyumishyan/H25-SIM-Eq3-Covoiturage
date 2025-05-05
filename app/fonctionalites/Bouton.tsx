@@ -11,7 +11,7 @@ type ButtonProps = {
   title?: string;
 } & TouchableOpacityProps;
 
-export const Button = forwardRef<View, ButtonProps>(
+export const Bouton = forwardRef<View, ButtonProps>(
   ({ title, disabled, ...touchableProps }, ref) => {
     return (
       <TouchableOpacity
