@@ -128,7 +128,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
 
   return (
     <View style={[styles.searchBoxWrapper, { backgroundColor: '#fff', borderRadius: 12, elevation: 5, padding: 10 }]}>
-      <View style={styles.centeredRow}>
+      <View style={styles.ligneCentree}>
         <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
         <TextInput
           style={styles.labelInverse}

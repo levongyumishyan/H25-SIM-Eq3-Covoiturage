@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
 
-  centeredColumn: {
+  colonneCentree: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     gap: 20,
   },
 
-  centeredRow: {
+  ligneCentree: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -62,25 +62,25 @@ export const styles = StyleSheet.create({
   },
 
   // ---------- Typography ----------
-  title: {
+  titre: {
     fontSize: 50,
     fontWeight: 'bold',
     color: colors.couleurTexte,
     textAlign: 'center',
     marginBottom: 15,
   },
-  subtitle: {
+  sousTitre: {
     fontSize: 30,
     fontWeight: '600',
     color: colors.couleurTexte,
     marginBottom: 10,
     textAlign: 'left'
   },
-  smallText: {
+  petitTexte: {
     fontSize: 14,
     color: colors.couleurTexte,
   },
-  elementText:
+  elementTexte:
    {
      fontSize:17,
      color: '#000000',
@@ -124,7 +124,7 @@ export const styles = StyleSheet.create({
   },
 
   // ---------- Buttons ----------
-  button: {
+  bouton: {
     backgroundColor: colors.vertPrincipal,
     paddingVertical: 14,
     borderRadius: 19,
@@ -136,17 +136,17 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
-  buttonText: {
+  boutonTexte: {
     color: colors.blanc,
     fontWeight: '600',
     fontSize: 16,
   },
-  outlineButton: {
+  contourBouton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: colors.couleurTexte,
   },
-  outlineButtonText: {
+  contourBoutonTexte: {
     color: colors.couleurTexte,
   },
 

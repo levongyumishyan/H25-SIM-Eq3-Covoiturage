@@ -88,16 +88,16 @@ const SignUpInput = () => {
 
   return (
     <ScrollView style={styles.scrollContainer}>
-      <SafeAreaView style={styles.centeredColumn}>
-        <View style={styles.centeredRow}>
-          <Text style={styles.title}>Créer un compte</Text>
+      <SafeAreaView style={styles.colonneCentree}>
+        <View style={styles.ligneCentree}>
+          <Text style={styles.titre}>Créer un compte</Text>
         </View>
         <View style={styles.linksContainer}>
           <Link href="../(tabs)/account" style={styles.linkText}>J'ai déjà un compte!</Link>
           <Link href="../(tabs)/" style={styles.linkText}>Retour</Link>
         </View>
 
-        <Text style={styles.subtitle}>Prénom</Text>
+        <Text style={styles.sousTitre}>Prénom</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setPrenom}
@@ -108,7 +108,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Nom</Text>
+        <Text style={styles.sousTitre}>Nom</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setNom}
@@ -119,7 +119,7 @@ const SignUpInput = () => {
           autoCapitalize="words"
         />
 
-        <Text style={styles.subtitle}>Date de naissance</Text>
+        <Text style={styles.sousTitre}>Date de naissance</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={() => setShowDatePicker(true)}
@@ -140,7 +140,7 @@ const SignUpInput = () => {
           />
         )}
 
-        <Text style={styles.subtitle}>Téléphone</Text>
+        <Text style={styles.sousTitre}>Téléphone</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setTelephone}
@@ -151,7 +151,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Courriel</Text>
+        <Text style={styles.sousTitre}>Courriel</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setCourriel}
@@ -162,7 +162,7 @@ const SignUpInput = () => {
           autoCapitalize="none"
         />
 
-        <Text style={styles.subtitle}>Mot de passe</Text>
+        <Text style={styles.sousTitre}>Mot de passe</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setMdp}
@@ -172,7 +172,7 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitle}>Vérifier votre mot de passe</Text>
+        <Text style={styles.sousTitre}>Vérifier votre mot de passe</Text>
         <TextInput
           style={[styles.input, { color: colors.couleurTexteInverse }]}
           onChangeText={setMdpVerif}
@@ -182,13 +182,13 @@ const SignUpInput = () => {
           secureTextEntry
         />
 
-        <Text style={styles.subtitle}>Sélectionner votre rôle</Text>
+        <Text style={styles.sousTitre}>Sélectionner votre rôle</Text>
         <Text style={styles.labelLeft}>
           Vous pourrez toujours changer en cours de route :)
         </Text>
 
         <View style={styles.container}>
-          <Text style={styles.subtitle}>Conducteur</Text>
+          <Text style={styles.sousTitre}>Conducteur</Text>
           <Checkbox
             value={conducteur}
             onValueChange={setConducteur}
@@ -196,9 +196,9 @@ const SignUpInput = () => {
           />
         </View>
 
-        <View style={styles.centeredRow}>
+        <View style={styles.ligneCentree}>
           <View style={styles.container}>
-            <Text style={styles.subtitle}>Passager</Text>
+            <Text style={styles.sousTitre}>Passager</Text>
             <Checkbox
               value={passager}
               onValueChange={setPassager}
@@ -208,7 +208,7 @@ const SignUpInput = () => {
 
           {conducteur && (
             <SafeAreaView style={styles.container}>
-              <Text style={styles.subtitle}>Modèle de voiture</Text>
+              <Text style={styles.sousTitre}>Modèle de voiture</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setModeleVoiture}
@@ -219,7 +219,7 @@ const SignUpInput = () => {
                 autoCapitalize="none"
               />
 
-              <Text style={styles.subtitle}>Année</Text>
+              <Text style={styles.sousTitre}>Année</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={setAnneeVoiture}
@@ -230,7 +230,7 @@ const SignUpInput = () => {
                 autoCapitalize="none"
               />
 
-              <Text style={styles.subtitle}>
+              <Text style={styles.sousTitre}>
                 Consommation moyenne en carburant
               </Text>
               <TextInput
@@ -246,8 +246,8 @@ const SignUpInput = () => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={verifierConnection}>
-          <Text style={styles.buttonText}>S'inscrire</Text>
+        <TouchableOpacity style={styles.bouton} onPress={verifierConnection}>
+          <Text style={styles.boutonTexte}>S'inscrire</Text>
         </TouchableOpacity>
       </SafeAreaView>
       <Text>{'\n'.repeat(10)}</Text>

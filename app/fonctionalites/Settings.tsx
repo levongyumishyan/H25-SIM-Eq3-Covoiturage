@@ -66,10 +66,10 @@ const Settings = () => {
   };
 
   return (
-      <View style={styles.centeredColumn}>
+      <View style={styles.colonneCentree}>
         {estConnecte ? (
           <>
-            <Text style={styles.subtitle}>Réglages utilisateur</Text>
+            <Text style={styles.sousTitre}>Réglages utilisateur</Text>
 
             {/* NOM */}
             <TouchableOpacity onPress={() => setEditingNom(true)}>
@@ -84,7 +84,7 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Nom: {nomUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Nom: {nomUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
@@ -102,7 +102,7 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Courriel: {courrielUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Courriel: {courrielUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
@@ -120,21 +120,21 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Téléphone: {telephoneUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Téléphone: {telephoneUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={updateUserInfos}>
-              <Text style={styles.buttonText}>Mettre à jour</Text>
+            <TouchableOpacity style={styles.bouton} onPress={updateUserInfos}>
+              <Text style={styles.boutonTexte}>Mettre à jour</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={deconnection}>
-              <Text style={styles.buttonText}>Se déconnecter</Text>
+            <TouchableOpacity style={styles.bouton} onPress={deconnection}>
+              <Text style={styles.boutonTexte}>Se déconnecter</Text>
             </TouchableOpacity>
 
           </>
         ) : (
-          <Text style={styles.title}>Ride/W</Text>
+          <Text style={styles.titre}>Ride/W</Text>
         )}
       </View>
   );

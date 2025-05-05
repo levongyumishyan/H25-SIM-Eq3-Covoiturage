@@ -13,21 +13,21 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.centeredColumn}>
-      <Text style={styles.title}>
+      <View style={styles.colonneCentree}>
+      <Text style={styles.titre}>
           {estConnecte ? `Bienvenue,\n ${nomUtilisateur}` : 'Ride/W'}
       </Text>
-      <Text style={styles.subtitle}>
+      <Text style={styles.sousTitre}>
           {estConnecte ? 'Bon retour !' : 'Application de Covoiturage'}
       </Text>
 
         {!estConnecte && (
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => router.push('/inscription')}>
+            <TouchableOpacity style={styles.bouton} onPress={() => router.push('/inscription')}>
               <Text style={styles.label}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.outlineButton]} onPress={() => router.push('/account')}>
-              <Text style={[styles.label, styles.outlineButtonText]}>Login</Text>
+            <TouchableOpacity style={[styles.bouton, styles.contourBouton]} onPress={() => router.push('/account')}>
+              <Text style={[styles.label, styles.contourBoutonTexte]}>Login</Text>
             </TouchableOpacity>
           </View>
         )}

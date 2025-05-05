@@ -58,17 +58,17 @@ const LoginInput = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.centeredColumn}>
+      <View style={styles.colonneCentree}>
         {estConnecte ? (
           <>
-            <Text style={styles.title}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
+            <Text style={styles.titre}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
             <Settings/>
           </>
         ) : (
           <>
-            <Text style={styles.title}>Ride/W</Text>
+            <Text style={styles.titre}>Ride/W</Text>
 
-            <Text style={styles.subtitle}>Courriel</Text>
+            <Text style={styles.sousTitre}>Courriel</Text>
             <TextInput
               style={[styles.input, { color: colors.couleurTexteInverse }]}
               onChangeText={setCourriel}
@@ -79,7 +79,7 @@ const LoginInput = () => {
               autoCapitalize="none"
             />
 
-            <Text style={styles.subtitle}>Mot de passe</Text>
+            <Text style={styles.sousTitre}>Mot de passe</Text>
             <TextInput
               style={[styles.input, { color: colors.couleurTexteInverse }]}
               onChangeText={setMdp}
@@ -98,7 +98,7 @@ const LoginInput = () => {
               <Link href="../(tabs)/inscription" style={styles.linkText}>Se créer un compte</Link>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={verifierConnection}>
+            <TouchableOpacity style={styles.bouton} onPress={verifierConnection}>
               <Text style={styles.label}>Se connecter</Text>
             </TouchableOpacity>
           </>

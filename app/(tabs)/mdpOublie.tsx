@@ -11,8 +11,8 @@ export default function Index() {
   };
   return (
       <View style={styles.container}>
-        <View style={styles.centeredColumn}>
-        <Text style={styles.title}>Courriel</Text>
+        <View style={styles.colonneCentree}>
+        <Text style={styles.titre}>Courriel</Text>
             <TextInput
               style={styles.input}
               onChangeText={setCourriel}
@@ -23,7 +23,7 @@ export default function Index() {
               autoCapitalize="none"
             />
             <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={envoieCourrielVerif}>
+            <TouchableOpacity style={styles.bouton} onPress={envoieCourrielVerif}>
               <Text style={styles.label}>Envoyer le lien</Text>
             </TouchableOpacity>
             </View>
