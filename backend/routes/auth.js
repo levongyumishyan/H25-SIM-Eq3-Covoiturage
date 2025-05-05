@@ -195,7 +195,7 @@ router.post("/updateUserInfos", [
     const erreurs = validationResult(req);
     if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
-    const { id, nom, telephone, email } = req.body;
+    const { id, prenom, nom, telephone, email } = req.body;
     try {
         let utilisateur = await Utilisateur.findById(id);
         if (!utilisateur) return res.status(400).json({ msg: "Erreur utilisateur introuvable" });

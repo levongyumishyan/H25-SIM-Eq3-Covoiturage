@@ -68,7 +68,7 @@ export default function Rides() {
       <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
         <Text style={styles.label}>{item.origin} → {item.destination}</Text>
-        <Text style={styles.smallText}>{item.distance} km • Terminé</Text>
+        <Text style={styles.petitTexte}>{item.distance} km • Terminé</Text>
       </View>
     </TouchableOpacity>
   );
@@ -86,16 +86,16 @@ export default function Rides() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
         {stats && (
-          <View style={styles.centeredRow}>
-            <View style={styles.centeredColumn}>
+          <View style={styles.ligneCentree}>
+            <View style={styles.colonneCentree}>
               <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
             </View>
-            <View style={styles.centeredColumn}>
+            <View style={styles.colonneCentree}>
               <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
             </View>
-            <View style={styles.centeredColumn}>
+            <View style={styles.colonneCentree}>
               <Ionicons name="bicycle" size={30} color={colors.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.totalDistance} km parcourus</Text>
             </View>
@@ -104,21 +104,21 @@ export default function Rides() {
 
         {upcomingRide && (
           <View style={styles.upcomingRideContainer}>
-            <Text style={styles.title}>Trajet en Cours</Text>
+            <Text style={styles.titre}>Trajet en Cours</Text>
             <View style={styles.ridecontainer}>
               <Ionicons name="car-sport-outline" size={24} color={colors.vertPrincipal} style={styles.icon} />
               <View style={styles.rideDetails}>
                 <Text style={styles.label}>{upcomingRide.origin} → {upcomingRide.destination}</Text>
-                <Text style={styles.smallText}>{upcomingRide.distance} km • En cours...</Text>
+                <Text style={styles.petitTexte}>{upcomingRide.distance} km • En cours...</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.button} onPress={completeRide}>
-              <Text style={styles.buttonText}>Terminer le trajet</Text>
+            <TouchableOpacity style={styles.bouton} onPress={completeRide}>
+              <Text style={styles.boutonTexte}>Terminer le trajet</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        <Text style={styles.title}>Trajets Récents</Text>
+        <Text style={styles.titre}>Trajets Récents</Text>
         <FlatList
           data={rides}
           keyExtractor={(item) => item.id.toString()}

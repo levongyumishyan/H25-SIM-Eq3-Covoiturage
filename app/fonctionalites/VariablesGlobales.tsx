@@ -17,6 +17,15 @@ interface AuthState {
   setCourrielUtilisateur: (courriel: string) => void;
   userId: string;
   setUserId: (id: string) => void;
+
+  userLong: number;
+  setUserLong: (long: number) => void;
+  userLat: number;
+  setUserLat: (lat: number) => void;
+  targetLong: number;
+  targetLat: number;
+  setTargetLong: (tLong: number) => void;
+  setTargetLat: (tLat: number) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -32,6 +41,14 @@ export const useAuthStore = create<AuthState>((set) => ({
   setCourrielUtilisateur: (courriel) => set({ courrielUtilisateur: courriel }),
   userId:"",
   setUserId: (id)  => set({ userId: id }),
+  userLong:0,
+  userLat:0,
+  setUserLong: (long) => set({ userLong: long }),
+  setUserLat: (lat) => set({ userLat: lat }),
+  targetLong:0,
+  targetLat:0,
+  setTargetLong: (tLong) => set({ targetLong: tLong }),
+  setTargetLat: (tLat) => set({ targetLat: tLat }),
 }));
 
 export default function VariablesGlobales() {

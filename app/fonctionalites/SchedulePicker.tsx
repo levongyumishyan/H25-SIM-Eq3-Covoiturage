@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from 'app/apiConfig.js'; // Adjust path if needed
+import { useAuthStore } from './VariablesGlobales';
 
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
-export default function SchedulePicker({ coordinates = {} }) {
+
+
+export default function SchedulePicker({ onClose }) {
   const [time, setTime] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([]);
+  const userLat = useAuthStore((state) => state.userLat);
+  const userLong = useAuthStore((state) => state.userLong);
+  const targetLat = useAuthStore((state) => state.targetLat);
+  const targetLong = useAuthStore((state) => state.targetLong);
+  const userId = useAuthStore((state) => state.userId);
 
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
@@ -35,20 +43,20 @@ export default function SchedulePicker({ coordinates = {} }) {
 
   const handleConfirm = async () => {
     const payload = {
-      id: Math.floor(Math.random() * 1000000),
-      long: coordinates.long ?? -73.5673,
-      lat: coordinates.lat ?? 45.5017,
-      targetLong: coordinates.targetLong ?? -73.5671,
-      targetLat: coordinates.targetLat ?? 45.5025,
+      userId: userId,
+      long: userLong,
+      lat: userLat,
+      targetLong: targetLong,
+      targetLat: targetLat,
       scheduleDays: selectedDays,
       scheduleTime: formatTime(time),
     };
-
+  
     console.log("📅 Selected days:", selectedDays);
     console.log("📦 Sending to backend:", payload);
-
+  
     Alert.alert("Envoi", "Tentative d'envoi du trajet...");
-
+  
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`, {
         method: "POST",
@@ -57,12 +65,17 @@ export default function SchedulePicker({ coordinates = {} }) {
         },
         body: JSON.stringify(payload),
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         console.log("✅ Saved:", result);
         Alert.alert("Succès", "Trajet enregistré !");
+        // ✅ Call onClose AFTER successful save
+        onClose?.({
+          days: selectedDays,
+          time: formatTime(time),
+        });
       } else {
         console.error("❌ Server error:", result);
         Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
@@ -72,6 +85,7 @@ export default function SchedulePicker({ coordinates = {} }) {
       Alert.alert("Erreur", "Impossible de se connecter au serveur");
     }
   };
+  
 
   return (
     <View

@@ -13,6 +13,7 @@ import Constants from 'expo-constants';
 import { styles } from './Styles';
 import { colors } from './Colors';
 import { BASE_URL } from '~/apiConfig';
+import { useAuthStore } from './VariablesGlobales';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
@@ -23,6 +24,9 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
+    const setTargetLat = useAuthStore((state) => state.setTargetLat); 
+    const setTargetLong = useAuthStore((state) => state.setTargetLong); 
+
   useImperativeHandle(ref, () => ({
     confirmSchedule,
   }));
@@ -31,6 +35,8 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     (async () => {
       const loc = await Location.getCurrentPositionAsync({});
       setLocation(loc.coords);
+      console.log("coordonnées actuelles raw: " + location);
+      S
     })();
   }, []);
 
@@ -50,15 +56,18 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   const handleSelect = (place_name, coords) => {
     setSelectedAddress(place_name);
     setPendingTargetCoords(coords);
+    console.log(coords[1]);
+    setTargetLong(coords[0]);
+    setTargetLat(coords[1]);
     setSuggestions([]);
     onSelect?.();
   };
-
+  
+  //INUTILEEEEEEEEEEEEEEEeeeeee
   const confirmSchedule = async (schedule) => {
     if (!location || !pendingTargetCoords) return;
     try {
       const body = {
-        id: Math.floor(Math.random() * 1000000),
         long: location.longitude,
         lat: location.latitude,
         targetLong: pendingTargetCoords[0],
@@ -119,7 +128,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
 
   return (
     <View style={[styles.searchBoxWrapper, { backgroundColor: '#fff', borderRadius: 12, elevation: 5, padding: 10 }]}>
-      <View style={styles.centeredRow}>
+      <View style={styles.ligneCentree}>
         <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
         <TextInput
           style={styles.labelInverse}

@@ -18,6 +18,7 @@ const LoginInput = () => {
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
+  const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
   const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
   const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
   const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
@@ -40,6 +41,7 @@ const LoginInput = () => {
       
       //Attribution des variables globales
       setConnecte(true);
+      setPrenomUtilisateur(data.utilisateur?.prenom || 'erreur user');
       setNomUtilisateur(data.utilisateur?.nom || 'erreur user');
       setCourrielUtilisateur(data.utilisateur?.email || "erreur email");
       setTelephoneUtilisateur(data.utilisateur?.telephone || "erreur telephone");
@@ -58,17 +60,17 @@ const LoginInput = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.centeredColumn}>
+      <View style={styles.colonneCentree}>
         {estConnecte ? (
           <>
-            <Text style={styles.title}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
+            <Text style={styles.titre}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
             <Settings/>
           </>
         ) : (
           <>
-            <Text style={styles.title}>Ride/W</Text>
+            <Text style={styles.titre}>Ride/W</Text>
 
-            <Text style={styles.subtitle}>Courriel</Text>
+            <Text style={styles.sousTitre}>Courriel</Text>
             <TextInput
               style={[styles.input, { color: colors.couleurTexteInverse }]}
               onChangeText={setCourriel}
@@ -79,7 +81,7 @@ const LoginInput = () => {
               autoCapitalize="none"
             />
 
-            <Text style={styles.subtitle}>Mot de passe</Text>
+            <Text style={styles.sousTitre}>Mot de passe</Text>
             <TextInput
               style={[styles.input, { color: colors.couleurTexteInverse }]}
               onChangeText={setMdp}
@@ -98,7 +100,7 @@ const LoginInput = () => {
               <Link href="../(tabs)/inscription" style={styles.linkText}>Se créer un compte</Link>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={verifierConnection}>
+            <TouchableOpacity style={styles.bouton} onPress={verifierConnection}>
               <Text style={styles.label}>Se connecter</Text>
             </TouchableOpacity>
           </>

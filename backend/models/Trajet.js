@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const TrajetSchema = new mongoose.Schema({
-  id: { type: Number, required: true, unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true, unique: false},
   long: { type: Number, required: true },
   lat: { type: Number, required: true },
   targetLong: { type: Number, required: true },

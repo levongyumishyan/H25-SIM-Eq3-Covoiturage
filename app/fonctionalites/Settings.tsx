@@ -8,6 +8,7 @@ import { BASE_URL } from "~/apiConfig";
 
 const Settings = () => {
   const [editingNom, setEditingNom] = useState(false);
+  const [editingPrenom, setEditingPrenom] = useState(false);
   const [editingCourriel, setEditingCourriel] = useState(false);
   const [editingTelephone, setEditingTelephone] = useState(false);
 
@@ -15,6 +16,8 @@ const Settings = () => {
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
+  const prenomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
+  const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
   const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
   const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
   const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
@@ -45,6 +48,7 @@ const Settings = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: userId,
+          prenom: prenomUtilisateur,
           nom: nomUtilisateur,
           email: courrielUtilisateur,
           telephone: telephoneUtilisateur,
@@ -66,11 +70,27 @@ const Settings = () => {
   };
 
   return (
-      <View style={styles.centeredColumn}>
+      <View style={styles.colonneCentree}>
         {estConnecte ? (
           <>
-            <Text style={styles.subtitle}>Réglages utilisateur</Text>
+            <Text style={styles.sousTitre}>Réglages utilisateur</Text>
 
+            {/* PRENOM */}
+            <TouchableOpacity onPress={() => setEditingPrenom(true)}>
+              {editingPrenom ? (
+                <TextInput
+                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
+                  onChangeText={setPrenomUtilisateur}
+                  value={prenomUtilisateur}
+                  placeholder="Prenom"
+                  placeholderTextColor={colors.grisPrincipal}
+                  onBlur={() => setEditingPrenom(false)}
+                  autoFocus
+                />
+              ) : (
+                <Text style={styles.sousTitre}>Prénom: {prenomUtilisateur || "(Cliquez pour ajouter)"}</Text>
+              )}
+            </TouchableOpacity>
             {/* NOM */}
             <TouchableOpacity onPress={() => setEditingNom(true)}>
               {editingNom ? (
@@ -84,7 +104,7 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Nom: {nomUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Nom: {nomUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
@@ -102,7 +122,7 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Courriel: {courrielUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Courriel: {courrielUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
@@ -120,21 +140,21 @@ const Settings = () => {
                   autoFocus
                 />
               ) : (
-                <Text style={styles.subtitle}>Téléphone: {telephoneUtilisateur || "(Cliquez pour ajouter)"}</Text>
+                <Text style={styles.sousTitre}>Téléphone: {telephoneUtilisateur || "(Cliquez pour ajouter)"}</Text>
               )}
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={updateUserInfos}>
-              <Text style={styles.buttonText}>Mettre à jour</Text>
+            <TouchableOpacity style={styles.bouton} onPress={updateUserInfos}>
+              <Text style={styles.boutonTexte}>Mettre à jour</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={deconnection}>
-              <Text style={styles.buttonText}>Se déconnecter</Text>
+            <TouchableOpacity style={styles.bouton} onPress={deconnection}>
+              <Text style={styles.boutonTexte}>Se déconnecter</Text>
             </TouchableOpacity>
 
           </>
         ) : (
-          <Text style={styles.title}>Ride/W</Text>
+          <Text style={styles.titre}>Ride/W</Text>
         )}
       </View>
   );
