@@ -7,7 +7,9 @@ const TrajetSchema = new mongoose.Schema({
   targetLong: { type: Number, required: true },
   targetLat: { type: Number, required: true },
   scheduleDays: [String], // 👈 must be included
-  scheduleTime: String     // 👈 must be included
+  scheduleTime: String,     // 👈 must be included
+  pickupAddress: { type: String, required: true },
+  targetAddress: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Trajet', TrajetSchema);

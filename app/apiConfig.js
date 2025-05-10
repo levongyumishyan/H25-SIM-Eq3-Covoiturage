@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // Replace with your computer's local IP address on Wi-Fi
-const LOCAL_NETWORK_IP = 'http://10.0.0.47:5001';
+const LOCAL_NETWORK_IP = 'http://192.168.2.17:5001';
 
 const LOCAL_HOST =
   Platform.OS === 'android'
@@ -10,4 +10,4 @@ const LOCAL_HOST =
 
 const PRODUCTION_HOST = 'https://backend-392j.onrender.com';
 
-export const BASE_URL = PRODUCTION_HOST;
+export const BASE_URL = "http://10.0.2.2:5001";

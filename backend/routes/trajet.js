@@ -49,17 +49,49 @@ router.get('/', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   try {
-    const {userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime } = req.body;
+    const {userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress } = req.body;
 
     console.log("🛬 Reçu POST:", req.body); // 👈 DEBUG
 
-    const trajet = new Trajet({userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime });
+    const trajet = new Trajet({userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress });
     await trajet.save();
 
     return res.json({ message: "Trajet enregistré", trajet });
   } catch (err) {
     console.error('Erreur serveur (POST):', err);
     return res.status(500).json({ msg: "Erreur serveur (POST)", error: err.message });
+  }
+});
+
+router.post("/getTrajets", [
+
+], async (req, res) => {
+  const erreurs = validationResult(req);
+  if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
+
+  const userId = req.body.userId.toLowerCase();
+
+  try {
+    const utilisateur = await Utilisateur.findOne({ userId });
+    if (!utilisateur) return res.status(400).json({ msg: "Email introuvable" });
+
+    const isMatch = await bcrypt.compare(mdp, utilisateur.mdp);
+    if (!isMatch) return res.status(400).json({ msg: "aucun trajet pour cet utilisateur" });
+
+    res.json({
+      token,
+      trajet: {
+        long,
+        lat,
+        targetLong,
+        targetLat,
+        pickupAddress,
+        targetAddress,
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Erreur server" });
   }
 });
 

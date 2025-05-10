@@ -20,6 +20,19 @@ export default function SchedulePicker({ onClose }) {
   const targetLong = useAuthStore((state) => state.targetLong);
   const userId = useAuthStore((state) => state.userId);
 
+  const reverseGeocode = async ([lng, lat]) => {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+      return json.features[0]?.place_name || '';
+    } catch (error) {
+      console.error('Error reverse geocoding:', error);
+      return '';
+    }
+  };
+  
+
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
     const m = date.getMinutes().toString().padStart(2, '0');
@@ -45,6 +58,12 @@ export default function SchedulePicker({ onClose }) {
   };
 
   const handleConfirm = async () => {
+    const targetCoords = [targetLong, targetLat];
+    const targetAddress = await reverseGeocode(targetCoords);
+    const rideCoords = [userLong, userLat];
+    const pickupAddress = await reverseGeocode(rideCoords);
+
+
     const payload = {
       userId: userId,
       long: userLong,
@@ -53,6 +72,9 @@ export default function SchedulePicker({ onClose }) {
       targetLat: targetLat,
       scheduleDays: selectedDays,
       scheduleTime: formatTime(time),
+      pickupAddress,
+      targetAddress,
+
     };
 
     console.log("📅 Selected days:", selectedDays);

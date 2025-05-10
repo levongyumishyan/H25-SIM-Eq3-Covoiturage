@@ -67,11 +67,35 @@ export default function Rides() {
     <TouchableOpacity style={styles.ridecontainer}>
       <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
-        <Text style={styles.label}>{item.origin} → {item.destination}</Text>
-        <Text style={styles.petitTexte}>{item.distance} km • Terminé</Text>
+        <Text style={styles.label}>{item.pickupAddress} → {item.targetAddress}</Text>
+        <Text style={styles.petitTexte}>{item.distance} km • À venir</Text>
       </View>
     </TouchableOpacity>
   );
+  const actualiserTrajets = async () => {
+  try {
+    setRides(null);
+    const response = await fetch(`${BASE_URL}/api/trajets`);
+    const text = await response.text();
+
+    try {
+      const data = JSON.parse(text);
+      //console.log('JSON OUTPUT:', data);
+      const trajetsFiltrés = data.filter(
+        (trajet) => trajet.userId === userId
+      );
+      console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
+      setRides(trajetsFiltrés);
+      console.log(rides);
+    } catch (parseError) {
+      console.error('erreur transfert json', parseError.message);
+    }
+    
+
+  } catch (error) {
+    console.error('Network error', error.message);
+  }
+};
 
   if (loading) {
     return (
@@ -119,9 +143,12 @@ export default function Rides() {
         )}
 
         <Text style={styles.titre}>Trajets Récents</Text>
+        <TouchableOpacity style={styles.bouton} onPress={actualiserTrajets}>
+                  <Text style={styles.boutonTexte}>Actualiser</Text>
+                </TouchableOpacity>
         <FlatList
           data={rides}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={renderRide}
           contentContainerStyle={styles.scrollContainer}
           scrollEnabled={false}

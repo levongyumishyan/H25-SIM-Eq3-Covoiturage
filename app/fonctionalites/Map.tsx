@@ -53,11 +53,11 @@ const fetchDrivers = async () => {
     const response = await fetch(`${BASE_URL}/api/trajets`);
     const text = await response.text();
 
-    console.log('🟡 Raw response:', text);
+    //console.log('🟡 Raw response:', text);
 
     try {
       const data = JSON.parse(text);
-      console.log('✅ Parsed data:', data);
+      //console.log('✅ Parsed data:', data);
       setDrivers(data);
     } catch (parseError) {
       console.error('❌ JSON parse error:', parseError.message);
