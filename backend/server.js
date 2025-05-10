@@ -17,33 +17,24 @@
 
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const app = express();
-
-// Middleware
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Import des routes
 const authRoutes = require("./routes/auth");
-const trajetRoutes = require('./routes/trajet'); 
+const trajetRoutes = require("./routes/trajet");
 
-// Définition des routes
-app.use('/api/trajets', trajetRoutes);         
 app.use("/api/auth", authRoutes);
+app.use("/api/trajets", trajetRoutes);
 
-// Connexion à MongoDB
+app.get("/", (req, res) => res.send("API is running"));
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB est connecté"))
-  .catch(err => console.error("Erreur MongoDB:", err));
+  .catch((err) => console.error("Erreur MongoDB:", err));
 
-// Route de test par défaut
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-// Lancement du serveur
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server marche sur le port : ${PORT}`));
+const PORT = process.env.PORT;
+app.listen(PORT, '0.0.0.0', () => console.log(`Server marche sur le port : ${PORT}`));

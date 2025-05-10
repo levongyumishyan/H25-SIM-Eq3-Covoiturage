@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, TouchableOpacity, View, Dimensions, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { styles } from '../fonctionalites/Styles';
 import { useAuthStore } from '~/fonctionalites/VariablesGlobales';
-import { useRideStore } from '~/fonctionalites/useRideStore';
 import { colors } from '../fonctionalites/Colors';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync(); // prevent native splash from auto hiding
 
 export default function App() {
+  const [appReady, setAppReady] = useState(false);
+
   const estConnecte = useAuthStore((state) => state.estConnecte);
-  const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
-  const upcomingRide = useRideStore((state) => state.upcomingRide);
+  const nomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
+
+  useEffect(() => {
+    const load = async () => {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setAppReady(true);
+      await SplashScreen.hideAsync();
+    };
+    load();
+  }, []);
+
+  if (!appReady) {
+    return (
+      <View style={splashStyles.container}>
+        <Image
+          source={require('../assets/animations/animation-a.gif')}
+          style={splashStyles.lottie}
+          resizeMode="cover"
+        />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,29 +46,6 @@ export default function App() {
         <Text style={styles.sousTitre}>
           {estConnecte ? 'Bon retour !' : 'Application de Covoiturage'}
         </Text>
-
-        {estConnecte && upcomingRide && (
-          <View style={{
-            backgroundColor: colors.vertPrincipal,
-            paddingHorizontal: 20,
-            paddingVertical: 15,
-            borderRadius: 16,
-            marginTop: 30,
-            width: '90%',
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.2,
-            shadowRadius: 4,
-            elevation: 5,
-          }}>
-            <Text style={{ color: 'white', fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
-              🚗 Trajet en cours
-            </Text>
-            <Text style={{ color: 'white', fontSize: 16, textAlign: 'center', marginTop: 5 }}>
-              {upcomingRide.origin} ➔ {upcomingRide.destination}
-            </Text>
-          </View>
-        )}
 
         {!estConnecte && (
           <View style={styles.buttonContainer}>
@@ -60,3 +61,17 @@ export default function App() {
     </SafeAreaView>
   );
 }
+
+const { width, height } = Dimensions.get('window');
+const splashStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lottie: {
+    width: 350,
+    height: 100
+  }
+});

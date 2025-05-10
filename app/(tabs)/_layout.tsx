@@ -1,11 +1,12 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useNavigation } from 'expo-router';
 import { colors } from '../fonctionalites/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { Dimensions, StatusBar } from 'react-native';
-import React from 'react';
+import { Dimensions, StatusBar, BackHandler } from 'react-native';
+import React, { useCallback } from 'react';
 import { useKeyboard } from 'react-native-use-keyboard';
 import { useAuthStore } from '../fonctionalites/VariablesGlobales';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width } = Dimensions.get("window");
 const iconSize = width * 0.075;
@@ -13,10 +14,26 @@ const iconSize = width * 0.075;
 export default function TabLayout() {
   const keyboard = useKeyboard();
   const estConnecte = useAuthStore((state) => state.estConnecte);
+  const navigation = useNavigation();
+
+  // ✅ Back handler for Android
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (navigation.canGoBack()) {
+          navigation.goBack();
+          return true; // block default (exit app)
+        }
+        return false; // allow exit if no back nav
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [navigation])
+  );
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* ✅ Status bar across all screens */}
       <StatusBar barStyle="light-content" backgroundColor={colors.arrierePlan} />
 
       <Tabs
@@ -77,18 +94,9 @@ export default function TabLayout() {
             ),
           }}
         />
-        <Tabs.Screen
-          name="inscription"
-          options={{ href: null }}
-        />
-        <Tabs.Screen
-          name="mdpOublie"
-          options={{ href: null }}
-        />
-        <Tabs.Screen
-          name="index"
-          options={{ href: null }}
-        />
+        <Tabs.Screen name="inscription" options={{ href: null }} />
+        <Tabs.Screen name="mdpOublie" options={{ href: null }} />
+        <Tabs.Screen name="index" options={{ href: null }} />
       </Tabs>
     </GestureHandlerRootView>
   );

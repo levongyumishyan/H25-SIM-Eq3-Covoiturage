@@ -12,7 +12,11 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_ACCESS_KEY": " pk.eyJ1IjoibGV2b25neXVtaXNoeWFuIiwiYSI6ImNtOHZ4aXdtcjExOTUybnExN3RpbjJjc2IifQ.2BXs5uXUi84YBuyZB1n-7w",
+        "MAPBOX_ACCESS_TOKEN": "sk.eyJ1IjoibGV2b25neXVtaXNoeWFuIiwiYSI6ImNtOWcwY200dzFyZDEya3ExcnhzdGd4MWMifQ.GNmX5nrVfSEyhZyXBQYmdw"
+      }
     }
   },
   "submit": {

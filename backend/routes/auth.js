@@ -173,4 +173,9 @@ router.post("/trajet", async (req, res) => {
   }
 });
 
+
+router.get("/ping", (req, res) => {
+  res.send("✅ Auth route is alive!");
+});
+
 module.exports = router;

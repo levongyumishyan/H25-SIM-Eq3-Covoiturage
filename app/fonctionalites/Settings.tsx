@@ -6,13 +6,14 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { styles } from "./Styles";
 import { colors } from "./Colors";
 import { BASE_URL } from "~/apiConfig";
 import { useAuthStore } from "./VariablesGlobales";
+import logo from 'temp_logo.png'; // Adjust this if needed
 
-// Format phone number like (514) 123-4567
 const formatPhone = (value) => {
   const digits = value.replace(/\D/g, "").slice(0, 10);
   if (digits.length < 4) return digits;
@@ -33,6 +34,7 @@ const Settings = () => {
     setNomUtilisateur,
     setCourrielUtilisateur,
     setTelephoneUtilisateur,
+    setUserId
   } = useAuthStore();
 
   const [prenom, setPrenom] = useState("");
@@ -42,14 +44,6 @@ const Settings = () => {
   const [editingField, setEditingField] = useState(null);
 
   useEffect(() => {
-    console.log("🧠 Auth context loaded:", {
-      userId,
-      prenomUtilisateur,
-      nomUtilisateur,
-      courrielUtilisateur,
-      telephoneUtilisateur,
-    });
-
     setPrenom(prenomUtilisateur || "");
     setNom(nomUtilisateur || "");
     setEmail(courrielUtilisateur || "");
@@ -58,7 +52,6 @@ const Settings = () => {
 
   const handleSave = async () => {
     if (!userId) {
-      console.error("❌ Cannot save: userId is undefined.");
       alert("Erreur : utilisateur non identifié.");
       return;
     }
@@ -71,8 +64,6 @@ const Settings = () => {
       telephone,
     };
 
-    console.log("📤 Sending payload:", payload);
-
     try {
       const res = await fetch(`${BASE_URL}/api/auth/updateUserInfos`, {
         method: "POST",
@@ -81,11 +72,9 @@ const Settings = () => {
       });
 
       const data = await res.json();
-      console.log("✅ Server response:", res.status, data);
 
       if (!res.ok) throw new Error(data.msg || "Erreur inconnue");
 
-      // Sync global state on success
       setPrenomUtilisateur(prenom);
       setNomUtilisateur(nom);
       setCourrielUtilisateur(email);
@@ -99,29 +88,14 @@ const Settings = () => {
   };
 
   const handleLogout = async () => {
-    if (!email) {
-      alert("Adresse courriel introuvable pour la déconnexion.");
-      return;
-    }
+    setEstConnecte(false);
+    setPrenomUtilisateur('');
+    setNomUtilisateur('');
+    setCourrielUtilisateur('');
+    setTelephoneUtilisateur('');
+    setUserId(null);
 
-    try {
-      const res = await fetch(`${BASE_URL}/api/auth/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-      console.log("🚪 Logout response:", res.status, data);
-
-      if (!res.ok) throw new Error(data.msg || "Échec de la déconnexion");
-
-      setEstConnecte(false);
-      alert("Déconnexion réussie.");
-    } catch (e) {
-      console.error("❌ Logout failed:", e.message);
-      alert("Erreur de déconnexion");
-    }
+    alert("Déconnexion réussie.");
   };
 
   const renderField = (label, value, setValue, fieldKey, keyboardType = "default") => {
@@ -184,7 +158,20 @@ const Settings = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={[styles.colonneCentree, { paddingVertical: 30 }]}>
-        <View style={[styles.card, { width: "100%", maxWidth: 500 }]}>
+        <Image
+          source={logo}
+          style={{
+            alignContent: 'center',
+            width: 280,
+            height: 280,
+            left: -10,
+            top: -120,
+            resizeMode: 'contain',
+            marginBottom: -300,
+          }}
+        />
+
+        <View style={styles.card}>
           <Text style={[styles.sousTitre, { color: colors.couleurTexteInverse, marginBottom: 20 }]}>
             Réglages utilisateur
           </Text>
@@ -194,24 +181,15 @@ const Settings = () => {
           {renderField("Courriel", email, setEmail, "email", "email-address")}
           {renderField("Téléphone", telephone, setTelephone, "telephone", "phone-pad")}
 
-          <View style={styles.buttonContainer}>
+          <View style={{ marginBottom: 15 }}>
             <TouchableOpacity style={styles.bouton} onPress={handleSave}>
               <Text style={styles.boutonTexte}>💾 Sauvegarder</Text>
             </TouchableOpacity>
+          </View>
 
-            <TouchableOpacity
-              style={[styles.bouton, styles.contourBouton]}
-              onPress={handleLogout}
-            >
-              <Text
-                style={[
-                  styles.boutonTexte,
-                  styles.contourBoutonTexte,
-                  { color: colors.couleurTexteInverse },
-                ]}
-              >
-                🚪 Se déconnecter
-              </Text>
+          <View>
+            <TouchableOpacity style={styles.bouton} onPress={handleLogout}>
+              <Text style={styles.boutonTexte}>🚪 Se déconnecter</Text>
             </TouchableOpacity>
           </View>
         </View>

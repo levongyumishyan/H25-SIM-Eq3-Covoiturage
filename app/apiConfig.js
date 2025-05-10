@@ -1,12 +1,13 @@
 import { Platform } from 'react-native';
 
+// Replace with your computer's local IP address on Wi-Fi
+const LOCAL_NETWORK_IP = 'http://10.0.0.47:5001';
+
 const LOCAL_HOST =
   Platform.OS === 'android'
-    ? 'http://10.0.2.2:5001'  // Android Emulator
-    : 'http://localhost:5001'; // iOS Simulator or Web
+    ? LOCAL_NETWORK_IP           // Android physical device or emulator (on Wi-Fi)
+    : 'http://localhost:5001';   // iOS simulator or web
 
-// Change this to your production backend when deployed
-const PRODUCTION_HOST = 'https://ridew-backend-production.up.railway.app';
+const PRODUCTION_HOST = 'https://backend-392j.onrender.com';
 
-// Toggle between local or production
-export const BASE_URL = __DEV__ ? LOCAL_HOST : PRODUCTION_HOST;
+export const BASE_URL = PRODUCTION_HOST;

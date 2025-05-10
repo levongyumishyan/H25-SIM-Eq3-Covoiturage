@@ -5,13 +5,23 @@ const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   // ---------- Layout ----------
-  card:
-  {
-    width:"90%",
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 8,
-  },
+card: {
+  width: '90%',          // 💡 Responsive width
+  maxWidth: 500,         // ✅ Prevents it from getting too wide on tablets
+  alignSelf: 'center',
+  marginTop: 20,
+  top: 70,
+  left:-10,  // ✅ Center it horizontally
+  backgroundColor: colors.blanc,
+  borderRadius: 20,
+  padding: 20,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 5,
+},
+
   element:
    {
      backgroundColor: '#FFF',
@@ -25,13 +35,15 @@ export const styles = StyleSheet.create({
    },
 
    
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: colors.arrierePlan,
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
+container: {
+  flex: 1,
+  width: '100%', // 🔁 ensures full width
+  alignItems: 'center',
+  backgroundColor: colors.arrierePlan,
+  paddingHorizontal: 20,
+  paddingBottom: 40,
+},
+
 
   buttonContainer: {
     marginTop: 30,
@@ -158,7 +170,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: colors.couleurTexte,
+    color: colors.couleurTexteInverse,
     borderWidth: 1,
     borderColor: colors.grisPrincipal,
     marginBottom: 12,

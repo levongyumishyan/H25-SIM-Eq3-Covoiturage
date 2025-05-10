@@ -18,9 +18,10 @@ import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';
 import { estDarkMode, useAuthStore } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
-import Trajet from './Trajet';
+import Trajet from './TrajetJoin';
 import SchedulePicker from './SchedulePicker';
 import { useRideStore } from './useRideStore';
+import TrajetBottomSheet from './TrajetJoin';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
@@ -47,22 +48,27 @@ export default function MapScreen() {
   const setUserLat = useAuthStore((state) => state.setUserLat);
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
-  const fetchDrivers = async () => {
+const fetchDrivers = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/trajets`);
+    const text = await response.text();
+
+    console.log('🟡 Raw response:', text);
+
     try {
-      const response = await fetch(`${BASE_URL}/api/trajets`);
-      const text = await response.text();
-
-      try {
-        const data = JSON.parse(text);
-        setDrivers(data);
-      } catch (parseError) {
-        console.error('❌ Failed to parse response as JSON:', text);
-      }
-
-    } catch (error) {
-      console.error('Error fetching drivers:', error);
+      const data = JSON.parse(text);
+      console.log('✅ Parsed data:', data);
+      setDrivers(data);
+    } catch (parseError) {
+      console.error('❌ JSON parse error:', parseError.message);
+      console.error('❌ Response was:', text);
     }
-  };
+
+  } catch (error) {
+    console.error('❌ Network error fetching trajets:', error.message);
+  }
+};
+
 
   useEffect(() => {
     fetchDrivers();
@@ -278,24 +284,20 @@ export default function MapScreen() {
 
       <TrajetSearch
         onSheetChange={setIsSearchOpen}
-        isAnotherSheetOpen={isRideDetailsOpen}
+        isAnotherSheetOpen={isRideDetailsOpen || showTrajet || showSchedulePicker}
       />
 
       {/* Bottom Sheet Overlay */}
-      {showTrajet && selectedRide && (
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
-          <Trajet
+        {showTrajet && selectedRide && (
+          <TrajetBottomSheet
             ride={selectedRide}
             pickupStreet={pickupStreet}
             targetStreet={targetStreet}
+            distanceKm={routeGeoJSON ? 4.2 : null} // or calculate real one
+            visible={true}
             onClose={closeTrajet}
-            onSchedulePress={() => {
-              setShowTrajet(false);
-              setShowSchedulePicker(true);
-            }}
           />
-        </View>
-      )}
+        )}
 
       {showSchedulePicker && selectedRide && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>

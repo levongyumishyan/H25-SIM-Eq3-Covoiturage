@@ -6,25 +6,20 @@ import { Link } from 'expo-router';
 import { colors } from './Colors';
 import { styles } from './Styles';
 import { useAuthStore } from './VariablesGlobales';
-import { BASE_URL } from '../apiConfig'; // ✅ Using hosted backend
+import { BASE_URL } from '../apiConfig';
 
 const LoginInput = () => {
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState('');
 
-
   const estConnecte = useAuthStore((state) => state.estConnecte);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
-  const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
   const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
-  const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
   const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
-  const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
-  const setTelephoneUtilisateur = useAuthStore((state) => state.setTelephoneUtilisateur); 
-  const userId = useAuthStore((state) => state.userId);
-  const setUserId = useAuthStore((state) => state.setUserId); 
+  const setTelephoneUtilisateur = useAuthStore((state) => state.setTelephoneUtilisateur);
+  const setUserId = useAuthStore((state) => state.setUserId);
 
   const verifierConnection = async () => {
     try {
@@ -34,37 +29,53 @@ const LoginInput = () => {
         body: JSON.stringify({ email: courriel, mdp }),
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.msg || 'Une erreur est survenue');
+      const contentType = response.headers.get('Content-Type');
+      const raw = await response.text();
+      console.log("📦 RAW RESPONSE:", raw);
 
-      setMessageErreur('');
-      
-      //Attribution des variables globales
+      if (!response.ok) {
+        let message = 'Erreur inconnue';
+        if (contentType && contentType.includes('application/json')) {
+          try {
+            const data = JSON.parse(raw);
+            message = data.msg || (data.errors && data.errors[0]?.msg) || message;
+          } catch (parseError) {
+            message = "Erreur lors de l'analyse JSON de la réponse.";
+          }
+        } else {
+          message = `Réponse inattendue du serveur : ${raw.slice(0, 100)}`;
+        }
+        throw new Error(message);
+      }
+
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        throw new Error("Réponse serveur illisible (non-JSON)");
+      }
+
+      if (!data.utilisateur) throw new Error("Réponse invalide du serveur.");
+
       setConnecte(true);
-      setPrenomUtilisateur(data.utilisateur?.prenom || 'erreur user');
-      setNomUtilisateur(data.utilisateur?.nom || 'erreur user');
-      setCourrielUtilisateur(data.utilisateur?.email || "erreur email");
-      setTelephoneUtilisateur(data.utilisateur?.telephone || "erreur telephone");
-      setUserId(data.utilisateur?.id);
+      setPrenomUtilisateur(data.utilisateur.prenom);
+      setNomUtilisateur(data.utilisateur.nom);
+      setCourrielUtilisateur(data.utilisateur.email);
+      setTelephoneUtilisateur(data.utilisateur.telephone);
+      setUserId(data.utilisateur.id);
 
-
-      console.log('Réponse du serveur :', data);
-      console.log(courrielUtilisateur, nomUtilisateur, data.utilisateur?.telephone);
-      console.log(userId);
+      console.log('✅ Utilisateur connecté :', data.utilisateur);
     } catch (error) {
-      console.error('Erreur de connexion :', error.message);
+      console.error('❌ Erreur de connexion :', error.message);
       setMessageErreur(error.message);
     }
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.colonneCentree}>
         {estConnecte ? (
-          <>
-            <Settings/>
-          </>
+          <Settings />
         ) : (
           <>
             <Text style={styles.titre}>Ride/W</Text>
