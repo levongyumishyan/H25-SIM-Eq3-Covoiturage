@@ -4,10 +4,10 @@ import { Platform } from 'react-native';
 const LOCAL_NETWORK_IP = 'http://192.168.2.17:5001';
 
 const LOCAL_HOST =
-  Platform.OS === 'android'
+  Platform.OS === 'android' //http://10.0.2.2:5001
     ? LOCAL_NETWORK_IP           // Android physical device or emulator (on Wi-Fi)
     : 'http://localhost:5001';   // iOS simulator or web
 
 const PRODUCTION_HOST = 'https://backend-392j.onrender.com';
 
-export const BASE_URL = "http://10.0.2.2:5001";
+export const BASE_URL = LOCAL_HOST;
