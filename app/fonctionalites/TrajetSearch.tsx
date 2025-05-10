@@ -13,7 +13,7 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
 
-  const snapPoints = useMemo(() => ['20%', '20%'], []);
+  const snapPoints = useMemo(() => ['50%', '50%'], []);
 
   const openBottomSheet = () => {
     setIsSheetOpen(true);
@@ -43,10 +43,6 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
   
 
   const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen && !showSchedule;
-  console.log("shouldShowPlusButton", shouldShowPlusButton);
-  console.log("isSheetOpen", isSheetOpen);
-  console.log("isAnotherSheetOpen", isAnotherSheetOpen);
-  console.log("showSchedule", showSchedule);
   
   return (
     <>
@@ -57,7 +53,7 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
         enablePanDownToClose
         onChange={handleSheetChange}
       >
-        <BottomSheetView style={{ flex: 1, padding: 20 }}>
+        <BottomSheetView style={{ flex: 1, padding: 10 }}>
           <>
           {!showSchedule ? (
             <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />

@@ -18,7 +18,14 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.yourcompany.yourappname",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -43,16 +50,23 @@
         }
       ],
       [
-      "expo-location",
-          {
-            "locationAlwaysAndWhenInUsePermission" : "Allow RideW to use your location.",
-            "isAndroidBackgroundLocationEnabled": true
-            
-          }
-        ]
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow RideW to use your location.",
+          "isAndroidBackgroundLocationEnabled": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "986efa40-3149-49d8-ac3f-0e72d1482770"
+      }
     }
   }
 }

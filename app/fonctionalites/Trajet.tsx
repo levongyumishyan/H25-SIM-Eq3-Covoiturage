@@ -1,103 +1,61 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { colors } from './Colors';
-import { useRideStore } from './useRideStore';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { styles } from './Styles';
+import { BASE_URL } from '../apiConfig';
+import { useAuthStore } from './VariablesGlobales';
 
-const Trajet = ({ visible, onClose, selectedRide, pickupStreet, targetStreet, onSheetChange, onAddressPress }) => {
-  const sheetRef = useRef<BottomSheet>(null);
-  const { setUpcomingRide } = useRideStore();
+const Trajet = ({ ride, pickupStreet, targetStreet, onClose }) => {
+  const currentUserId = useAuthStore((state) => state.userId);
 
-  function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) *
-        Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
+  const handleJoinRide = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/trajets/${ride._id}/join`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: currentUserId }),
+      });
 
-  const distanceKm = selectedRide
-    ? calculateDistance(
-        selectedRide.lat,
-        selectedRide.long,
-        selectedRide.targetLat,
-        selectedRide.targetLong
-      ).toFixed(2)
-    : null;
+      const result = await response.json();
 
-  useEffect(() => {
-    if (visible) {
-      onSheetChange(true);
-      sheetRef.current?.expand();
-    } else {
-      onSheetChange(false);
-      sheetRef.current?.close();
-    }
-  }, [visible]);
+      if (!response.ok) throw new Error(result.msg || 'Erreur lors de la planification');
 
-  const handleJoindre = () => {
-    if (selectedRide) {
-      const rideToStart = {
-        id: selectedRide.id,
-        origin: pickupStreet,
-        destination: targetStreet,
-        distance: selectedRide.distance,
-      };
-      setUpcomingRide(rideToStart);
-      onClose();
+      console.log('✅ Trajet rejoint avec succès:', result);
+
+      Alert.alert('Succès', 'Vous avez rejoint ce trajet.');
+
+      onClose(); // ✅ Close bottom sheet
+    } catch (err) {
+      console.error('❌ Erreur lors de la requête de planification:', err.message);
+      Alert.alert('Erreur', err.message || 'Impossible de rejoindre le trajet.');
     }
   };
 
-  const snapPoints = ['60%', '60%'];
-
   return (
-    <BottomSheet
-      ref={sheetRef}
-      index={-1}
-      snapPoints={snapPoints}
-      enablePanDownToClose
-      onClose={onClose}
-    >
-      <BottomSheetView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-        <Ionicons name="footsteps-outline" size={30} color={colors.vertPrincipal} />
-        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Trajet proposé</Text>
+    <View style={[styles.card, { borderTopLeftRadius: 20, borderTopRightRadius: 20, marginBottom: 0 }]}>
+      <Text style={styles.sousTitre}>Trajet trouvé</Text>
 
-        <TouchableOpacity onPress={onAddressPress}>
-          <Text style={{ marginTop: 10, fontSize: 16 }}>{pickupStreet}</Text>
+      <View style={{ marginBottom: 12 }}>
+        <Text style={styles.label}>Départ</Text>
+        <Text style={styles.petitTexte}>{pickupStreet || 'Adresse inconnue'}</Text>
+      </View>
+
+      <View style={{ marginBottom: 20 }}>
+        <Text style={styles.labelInverseCentered}>Destination</Text>
+        <Text style={styles.petitTexte}>{targetStreet || 'Adresse inconnue'}</Text>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.bouton} onPress={handleJoinRide}>
+          <Text style={styles.boutonTexte}>Rejoindre ce trajet</Text>
         </TouchableOpacity>
 
-        <Text style={{ fontSize: 16 }}>➔</Text>
-
-        <TouchableOpacity onPress={onAddressPress}>
-          <Text style={{ marginBottom: 10, fontSize: 16 }}>{targetStreet}</Text>
+        <TouchableOpacity style={[styles.bouton, styles.contourBouton]} onPress={onClose}>
+          <Text style={[styles.boutonTexte, styles.contourBoutonTexte]}>Annuler</Text>
         </TouchableOpacity>
-
-        {distanceKm && (
-          <Text style={{ fontSize: 16, marginBottom: 10 }}>
-            Distance: {distanceKm} km
-          </Text>
-        )}
-
-        <TouchableOpacity
-          onPress={handleJoindre}
-          style={{
-            backgroundColor: colors.vertPrincipal,
-            padding: 12,
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Joindre</Text>
-        </TouchableOpacity>
-      </BottomSheetView>
-    </BottomSheet>
+      </View>
+    </View>
   );
 };
 

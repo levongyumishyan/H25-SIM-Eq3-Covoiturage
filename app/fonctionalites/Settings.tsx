@@ -1,162 +1,222 @@
-import { useState } from "react";
-import { useAuthStore } from "./VariablesGlobales";
-import { SafeAreaView, TouchableOpacity, View, Text, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { styles } from "./Styles";
-import React from "react";
 import { colors } from "./Colors";
 import { BASE_URL } from "~/apiConfig";
+import { useAuthStore } from "./VariablesGlobales";
+
+// Format phone number like (514) 123-4567
+const formatPhone = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length < 4) return digits;
+  if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
 
 const Settings = () => {
-  const [editingNom, setEditingNom] = useState(false);
-  const [editingPrenom, setEditingPrenom] = useState(false);
-  const [editingCourriel, setEditingCourriel] = useState(false);
-  const [editingTelephone, setEditingTelephone] = useState(false);
+  const {
+    estConnecte,
+    setEstConnecte,
+    userId,
+    prenomUtilisateur,
+    nomUtilisateur,
+    courrielUtilisateur,
+    telephoneUtilisateur,
+    setPrenomUtilisateur,
+    setNomUtilisateur,
+    setCourrielUtilisateur,
+    setTelephoneUtilisateur,
+  } = useAuthStore();
 
-  const estConnecte = useAuthStore((state) => state.estConnecte);
-  const setConnecte = useAuthStore((state) => state.setEstConnecte);
-  const nomUtilisateur = useAuthStore((state) => state.nomUtilisateur);
-  const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
-  const prenomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
-  const setPrenomUtilisateur = useAuthStore((state) => state.setPrenomUtilisateur);
-  const courrielUtilisateur = useAuthStore((state) => state.courrielUtilisateur);
-  const setCourrielUtilisateur = useAuthStore((state) => state.setCourrielUtilisateur);
-  const telephoneUtilisateur = useAuthStore((state) => state.telephoneUtilisateur);
-  const setTelephoneUtilisateur = useAuthStore((state) => state.setTelephoneUtilisateur);
-  const userId = useAuthStore((state) => state.userId);
-  const setUserId = useAuthStore((state) => state.setUserId);
+  const [prenom, setPrenom] = useState("");
+  const [nom, setNom] = useState("");
+  const [email, setEmail] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [editingField, setEditingField] = useState(null);
 
-  const deconnection = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/auth/logout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: courrielUtilisateur }),
-      });
+  useEffect(() => {
+    console.log("🧠 Auth context loaded:", {
+      userId,
+      prenomUtilisateur,
+      nomUtilisateur,
+      courrielUtilisateur,
+      telephoneUtilisateur,
+    });
 
-      const data = await response.json();
-      console.log('Réponse du serveur :', data);
-      setConnecte(false);
-    } catch (error) {
-      console.error('Erreur de déconnexion :', error);
+    setPrenom(prenomUtilisateur || "");
+    setNom(nomUtilisateur || "");
+    setEmail(courrielUtilisateur || "");
+    setTelephone(telephoneUtilisateur || "");
+  }, []);
+
+  const handleSave = async () => {
+    if (!userId) {
+      console.error("❌ Cannot save: userId is undefined.");
+      alert("Erreur : utilisateur non identifié.");
+      return;
     }
-  };
 
-  const updateUserInfos = async () => {
+    const payload = {
+      id: userId,
+      prenom,
+      nom,
+      email,
+      telephone,
+    };
+
+    console.log("📤 Sending payload:", payload);
+
     try {
-      const response = await fetch(`${BASE_URL}/api/auth/updateUserInfos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: userId,
-          prenom: prenomUtilisateur,
-          nom: nomUtilisateur,
-          email: courrielUtilisateur,
-          telephone: telephoneUtilisateur,
-        }),
+      const res = await fetch(`${BASE_URL}/api/auth/updateUserInfos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
-      console.log("Réponse serveur:", data);
+      const data = await res.json();
+      console.log("✅ Server response:", res.status, data);
 
-      if (!response.ok) {
-        const erreur = data.msg || JSON.stringify(data) || 'Erreur inconnue';
-        throw new Error(erreur);
-      }
-      alert("Informations à jour!");
+      if (!res.ok) throw new Error(data.msg || "Erreur inconnue");
+
+      // Sync global state on success
+      setPrenomUtilisateur(prenom);
+      setNomUtilisateur(nom);
+      setCourrielUtilisateur(email);
+      setTelephoneUtilisateur(telephone);
+
+      alert("✅ Informations mises à jour !");
     } catch (error) {
-      console.error("Erreur:", error);
+      console.error("❌ Error saving:", error);
       alert(`Erreur : ${error.message}`);
     }
   };
 
-  return (
-      <View style={styles.colonneCentree}>
-        {estConnecte ? (
-          <>
-            <Text style={styles.sousTitre}>Réglages utilisateur</Text>
+  const handleLogout = async () => {
+    if (!email) {
+      alert("Adresse courriel introuvable pour la déconnexion.");
+      return;
+    }
 
-            {/* PRENOM */}
-            <TouchableOpacity onPress={() => setEditingPrenom(true)}>
-              {editingPrenom ? (
-                <TextInput
-                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
-                  onChangeText={setPrenomUtilisateur}
-                  value={prenomUtilisateur}
-                  placeholder="Prenom"
-                  placeholderTextColor={colors.grisPrincipal}
-                  onBlur={() => setEditingPrenom(false)}
-                  autoFocus
-                />
-              ) : (
-                <Text style={styles.sousTitre}>Prénom: {prenomUtilisateur || "(Cliquez pour ajouter)"}</Text>
-              )}
-            </TouchableOpacity>
-            {/* NOM */}
-            <TouchableOpacity onPress={() => setEditingNom(true)}>
-              {editingNom ? (
-                <TextInput
-                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
-                  onChangeText={setNomUtilisateur}
-                  value={nomUtilisateur}
-                  placeholder="Nom"
-                  placeholderTextColor={colors.grisPrincipal}
-                  onBlur={() => setEditingNom(false)}
-                  autoFocus
-                />
-              ) : (
-                <Text style={styles.sousTitre}>Nom: {nomUtilisateur || "(Cliquez pour ajouter)"}</Text>
-              )}
-            </TouchableOpacity>
+    try {
+      const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-            {/* COURRIEL */}
-            <TouchableOpacity onPress={() => setEditingCourriel(true)}>
-              {editingCourriel ? (
-                <TextInput
-                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
-                  onChangeText={setCourrielUtilisateur}
-                  value={courrielUtilisateur}
-                  placeholder="Courriel"
-                  placeholderTextColor={colors.grisPrincipal}
-                  keyboardType="email-address"
-                  onBlur={() => setEditingCourriel(false)}
-                  autoFocus
-                />
-              ) : (
-                <Text style={styles.sousTitre}>Courriel: {courrielUtilisateur || "(Cliquez pour ajouter)"}</Text>
-              )}
-            </TouchableOpacity>
+      const data = await res.json();
+      console.log("🚪 Logout response:", res.status, data);
 
-            {/* TÉLÉPHONE */}
-            <TouchableOpacity onPress={() => setEditingTelephone(true)}>
-              {editingTelephone ? (
-                <TextInput
-                  style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
-                  onChangeText={setTelephoneUtilisateur}
-                  value={telephoneUtilisateur}
-                  placeholder="Téléphone"
-                  placeholderTextColor={colors.grisPrincipal}
-                  keyboardType="phone-pad"
-                  onBlur={() => setEditingTelephone(false)}
-                  autoFocus
-                />
-              ) : (
-                <Text style={styles.sousTitre}>Téléphone: {telephoneUtilisateur || "(Cliquez pour ajouter)"}</Text>
-              )}
-            </TouchableOpacity>
+      if (!res.ok) throw new Error(data.msg || "Échec de la déconnexion");
 
-            <TouchableOpacity style={styles.bouton} onPress={updateUserInfos}>
-              <Text style={styles.boutonTexte}>Mettre à jour</Text>
-            </TouchableOpacity>
+      setEstConnecte(false);
+      alert("Déconnexion réussie.");
+    } catch (e) {
+      console.error("❌ Logout failed:", e.message);
+      alert("Erreur de déconnexion");
+    }
+  };
 
-            <TouchableOpacity style={styles.bouton} onPress={deconnection}>
-              <Text style={styles.boutonTexte}>Se déconnecter</Text>
-            </TouchableOpacity>
+  const renderField = (label, value, setValue, fieldKey, keyboardType = "default") => {
+    const isEditing = editingField === fieldKey;
+    const formattedValue =
+      fieldKey === "telephone" && !isEditing ? formatPhone(value) : value;
 
-          </>
+    const handleTextChange = (text) => {
+      if (fieldKey === "telephone") {
+        const cleaned = text.replace(/\D/g, "");
+        setValue(cleaned);
+      } else {
+        setValue(text);
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={() => setEditingField(fieldKey)}
+        activeOpacity={0.9}
+        style={{ width: "100%", marginBottom: 15 }}
+      >
+        {isEditing ? (
+          <TextInput
+            autoFocus
+            style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
+            value={formattedValue}
+            onChangeText={handleTextChange}
+            keyboardType={keyboardType}
+            onBlur={() => setEditingField(null)}
+            placeholder={label}
+            placeholderTextColor={colors.grisPrincipal}
+          />
         ) : (
-          <Text style={styles.titre}>Ride/W</Text>
+          <View>
+            <Text style={[styles.labelLeft, { color: colors.couleurTexteInverse }]}>
+              {label}
+            </Text>
+            <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+              {formattedValue || "(Cliquez pour ajouter)"}
+            </Text>
+          </View>
         )}
-      </View>
+      </TouchableOpacity>
+    );
+  };
+
+  if (!estConnecte) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.colonneCentree}>
+          <Text style={[styles.titre, { color: colors.couleurTexteInverse }]}>
+            Ride/W
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={[styles.colonneCentree, { paddingVertical: 30 }]}>
+        <View style={[styles.card, { width: "100%", maxWidth: 500 }]}>
+          <Text style={[styles.sousTitre, { color: colors.couleurTexteInverse, marginBottom: 20 }]}>
+            Réglages utilisateur
+          </Text>
+
+          {renderField("Prénom", prenom, setPrenom, "prenom")}
+          {renderField("Nom", nom, setNom, "nom")}
+          {renderField("Courriel", email, setEmail, "email", "email-address")}
+          {renderField("Téléphone", telephone, setTelephone, "telephone", "phone-pad")}
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.bouton} onPress={handleSave}>
+              <Text style={styles.boutonTexte}>💾 Sauvegarder</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.bouton, styles.contourBouton]}
+              onPress={handleLogout}
+            >
+              <Text
+                style={[
+                  styles.boutonTexte,
+                  styles.contourBoutonTexte,
+                  { color: colors.couleurTexteInverse },
+                ]}
+              >
+                🚪 Se déconnecter
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

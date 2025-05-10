@@ -63,7 +63,6 @@ const LoginInput = () => {
       <View style={styles.colonneCentree}>
         {estConnecte ? (
           <>
-            <Text style={styles.titre}>Bienvenue {nomUtilisateur ? `, ${nomUtilisateur}` : ''}</Text>
             <Settings/>
           </>
         ) : (

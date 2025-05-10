@@ -20,7 +20,6 @@ import { estDarkMode, useAuthStore } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './Trajet';
 import SchedulePicker from './SchedulePicker';
-
 import { useRideStore } from './useRideStore';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
@@ -44,28 +43,26 @@ export default function MapScreen() {
   const [showSchedulePicker, setShowSchedulePicker] = useState(false);
   const [drivers, setDrivers] = useState([]);
 
-const userLat = useAuthStore((state) => state.userLat);
-  const setUserLat = useAuthStore((state) => state.setUserLat); 
-  const setUserLong = useAuthStore((state) => state.setUserLong); 
-
+  const userLat = useAuthStore((state) => state.userLat);
+  const setUserLat = useAuthStore((state) => state.setUserLat);
+  const setUserLong = useAuthStore((state) => state.setUserLong);
 
   const fetchDrivers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
-  
+
       try {
         const data = JSON.parse(text);
         setDrivers(data);
       } catch (parseError) {
         console.error('❌ Failed to parse response as JSON:', text);
       }
-  
+
     } catch (error) {
       console.error('Error fetching drivers:', error);
     }
   };
-  
 
   useEffect(() => {
     fetchDrivers();
@@ -141,7 +138,6 @@ const userLat = useAuthStore((state) => state.userLat);
       });
     } else {
       const rideCoords = feature.geometry.coordinates;
-      console.log(rideCoords + "!!!!!!!!!!!")
       const targetLong = feature.properties.targetLong;
       const targetLat = feature.properties.targetLat;
 
@@ -160,7 +156,6 @@ const userLat = useAuthStore((state) => state.userLat);
 
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
-        console.log(targetCoords);
 
         setPickupStreet(pickupAddress);
         setTargetStreet(targetAddress);
@@ -168,6 +163,10 @@ const userLat = useAuthStore((state) => state.userLat);
         setShowTrajet(true);
       }
     }
+
+    console.log("✅ showTrajet:", showTrajet);
+    console.log("✅ selectedRide:", selectedRide);
+
   };
 
   return (
@@ -275,10 +274,37 @@ const userLat = useAuthStore((state) => state.userLat);
         )}
       </MapView>
 
-      <LocateButton cameraRef={cameraRef} userCoords={userCoords} />  
+      <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
 
-      <TrajetSearch onSheetChange={setIsSearchOpen} isAnotherSheetOpen={isRideDetailsOpen}/>
+      <TrajetSearch
+        onSheetChange={setIsSearchOpen}
+        isAnotherSheetOpen={isRideDetailsOpen}
+      />
 
+      {/* Bottom Sheet Overlay */}
+      {showTrajet && selectedRide && (
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
+          <Trajet
+            ride={selectedRide}
+            pickupStreet={pickupStreet}
+            targetStreet={targetStreet}
+            onClose={closeTrajet}
+            onSchedulePress={() => {
+              setShowTrajet(false);
+              setShowSchedulePicker(true);
+            }}
+          />
+        </View>
+      )}
+
+      {showSchedulePicker && selectedRide && (
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
+          <SchedulePicker
+            ride={selectedRide}
+            onClose={() => setShowSchedulePicker(false)}
+          />
+        </View>
+      )}
     </View>
   );
 }
