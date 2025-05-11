@@ -84,9 +84,8 @@ export default function Rides() {
       const trajetsFiltrés = data.filter(
         (trajet) => trajet.userId === userId
       );
-      console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
+      //console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
       setRides(trajetsFiltrés);
-      console.log(rides);
     } catch (parseError) {
       console.error('erreur transfert json', parseError.message);
     }

@@ -9,7 +9,7 @@ const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 export default function SchedulePicker({ onClose }) {
   const [time, setTime] = useState(() => {
     const date = new Date();
-    date.setHours(8, 0, 0, 0); // ✅ Set initial time to 08:00
+    date.setHours(8, 0, 0, 0); // heure initiale 08:00
     return date;
   });
 
@@ -31,7 +31,26 @@ export default function SchedulePicker({ onClose }) {
       return '';
     }
   };
+
+  //Calculer la distance entre le point de départ et d'arrivée
+  function calculerDistance(long, lat, targetLong, targetLat) {
+
+    const dLat = toRadians(targetLat - lat);
+    const dLon = toRadians(targetLong - long);
   
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat)) * Math.cos(toRadians(targetLat)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+    const distance = 6371 * c;
+    const arrondi=(Math.round(distance * 100) / 100).toFixed(2) //deux décimales (km)
+    return arrondi.toString();
+  };
+  function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+  };
 
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
@@ -63,7 +82,6 @@ export default function SchedulePicker({ onClose }) {
     const rideCoords = [userLong, userLat];
     const pickupAddress = await reverseGeocode(rideCoords);
 
-
     const payload = {
       userId: userId,
       long: userLong,
@@ -74,11 +92,10 @@ export default function SchedulePicker({ onClose }) {
       scheduleTime: formatTime(time),
       pickupAddress,
       targetAddress,
-
+      distance: calculerDistance(userLong, userLat, targetLong, targetLat),
     };
 
-    console.log("📅 Selected days:", selectedDays);
-    console.log("📦 Sending to backend:", payload);
+    console.log("Envoie au backend:", payload);
     Alert.alert("Envoi", "Tentative d'envoi du trajet...");
 
     try {

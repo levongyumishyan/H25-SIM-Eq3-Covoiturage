@@ -34,7 +34,7 @@ const TrajetBottomSheet = ({ ride, pickupStreet, targetStreet, distanceKm, visib
       onClose?.();
     } catch (err) {
       console.error('❌ Erreur lors de la requête de planification:', err.message);
-      Alert.alert('Erreur', err.message || 'Impossible de rejoindre le trajet.');
+      Alert.alert('Erreur', 'Impossible de rejoindre le trajet.');
     }
   };
 

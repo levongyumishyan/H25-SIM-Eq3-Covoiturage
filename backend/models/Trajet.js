@@ -10,6 +10,7 @@ const TrajetSchema = new mongoose.Schema({
   scheduleTime: String,     // 👈 must be included
   pickupAddress: { type: String, required: true },
   targetAddress: { type: String, required: true },
+  distance: {type: String, required: true},
 });
 
 module.exports = mongoose.model('Trajet', TrajetSchema);
