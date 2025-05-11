@@ -150,7 +150,7 @@ router.post("/updateUserInfos", [
   }
 });
 
-// --- TRAJET UPDATE ---
+// --- TRAJET UPDATE ---   À BOUGER DANS TRAJET.JS
 router.post("/trajet", async (req, res) => {
   const { id, long, lat, targetLong, targetLat } = req.body;
 

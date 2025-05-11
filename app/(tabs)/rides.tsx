@@ -28,11 +28,8 @@ export default function Rides() {
     };
   };
 
-  const fetchRides = async () => {
-  };
-
   useEffect(() => {
-    if (userId) fetchRides();
+    if (userId) actualiserTrajets();
   }, [userId]);
 
   const completeRide = () => {
@@ -52,30 +49,30 @@ export default function Rides() {
     </TouchableOpacity>
   );
   const actualiserTrajets = async () => {
-  try {
-    setRides(null);
-    const response = await fetch(`${BASE_URL}/api/trajets`);
-    const text = await response.text();
-
     try {
-      const data = JSON.parse(text);
-      //console.log('JSON OUTPUT:', data);
-      const trajetsFiltres = data.filter(
-        (trajet) => trajet.userId === userId
-      );
-      //console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
-      setRides(trajetsFiltres);
-      setStats(calculateStats(trajetsFiltres));
+      setRides(null);
+      const response = await fetch(`${BASE_URL}/api/trajets`);
+      const text = await response.text();
 
-    } catch (parseError) {
-      console.error('erreur transfert json', parseError.message);
+      try {
+        const data = JSON.parse(text);
+        //console.log('JSON OUTPUT:', data);
+        const trajetsFiltres = data.filter(
+          (trajet) => trajet.userId === userId
+        );
+        //console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
+        setRides(trajetsFiltres);
+        setStats(calculateStats(trajetsFiltres));
+
+      } catch (parseError) {
+        console.error('erreur transfert json', parseError.message);
+      }
+
+
+    } catch (error) {
+      console.error('Network error', error.message);
     }
-    
-
-  } catch (error) {
-    console.error('Network error', error.message);
-  }
-};
+  };
 
   if (loading) {
     return (
@@ -124,8 +121,8 @@ export default function Rides() {
 
         <Text style={styles.titre}>Trajets Récents</Text>
         <TouchableOpacity style={styles.bouton} onPress={actualiserTrajets}>
-                  <Text style={styles.boutonTexte}>Actualiser</Text>
-                </TouchableOpacity>
+          <Text style={styles.boutonTexte}>Actualiser</Text>
+        </TouchableOpacity>
         <FlatList
           data={rides}
           keyExtractor={(item) => item.id}
