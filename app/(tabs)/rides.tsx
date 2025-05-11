@@ -29,27 +29,6 @@ export default function Rides() {
   };
 
   const fetchRides = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/users/${userId}/rides`);
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.warn('Response not JSON, injecting mock.');
-        data = { rides: [] };
-      }
-
-      let userRides = Array.isArray(data.rides) ? data.rides : Array.isArray(data) ? data : [];
-
-      setRides(userRides);
-      const calculatedStats = calculateStats(userRides);
-      setStats(calculatedStats);
-    } catch (error) {
-      console.error('Erreur en récupérant les trajets:', error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   useEffect(() => {
@@ -81,11 +60,13 @@ export default function Rides() {
     try {
       const data = JSON.parse(text);
       //console.log('JSON OUTPUT:', data);
-      const trajetsFiltrés = data.filter(
+      const trajetsFiltres = data.filter(
         (trajet) => trajet.userId === userId
       );
       //console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
-      setRides(trajetsFiltrés);
+      setRides(trajetsFiltres);
+      setStats(calculateStats(trajetsFiltres));
+
     } catch (parseError) {
       console.error('erreur transfert json', parseError.message);
     }

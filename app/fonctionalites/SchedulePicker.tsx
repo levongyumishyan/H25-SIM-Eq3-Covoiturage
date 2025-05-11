@@ -46,7 +46,7 @@ export default function SchedulePicker({ onClose }) {
   
     const distance = 6371 * c;
     const arrondi=(Math.round(distance * 100) / 100).toFixed(2) //deux décimales (km)
-    return arrondi.toString();
+    return arrondi;
   };
   function toRadians(degrees) {
     return degrees * (Math.PI / 180);
