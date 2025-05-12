@@ -14,7 +14,6 @@ export default function Rides() {
   const clearUpcomingRide = useRideStore((state) => state.clearUpcomingRide);
   const [rides, setRides] = useState([]);
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const calculateStats = (rides) => {
     const totalDistance = rides.reduce((sum, ride) => sum + (ride.distance || 0), 0);
@@ -74,13 +73,7 @@ export default function Rides() {
     }
   };
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color={colors.vertPrincipal} />
-      </SafeAreaView>
-    );
-  }
+
 
   return (
     <SafeAreaView style={styles.container}>
