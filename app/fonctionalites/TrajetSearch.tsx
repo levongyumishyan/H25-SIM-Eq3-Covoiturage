@@ -26,24 +26,24 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
     setIsSheetOpen(!closed);
     onSheetChange(!closed);
     if (closed) {
-      setShowSchedule(false); // ✅ Hide schedule picker when sheet is closed
+      setShowSchedule(false);
     }
   };
 
   const handleScheduleConfirm = (schedule) => {
     if (searchBoxRef.current) {
       searchBoxRef.current.confirmSchedule(schedule);
-      console.log("🚀 Sending schedule to SearchBox:", schedule);
+      console.log("Sending schedule to SearchBox:", schedule);
     }
     setShowSchedule(false);
     setIsSheetOpen(false);
     onSheetChange(false);
-    sheetRef.current?.close(); // ✅ Explicitly closes the bottom sheet
+    sheetRef.current?.close();
   };
-  
+
 
   const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen && !showSchedule;
-  
+
   return (
     <>
       <BottomSheet
@@ -55,13 +55,13 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
       >
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
           <>
-          {!showSchedule ? (
-            <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
-          ) : (
-            <SchedulePicker onClose={handleScheduleConfirm} />
-          )}
+            {!showSchedule ? (
+              <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
+            ) : (
+              <SchedulePicker onClose={handleScheduleConfirm} />
+            )}
           </>
-          
+
         </BottomSheetView>
       </BottomSheet>
 

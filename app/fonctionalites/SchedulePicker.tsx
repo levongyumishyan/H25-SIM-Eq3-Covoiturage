@@ -37,15 +37,15 @@ export default function SchedulePicker({ onClose }) {
 
     const dLat = toRadians(targetLat - lat);
     const dLon = toRadians(targetLong - long);
-  
+
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(toRadians(lat)) * Math.cos(toRadians(targetLat)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  
+
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
+
     const distance = 6371 * c;
-    const arrondi=(Math.round(distance * 100) / 100).toFixed(2) //deux décimales (km)
+    const arrondi = (Math.round(distance * 100) / 100).toFixed(2) //deux décimales (km)
     return arrondi;
   };
   function toRadians(degrees) {

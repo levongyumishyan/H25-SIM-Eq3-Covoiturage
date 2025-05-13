@@ -60,6 +60,7 @@ router.post("/signup", [
 
     const token = jwt.sign({ id: utilisateur._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({ token, user: { id: utilisateur._id, nom, prenom, email, voiture } });
+    console.log("Nouvel utilisateur créé:" + email)
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Erreur serveur" });
@@ -114,10 +115,10 @@ router.post("/logout", async (req, res) => {
     if (!utilisateur) return res.status(404).json({ msg: "Utilisateur introuvable." });
 
     await Utilisateur.updateOne({ email }, { $set: { estConnecte: false } });
-    console.log(`✅ Utilisateur déconnecté : ${email}`);
+    console.log(`Utilisateur déconnecté : ${email}`);
     return res.status(200).json({ msg: "Déconnexion réussie." });
   } catch (err) {
-    console.error("❌ Erreur serveur lors de la déconnexion:", err);
+    console.error("Erreur serveur lors de la déconnexion:", err);
     return res.status(500).json({ msg: "Erreur server" });
   }
 });
@@ -142,10 +143,10 @@ router.post("/updateUserInfos", [
     utilisateur.email = email;
 
     await utilisateur.save();
-    console.log(`✅ Infos mises à jour pour l'utilisateur ${email}`);
+    console.log(`Infos mises à jour pour l'utilisateur ${email}`);
     res.json({ msg: "Informations mises à jour." });
   } catch (err) {
-    console.error("❌ Erreur mise à jour utilisateur:", err);
+    console.error("Erreur mise à jour utilisateur:", err);
     res.status(500).json({ msg: "Erreur server" });
   }
 });
@@ -168,14 +169,14 @@ router.post("/trajet", async (req, res) => {
 
     res.json({ trajet });
   } catch (err) {
-    console.error("❌ Erreur serveur trajet:", err);
+    console.error("Erreur serveur trajet:", err);
     res.status(500).json({ msg: "Erreur server" });
   }
 });
 
 
 router.get("/ping", (req, res) => {
-  res.send("✅ Auth route is alive!");
+  res.send("Pong!");
 });
 
 module.exports = router;

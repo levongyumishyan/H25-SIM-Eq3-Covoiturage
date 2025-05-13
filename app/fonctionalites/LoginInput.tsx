@@ -31,7 +31,7 @@ const LoginInput = () => {
 
       const contentType = response.headers.get('Content-Type');
       const raw = await response.text();
-      console.log("📦 RAW RESPONSE:", raw);
+      console.log("RAW RESPONSE:", raw);
 
       if (!response.ok) {
         let message = 'Erreur inconnue';
@@ -64,9 +64,9 @@ const LoginInput = () => {
       setTelephoneUtilisateur(data.utilisateur.telephone);
       setUserId(data.utilisateur.id);
 
-      console.log('✅ Utilisateur connecté :', data.utilisateur);
+      console.log('Utilisateur connecté :', data.utilisateur);
     } catch (error) {
-      console.error('❌ Erreur de connexion :', error.message);
+      console.error('Erreur de connexion :', error.message);
       setMessageErreur(error.message);
     }
   };

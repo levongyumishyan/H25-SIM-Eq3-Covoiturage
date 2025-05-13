@@ -5,44 +5,44 @@ const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   // ---------- Layout ----------
-card: {
-  width: '90%',          // 💡 Responsive width
-  maxWidth: 500,         // ✅ Prevents it from getting too wide on tablets
-  alignSelf: 'center',
-  marginTop: 20,
-  top: 70,
-  left:-10,  // ✅ Center it horizontally
-  backgroundColor: colors.blanc,
-  borderRadius: 20,
-  padding: 20,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-  elevation: 5,
-},
+  card: {
+    width: '90%',          // 💡 Responsive width
+    maxWidth: 500,         // ✅ Prevents it from getting too wide on tablets
+    alignSelf: 'center',
+    marginTop: 20,
+    top: 70,
+    left: -10,  // ✅ Center it horizontally
+    backgroundColor: colors.blanc,
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 
   element:
-   {
-     backgroundColor: '#FFF',
-     padding: 0,
-     borderRadius: 7,
-     width: 350,
-     height: 75,
-     marginBottom: 10,
-     paddingLeft: 10,
-     paddingTop: 10,
-   },
+  {
+    backgroundColor: '#FFF',
+    padding: 0,
+    borderRadius: 7,
+    width: 350,
+    height: 75,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingTop: 10,
+  },
 
-   
-container: {
-  flex: 1,
-  width: '100%', // 🔁 ensures full width
-  alignItems: 'center',
-  backgroundColor: colors.arrierePlan,
-  paddingHorizontal: 20,
-  paddingBottom: 40,
-},
+
+  container: {
+    flex: 1,
+    width: '100%', // 🔁 ensures full width
+    alignItems: 'center',
+    backgroundColor: colors.arrierePlan,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
 
 
   buttonContainer: {
@@ -70,7 +70,7 @@ container: {
   scrollContainer: {
     flexGrow: 1,
     paddingBottom: 20,
-    
+
   },
 
   // ---------- Typography ----------
@@ -93,10 +93,10 @@ container: {
     color: colors.couleurTexte,
   },
   elementTexte:
-   {
-     fontSize:17,
-     color: '#000000',
-   },
+  {
+    fontSize: 17,
+    color: '#000000',
+  },
   label: {
     fontSize: 19,
     fontWeight: '500',
@@ -142,7 +142,7 @@ container: {
     borderRadius: 19,
     alignItems: 'center',
     marginTop: 20,
-    minWidth: 200, 
+    minWidth: 200,
     shadowColor: colors.arrierePlan,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
@@ -222,12 +222,12 @@ container: {
     alignItems: 'center',
     marginVertical: 10,
   },
-  
+
   checkboxItem: {
     alignItems: 'center',
     marginVertical: 5,
   },
-  
+
   voitureContainer: {
     width: '90%',
     alignSelf: 'center',
@@ -270,7 +270,7 @@ container: {
   },
 
   // ---------- Inscription ----------
-  
+
 
 
 
@@ -316,7 +316,7 @@ container: {
     borderBottomColor: colors.grisPrincipal,
     borderBottomWidth: 1,
   },
-  
+
   rideDetails: {
     paddingHorizontal: 5,
   },

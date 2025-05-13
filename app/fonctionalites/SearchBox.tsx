@@ -24,8 +24,8 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
-    const setTargetLat = useAuthStore((state) => state.setTargetLat); 
-    const setTargetLong = useAuthStore((state) => state.setTargetLong); 
+  const setTargetLat = useAuthStore((state) => state.setTargetLat);
+  const setTargetLong = useAuthStore((state) => state.setTargetLong);
 
   useImperativeHandle(ref, () => ({
     confirmSchedule,
@@ -62,7 +62,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     setSuggestions([]);
     onSelect?.();
   };
-  
+
   const confirmSchedule = async (schedule) => {
     if (!location || !pendingTargetCoords) return;
     try {
@@ -72,7 +72,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
         targetLong: pendingTargetCoords[0],
         targetLat: pendingTargetCoords[1],
       };
-      
+
       const response = await fetch(`${BASE_URL}/api/trajets`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -116,32 +116,32 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   };
 
   return (
-<View style={[styles.searchBoxWrapper, {
-  backgroundColor: colors.blanc,
-  borderRadius: 12,
-  elevation: 5,
-  padding: 10,
-  }]}>
-  <View style={styles.ligneCentree}>
-    <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
-    <TextInput
-      style={styles.labelInverse}
-      placeholder={'Où allez-vous ?'}
-      placeholderTextColor={colors.noir}
-      value={input}
-      onChangeText={setInput}
-    />
-  </View>
+    <View style={[styles.searchBoxWrapper, {
+      backgroundColor: colors.blanc,
+      borderRadius: 12,
+      elevation: 5,
+      padding: 10,
+    }]}>
+      <View style={styles.ligneCentree}>
+        <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
+        <TextInput
+          style={styles.labelInverse}
+          placeholder={'Où allez-vous ?'}
+          placeholderTextColor={colors.noir}
+          value={input}
+          onChangeText={setInput}
+        />
+      </View>
 
-  {suggestions.length > 0 && (
-    <FlatList
-      style={{ marginTop: 10, maxHeight: 180 }} // limit size if needed
-      data={suggestions}
-      keyExtractor={(item, index) => item.id + index}
-      renderItem={renderSuggestions}
-    />
-  )}
-</View>
+      {suggestions.length > 0 && (
+        <FlatList
+          style={{ marginTop: 10, maxHeight: 180 }} // limit size if needed
+          data={suggestions}
+          keyExtractor={(item, index) => item.id + index}
+          renderItem={renderSuggestions}
+        />
+      )}
+    </View>
 
   );
 });

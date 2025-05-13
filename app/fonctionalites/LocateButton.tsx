@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Camera } from '@rnmapbox/maps';
-import {styles} from './Styles'
+import { styles } from './Styles'
 
 interface LocateButtonProps {
   cameraRef: React.RefObject<Camera>;

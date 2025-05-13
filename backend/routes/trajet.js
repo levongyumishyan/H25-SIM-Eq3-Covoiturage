@@ -49,11 +49,11 @@ router.get('/', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   try {
-    const {userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance } = req.body;
+    const { userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance } = req.body;
 
-    console.log("🛬 Reçu POST:", req.body); // 👈 DEBUG
+    console.log("Reçu POST:", req.body); // 👈 DEBUG
 
-    const trajet = new Trajet({userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance });
+    const trajet = new Trajet({ userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance });
     await trajet.save();
 
     return res.json({ message: "Trajet enregistré", trajet });

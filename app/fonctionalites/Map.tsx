@@ -48,26 +48,26 @@ export default function MapScreen() {
   const setUserLat = useAuthStore((state) => state.setUserLat);
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
-const fetchDrivers = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/trajets`);
-    const text = await response.text();
-
-    //console.log('🟡 Raw response:', text);
-
+  const fetchDrivers = async () => {
     try {
-      const data = JSON.parse(text);
-      //console.log('✅ Parsed data:', data);
-      setDrivers(data);
-    } catch (parseError) {
-      console.error('❌ JSON parse error:', parseError.message);
-      console.error('❌ Response was:', text);
-    }
+      const response = await fetch(`${BASE_URL}/api/trajets`);
+      const text = await response.text();
 
-  } catch (error) {
-    console.error('❌ Network error fetching trajets:', error.message);
-  }
-};
+      //console.log('🟡 Raw response:', text);
+
+      try {
+        const data = JSON.parse(text);
+        //console.log('✅ Parsed data:', data);
+        setDrivers(data);
+      } catch (parseError) {
+        console.error('❌ JSON parse error:', parseError.message);
+        console.error('❌ Response was:', text);
+      }
+
+    } catch (error) {
+      console.error('❌ Network error fetching trajets:', error.message);
+    }
+  };
 
 
   useEffect(() => {
@@ -170,8 +170,8 @@ const fetchDrivers = async () => {
       }
     }
 
-    console.log("✅ showTrajet:", showTrajet);
-    console.log("✅ selectedRide:", selectedRide);
+    console.log("showTrajet:", showTrajet);
+    console.log("selectedRide:", selectedRide);
 
   };
 
@@ -288,16 +288,16 @@ const fetchDrivers = async () => {
       />
 
       {/* Bottom Sheet Overlay */}
-        {showTrajet && selectedRide && (
-          <TrajetBottomSheet
-            ride={selectedRide}
-            pickupStreet={pickupStreet}
-            targetStreet={targetStreet}
-            distanceKm={routeGeoJSON ? 4.2 : null} // or calculate real one
-            visible={true}
-            onClose={closeTrajet}
-          />
-        )}
+      {showTrajet && selectedRide && (
+        <TrajetBottomSheet
+          ride={selectedRide}
+          pickupStreet={pickupStreet}
+          targetStreet={targetStreet}
+          distanceKm={routeGeoJSON ? 4.2 : null} // or calculate real one
+          visible={true}
+          onClose={closeTrajet}
+        />
+      )}
 
       {showSchedulePicker && selectedRide && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>

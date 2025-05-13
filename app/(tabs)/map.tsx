@@ -5,7 +5,7 @@ import Map from '~/fonctionalites/Map';
 const MapScreen = () => {
   return (
     <View style={styles.container}>
-      <Map/>
+      <Map />
     </View>
   );
 };

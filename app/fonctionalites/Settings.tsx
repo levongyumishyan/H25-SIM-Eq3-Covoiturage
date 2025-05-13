@@ -80,9 +80,9 @@ const Settings = () => {
       setCourrielUtilisateur(email);
       setTelephoneUtilisateur(telephone);
 
-      alert("✅ Informations mises à jour !");
+      alert("Informations mises à jour !");
     } catch (error) {
-      console.error("❌ Error saving:", error);
+      console.error("❌ Erreur lors de l'enregistrement des données:", error);
       alert(`Erreur : ${error.message}`);
     }
   };
