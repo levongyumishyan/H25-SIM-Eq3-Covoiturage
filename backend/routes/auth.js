@@ -10,6 +10,8 @@ require("dotenv").config();
 
 const router = express.Router();
 
+
+
 // --- SIGNUP ---
 router.post("/signup", [
   body("nom").notEmpty().withMessage("Nom est requis"),
@@ -20,7 +22,7 @@ router.post("/signup", [
   if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
   const { mdp } = req.body;
-  const erreursMdp = verifierMotDePasse(mdp);
+  const erreursMdp = verifierMotDePasse(mdp); //Vérifie selon les éléments requis à sa création
   if (erreursMdp.length > 0) {
     return res.status(400).json({ errors: erreursMdp.map(msg => ({ msg })) });
   }
@@ -32,8 +34,9 @@ router.post("/signup", [
     if (utilisateur) return res.status(400).json({ msg: "Cet utilisateur est déjà existant" });
 
     const salt = await bcrypt.genSalt(10);
-    const mdpHash = await bcrypt.hash(mdp, salt);
+    const mdpHash = await bcrypt.hash(mdp, salt); //Encryption du mot de passe avec son grain de sel (c'est juste mixé avec un string aléatoire qui va améliorer la sécurité)
 
+    //Crée un voiture pour l'utilisateur s'il est conducteur
     let voiture;
     if (conducteur === true) {
       voiture = new Voiture({
@@ -63,9 +66,11 @@ router.post("/signup", [
     console.log("Nouvel utilisateur créé:" + email)
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: "Erreur serveur" });
+    res.status(500).json({ msg: "Erreur serveur ou une information est manquante" });
   }
 });
+
+
 
 // --- LOGIN ---
 router.post("/login", [
@@ -105,7 +110,7 @@ router.post("/login", [
   }
 });
 
-// --- LOGOUT (FIXED) ---
+// --- LOGOUT  ---
 router.post("/logout", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ msg: "Email manquant." });
@@ -150,30 +155,6 @@ router.post("/updateUserInfos", [
     res.status(500).json({ msg: "Erreur server" });
   }
 });
-
-// --- TRAJET UPDATE ---   À BOUGER DANS TRAJET.JS
-router.post("/trajet", async (req, res) => {
-  const { id, long, lat, targetLong, targetLat } = req.body;
-
-  try {
-    let trajet = await Trajet.findOne({ id });
-    if (!trajet) {
-      trajet = new Trajet({ id, long, lat, targetLong, targetLat });
-      await trajet.save();
-    } else {
-      await Trajet.updateOne(
-        { id },
-        { long, lat, targetLong, targetLat }
-      );
-    }
-
-    res.json({ trajet });
-  } catch (err) {
-    console.error("Erreur serveur trajet:", err);
-    res.status(500).json({ msg: "Erreur server" });
-  }
-});
-
 
 router.get("/ping", (req, res) => {
   res.send("Pong!");

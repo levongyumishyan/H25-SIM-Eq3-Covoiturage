@@ -44,7 +44,6 @@ export default function MapScreen() {
   const [showSchedulePicker, setShowSchedulePicker] = useState(false);
   const [drivers, setDrivers] = useState([]);
 
-  const userLat = useAuthStore((state) => state.userLat);
   const setUserLat = useAuthStore((state) => state.setUserLat);
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
@@ -53,19 +52,16 @@ export default function MapScreen() {
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
 
-      //console.log('🟡 Raw response:', text);
-
       try {
         const data = JSON.parse(text);
-        //console.log('✅ Parsed data:', data);
         setDrivers(data);
       } catch (parseError) {
-        console.error('❌ JSON parse error:', parseError.message);
-        console.error('❌ Response was:', text);
+        console.error('JSON parse error:', parseError.message);
+        console.error('Response:', text);
       }
 
     } catch (error) {
-      console.error('❌ Network error fetching trajets:', error.message);
+      console.error('Network error fetching trajets:', error.message);
     }
   };
 

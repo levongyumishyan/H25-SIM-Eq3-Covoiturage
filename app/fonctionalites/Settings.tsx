@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image
-} from "react-native";
+import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { styles } from "./Styles";
 import { colors } from "./Colors";
 import { BASE_URL } from "~/apiConfig";
 import { useAuthStore } from "./VariablesGlobales";
-import logo from 'temp_logo.png'; // Adjust this if needed
+import logo from 'temp_logo.png';
 
+
+//format pour l'affichage du numéro de téléphone standardisé
 const formatPhone = (value) => {
   const digits = value.replace(/\D/g, "").slice(0, 10);
   if (digits.length < 4) return digits;
@@ -22,6 +16,7 @@ const formatPhone = (value) => {
 };
 
 const Settings = () => {
+  //Global
   const {
     estConnecte,
     setEstConnecte,
@@ -37,12 +32,13 @@ const Settings = () => {
     setUserId
   } = useAuthStore();
 
+  //Local
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
   const [editingField, setEditingField] = useState(null);
-
+  //Modification de ces dernières
   useEffect(() => {
     setPrenom(prenomUtilisateur || "");
     setNom(nomUtilisateur || "");
@@ -50,6 +46,8 @@ const Settings = () => {
     setTelephone(telephoneUtilisateur || "");
   }, []);
 
+
+  //Enregistrement des nouvelles informations utilisateur (backend)
   const handleSave = async () => {
     if (!userId) {
       alert("Erreur : utilisateur non identifié.");
@@ -82,11 +80,13 @@ const Settings = () => {
 
       alert("Informations mises à jour !");
     } catch (error) {
-      console.error("❌ Erreur lors de l'enregistrement des données:", error);
+      console.error("Erreur lors de l'enregistrement des données:", error);
       alert(`Erreur : ${error.message}`);
     }
   };
 
+
+  //Déconnection
   const handleLogout = async () => {
     setEstConnecte(false);
     setPrenomUtilisateur('');
@@ -98,6 +98,8 @@ const Settings = () => {
     alert("Déconnexion réussie.");
   };
 
+
+  //Affichage de chacunes des informations modifiables
   const renderField = (label, value, setValue, fieldKey, keyboardType = "default") => {
     const isEditing = editingField === fieldKey;
     const formattedValue =
@@ -143,18 +145,8 @@ const Settings = () => {
     );
   };
 
-  if (!estConnecte) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.colonneCentree}>
-          <Text style={[styles.titre, { color: colors.couleurTexteInverse }]}>
-            Ride/W
-          </Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
 
+  //PAGE
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={[styles.colonneCentree, { paddingVertical: 30 }]}>

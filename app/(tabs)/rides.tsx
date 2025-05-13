@@ -15,6 +15,11 @@ export default function Rides() {
   const [rides, setRides] = useState([]);
   const [stats, setStats] = useState(null);
 
+  useEffect(() => {
+    if (userId) actualiserTrajets();
+  }, [userId]);
+
+  //Statitistiques écolo
   const calculateStats = (rides) => {
     const totalDistance = rides.reduce((sum, ride) => sum + (ride.distance || 0), 0);
     const co2Saved = totalDistance * 0.21;
@@ -27,17 +32,8 @@ export default function Rides() {
     };
   };
 
-  useEffect(() => {
-    if (userId) actualiserTrajets();
-  }, [userId]);
 
-  const completeRide = () => {
-    if (upcomingRide) {
-      setRides((prev) => [upcomingRide, ...prev]);
-      clearUpcomingRide();
-    }
-  };
-
+  //Case d'affichage pour un trajet effectué
   const renderRide = ({ item }) => (
     <TouchableOpacity style={styles.ridecontainer}>
       <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
@@ -47,6 +43,8 @@ export default function Rides() {
       </View>
     </TouchableOpacity>
   );
+
+  //Get les trajets de l'utilisateur connecté uniquement
   const actualiserTrajets = async () => {
     try {
       setRides(null);
@@ -55,30 +53,33 @@ export default function Rides() {
 
       try {
         const data = JSON.parse(text);
-        //console.log('JSON OUTPUT:', data);
         const trajetsFiltres = data.filter(
           (trajet) => trajet.userId === userId
         );
-        //console.log('Trajets pour userId', userId, ':', trajetsFiltrés);
         setRides(trajetsFiltres);
         setStats(calculateStats(trajetsFiltres));
 
       } catch (parseError) {
         console.error('erreur transfert json', parseError.message);
       }
-
-
     } catch (error) {
       console.error('Network error', error.message);
     }
   };
 
-
+  //Pas fini
+  const completeRide = () => {
+    if (upcomingRide) {
+      setRides((prev) => [upcomingRide, ...prev]);
+      clearUpcomingRide();
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
+        {/*Statistiques écolo de l'utilisateur*/}
         {stats && (
           <View style={styles.ligneCentree}>
             <View style={styles.colonneCentree}>
@@ -96,7 +97,7 @@ export default function Rides() {
           </View>
         )}
 
-        {upcomingRide && (
+        {upcomingRide && ( //Pas fini
           <View style={styles.upcomingRideContainer}>
             <Text style={styles.titre}>Trajet en Cours</Text>
             <View style={styles.ridecontainer}>
@@ -112,6 +113,7 @@ export default function Rides() {
           </View>
         )}
 
+        {/* Affichage de tous les trajets de l'utlisateur*/}
         <Text style={styles.titre}>Trajets Récents</Text>
         <TouchableOpacity style={styles.bouton} onPress={actualiserTrajets}>
           <Text style={styles.boutonTexte}>Actualiser</Text>

@@ -11,12 +11,17 @@ import { useFocusEffect } from '@react-navigation/native';
 const { width } = Dimensions.get("window");
 const iconSize = width * 0.075;
 
+
+/**
+ * Gestion de la barre des tâches au bas de l'écran
+ * @returns 
+ */
 export default function TabLayout() {
   const keyboard = useKeyboard();
   const estConnecte = useAuthStore((state) => state.estConnecte);
   const navigation = useNavigation();
 
-  // ✅ Back handler for Android
+  // Back handler for Android
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {

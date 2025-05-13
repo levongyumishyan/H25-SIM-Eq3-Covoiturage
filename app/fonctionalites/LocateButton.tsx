@@ -9,6 +9,8 @@ interface LocateButtonProps {
   userCoords: [number, number] | null;
 }
 
+/** Pour réinitialiser la vue de la caméra à la localisation de l'utilisateur */
+
 const LocateButton: React.FC<LocateButtonProps> = ({ cameraRef, userCoords }) => {
   const centerOnUser = () => {
     if (cameraRef.current && userCoords) {

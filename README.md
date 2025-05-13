@@ -88,7 +88,7 @@ Plus d'informations ici: https://learn.microsoft.com/en-us/windows/win32/fileio/
 - MONGO_URI = mongodb+srv://VOTRE_NOM_D_UTLISATEUR:VOTRE_MDP@ridew.xta2m.mongodb.net/?retryWrites=true&w=majority&appName=RideW
 - JWT_SECRET = VOTRE_CLÉE_SECRETE
 
-3) Dans le fichier 'VariablesGlobales', changez l'adresse IP.
+3) Dans le fichier 'apiConfig.js', changez l'adresse IP.
 
 Pour tester des requêtes HTTP manuellement :
 - Avoir l'extension VSCode 'REST Client'

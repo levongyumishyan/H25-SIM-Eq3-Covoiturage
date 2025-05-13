@@ -85,9 +85,9 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
       }
 
       const result = await response.json();
-      console.log("✅ Trajet ajouté:", result);
+      console.log("Trajet ajouté:", result);
     } catch (error) {
-      console.error("❌ Erreur ajout trajet:", error.message);
+      console.error("Erreur ajout trajet:", error.message);
     }
   };
 

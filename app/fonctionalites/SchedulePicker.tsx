@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BASE_URL } from 'app/apiConfig.js'; // Adjust path if needed
+import { BASE_URL } from 'app/apiConfig.js';
 import { useAuthStore } from './VariablesGlobales';
 
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
@@ -20,6 +20,8 @@ export default function SchedulePicker({ onClose }) {
   const targetLong = useAuthStore((state) => state.targetLong);
   const userId = useAuthStore((state) => state.userId);
 
+
+  //Get le nom et l'adresse selon les coordonnées géo
   const reverseGeocode = async ([lng, lat]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
@@ -52,30 +54,32 @@ export default function SchedulePicker({ onClose }) {
     return degrees * (Math.PI / 180);
   };
 
+
+  //Sélection de l'heure et de la date
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
     const m = date.getMinutes().toString().padStart(2, '0');
     return `${h}:${m}`;
   };
-
   const incrementTime = () => {
     const next = new Date(time);
     next.setMinutes(time.getMinutes() + 30);
     setTime(next);
   };
-
   const decrementTime = () => {
     const prev = new Date(time);
     prev.setMinutes(time.getMinutes() - 30);
     setTime(prev);
   };
-
   const toggleDay = (day) => {
     setSelectedDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
+
+
+  //Envoie au backend du trajet créé
   const handleConfirm = async () => {
     const targetCoords = [targetLong, targetLat];
     const targetAddress = await reverseGeocode(targetCoords);
@@ -108,19 +112,21 @@ export default function SchedulePicker({ onClose }) {
       const result = await response.json();
 
       if (response.ok) {
-        console.log("✅ Saved:", result);
+        console.log("Saved:", result);
         Alert.alert("Succès", "Trajet enregistré !");
         onClose?.({ days: selectedDays, time: formatTime(time) });
       } else {
-        console.error("❌ Server error:", result);
+        console.error("Server error:", result);
         Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
       }
     } catch (err) {
-      console.error("❌ Network error:", err);
+      console.error("Network error:", err);
       Alert.alert("Erreur", "Impossible de se connecter au serveur");
     }
   };
 
+
+  //Interface de création
   return (
     <View
       style={{
@@ -171,6 +177,7 @@ export default function SchedulePicker({ onClose }) {
         ))}
       </View>
 
+      {/*Bouton de création du trajet */}
       <TouchableOpacity
         onPress={handleConfirm}
         style={{

@@ -9,10 +9,12 @@ import { useAuthStore } from './VariablesGlobales';
 import { BASE_URL } from '../apiConfig';
 
 const LoginInput = () => {
+  //Var locales
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState('');
 
+  //Var globales --> lorsque l'utilisateur se connecte, ces données sont nécessaires pour les autres fenêtres de l'application
   const estConnecte = useAuthStore((state) => state.estConnecte);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
@@ -21,6 +23,8 @@ const LoginInput = () => {
   const setTelephoneUtilisateur = useAuthStore((state) => state.setTelephoneUtilisateur);
   const setUserId = useAuthStore((state) => state.setUserId);
 
+
+  //Connection de l'utilisateur (database)
   const verifierConnection = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -57,6 +61,7 @@ const LoginInput = () => {
 
       if (!data.utilisateur) throw new Error("Réponse invalide du serveur.");
 
+      //Set les variables dans l'app local
       setConnecte(true);
       setPrenomUtilisateur(data.utilisateur.prenom);
       setNomUtilisateur(data.utilisateur.nom);
@@ -71,11 +76,14 @@ const LoginInput = () => {
     }
   };
 
+
+
+  //Affichage, si l'utilisateur est connecté: page de réglages utilisateur. Sinon page de connection
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.colonneCentree}>
         {estConnecte ? (
-          <Settings />
+          <Settings /> // Réglages utilisateur
         ) : (
           <>
             <Text style={styles.titre}>Ride/W</Text>

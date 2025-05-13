@@ -6,12 +6,12 @@ const { width, height } = Dimensions.get('window');
 export const styles = StyleSheet.create({
   // ---------- Layout ----------
   card: {
-    width: '90%',          // 💡 Responsive width
-    maxWidth: 500,         // ✅ Prevents it from getting too wide on tablets
+    width: '90%',          
+    maxWidth: 500,         
     alignSelf: 'center',
     marginTop: 20,
     top: 70,
-    left: -10,  // ✅ Center it horizontally
+    left: -10,  
     backgroundColor: colors.blanc,
     borderRadius: 20,
     padding: 20,
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    width: '100%', // 🔁 ensures full width
+    width: '100%',
     alignItems: 'center',
     backgroundColor: colors.arrierePlan,
     paddingHorizontal: 20,

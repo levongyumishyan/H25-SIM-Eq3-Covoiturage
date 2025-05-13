@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView, Platform, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from './Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -17,6 +9,7 @@ import { BASE_URL } from '../apiConfig';
 import { Link } from 'expo-router';
 
 const SignUpInput = () => {
+  //Variables utilisateur
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [dateNaissance, setDateNaissance] = useState(new Date(1970, 0, 1));
@@ -30,17 +23,23 @@ const SignUpInput = () => {
   const [conducteur, setConducteur] = useState(false);
   const [passager, setPassager] = useState(false);
 
+  //Variables voiture (si utilisateur est conducteur)
   const [modeleVoiture, setModeleVoiture] = useState("");
   const [anneeVoiture, setAnneeVoiture] = useState("");
   const [consommationVoiture, setConsommationVoiture] = useState("");
 
+
+  //Pour la sélection de la date (puisque n'est pas un string)
   const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === "ios"); // Keep open on iOS
+    setShowDatePicker(Platform.OS === "ios");
     if (selectedDate) {
       setDateNaissance(selectedDate);
     }
   };
 
+
+
+  //Envoie au backend de l'inscription
   const verifierConnection = async () => {
     if (mdp !== mdpVerif) {
       alert("Les mots de passe ne correspondent pas.");
@@ -73,7 +72,6 @@ const SignUpInput = () => {
       console.log("Réponse serveur:", data);
 
       if (!response.ok) {
-        // Afficher message d'erreur du backend s’il existe
         const erreur = data.msg || JSON.stringify(data) || "Erreur inconnue";
         throw new Error(erreur);
       }
@@ -85,6 +83,9 @@ const SignUpInput = () => {
     }
   };
 
+
+
+  //Formulaire d'inscription
   return (
     <ScrollView style={styles.scrollContainer}>
       <SafeAreaView style={styles.colonneCentree}>

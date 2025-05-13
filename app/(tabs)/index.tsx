@@ -4,10 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { styles } from '../fonctionalites/Styles';
 import { useAuthStore } from '~/fonctionalites/VariablesGlobales';
-import { colors } from '../fonctionalites/Colors';
 import * as SplashScreen from 'expo-splash-screen';
 
-SplashScreen.preventAutoHideAsync(); // prevent native splash from auto hiding
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appReady, setAppReady] = useState(false);
@@ -15,6 +14,8 @@ export default function App() {
   const estConnecte = useAuthStore((state) => state.estConnecte);
   const nomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
 
+
+  //Animation d'ouverture d'application
   useEffect(() => {
     const load = async () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -36,9 +37,11 @@ export default function App() {
     );
   }
 
-  return (
+
+  return ( //Affichage en fonction de si l'utilisateur est connecté
     <SafeAreaView style={styles.container}>
       <View style={styles.colonneCentree}>
+
         <Text style={styles.titre}>
           {estConnecte ? `Bienvenue,\n ${nomUtilisateur}` : 'Ride/W'}
         </Text>
@@ -50,10 +53,10 @@ export default function App() {
         {!estConnecte && (
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.bouton} onPress={() => router.push('/inscription')}>
-              <Text style={styles.label}>Sign Up</Text>
+              <Text style={styles.label}>S'inscrire</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.bouton, styles.contourBouton]} onPress={() => router.push('/account')}>
-              <Text style={[styles.label, styles.contourBoutonTexte]}>Login</Text>
+              <Text style={[styles.label, styles.contourBoutonTexte]}>Se connecter</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -62,7 +65,6 @@ export default function App() {
   );
 }
 
-const { width, height } = Dimensions.get('window');
 const splashStyles = StyleSheet.create({
   container: {
     flex: 1,

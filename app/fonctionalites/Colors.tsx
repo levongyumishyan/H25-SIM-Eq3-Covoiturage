@@ -1,5 +1,6 @@
 import { estDarkMode } from "./VariablesGlobales";
 
+/** Couleurs selon le thème de l'application */
 
 export const colors = ({  //   dark        light
   arrierePlan: estDarkMode ? "#1c1c1c" : "#ebefeb",

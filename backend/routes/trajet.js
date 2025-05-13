@@ -47,6 +47,9 @@ router.get('/', async (req, res) => {
  * @returns {Object} 200 - Objet contenant un message de succès et le trajet enregistré
  * @returns {Object} 500 - Erreur serveur
  */
+
+
+//Enregistre un nouveau trajet
 router.post('/', async (req, res) => {
   try {
     const { userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance } = req.body;
@@ -63,8 +66,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post("/getTrajets", [
 
+//Get les trajets
+router.post("/getTrajets", [
 ], async (req, res) => {
   const erreurs = validationResult(req);
   if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
@@ -92,6 +96,29 @@ router.post("/getTrajets", [
     });
   } catch (err) {
     console.error(err);
+    res.status(500).json({ msg: "Erreur server" });
+  }
+});
+
+// --- TRAJET UPDATE --- 
+router.post("/updateTrajet", async (req, res) => {
+  const { id, long, lat, targetLong, targetLat } = req.body;
+
+  try {
+    let trajet = await Trajet.findOne({ id });
+    if (!trajet) {
+      trajet = new Trajet({ id, long, lat, targetLong, targetLat });
+      await trajet.save();
+    } else {
+      await Trajet.updateOne(
+        { id },
+        { long, lat, targetLong, targetLat }
+      );
+    }
+
+    res.json({ trajet });
+  } catch (err) {
+    console.error("Erreur serveur trajet:", err);
     res.status(500).json({ msg: "Erreur server" });
   }
 });

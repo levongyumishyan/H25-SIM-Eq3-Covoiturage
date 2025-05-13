@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
-
 export var estDarkMode = true;
 
-
+/**
+ * Toutes les variables globales qu'un utilisateur aura
+ */
 interface AuthState {
   estConnecte: boolean;
   setEstConnecte: (val: boolean) => void;

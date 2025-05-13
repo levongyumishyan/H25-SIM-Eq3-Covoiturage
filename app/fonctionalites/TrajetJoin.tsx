@@ -28,12 +28,12 @@ const TrajetBottomSheet = ({ ride, pickupStreet, targetStreet, distanceKm, visib
 
       if (!response.ok) throw new Error(result.msg || 'Erreur lors de la planification');
 
-      console.log('✅ Trajet rejoint avec succès:', result);
+      console.log('Trajet rejoint avec succès:', result);
       Alert.alert('Succès', 'Vous avez rejoint ce trajet.');
       sheetRef.current?.close();
       onClose?.();
     } catch (err) {
-      console.error('❌ Erreur lors de la requête de planification:', err.message);
+      console.error('Erreur lors de la requête de planification:', err.message);
       Alert.alert('Erreur', 'Impossible de rejoindre le trajet.');
     }
   };

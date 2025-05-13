@@ -10,7 +10,7 @@ export default function Index() {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <View>
         <LoginInput />
       </View>
     </SafeAreaView>
