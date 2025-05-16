@@ -289,7 +289,7 @@ export default function MapScreen() {
           ride={selectedRide}
           pickupStreet={pickupStreet}
           targetStreet={targetStreet}
-          distanceKm={routeGeoJSON ? 4.2 : null} // or calculate real one
+          distanceKm={routeGeoJSON} // or calculate real one
           visible={true}
           onClose={closeTrajet}
         />

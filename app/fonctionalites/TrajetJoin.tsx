@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useCallback } from 'react';
+import React, { useRef, useMemo, useCallback, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,36 +7,95 @@ import { colors } from './Colors';
 import { BASE_URL } from '../apiConfig';
 import { useAuthStore } from './VariablesGlobales';
 
-const TrajetBottomSheet = ({ ride, pickupStreet, targetStreet, distanceKm, visible, onClose }) => {
+const TrajetBottomSheet = ({ ride, visible, onClose }) => {
   const sheetRef = useRef(null);
   const currentUserId = useAuthStore((state) => state.userId);
-  const snapPoints = useMemo(() => ['65%'], []);
+  const snapPoints = useMemo(() => ['50%', '90%'], []);
 
   const handleSheetChange = useCallback((index) => {
     if (index === -1) onClose?.();
   }, []);
 
   const handleJoinRide = async () => {
+    if (!currentUserId || !ride?._id) {
+      Alert.alert('Erreur', 'Informations utilisateur ou trajet manquantes.');
+      return;
+    }
+
+    const url = `${BASE_URL}/api/trajets/${ride._id}/join`;
     try {
-      const response = await fetch(`${BASE_URL}/api/trajets/${ride._id}/join`, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: currentUserId }),
       });
 
-      const result = await response.json();
+      const raw = await response.text();
+      const result = JSON.parse(raw);
 
-      if (!response.ok) throw new Error(result.msg || 'Erreur lors de la planification');
+      if (!response.ok) {
+        Alert.alert('Erreur', result.msg || 'Erreur lors de la planification');
+        return;
+      }
 
-      console.log('Trajet rejoint avec succès:', result);
       Alert.alert('Succès', 'Vous avez rejoint ce trajet.');
       sheetRef.current?.close();
       onClose?.();
     } catch (err) {
-      console.error('Erreur lors de la requête de planification:', err.message);
+      console.error('❌ Erreur de requête:', err.message);
       Alert.alert('Erreur', 'Impossible de rejoindre le trajet.');
     }
   };
+
+  const handleUnjoinRide = async () => {
+    const url = `${BASE_URL}/api/trajets/${ride._id}/unjoin`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUserId }),
+      });
+
+      const raw = await response.text();
+      const result = JSON.parse(raw);
+
+      if (!response.ok) {
+        Alert.alert('Erreur', result.msg || 'Erreur lors de la désinscription');
+        return;
+      }
+
+      Alert.alert('Désinscription', 'Vous avez quitté ce trajet.');
+      sheetRef.current?.close();
+      onClose?.();
+    } catch (err) {
+      console.error('❌ Erreur de désinscription:', err.message);
+      Alert.alert('Erreur', 'Impossible de quitter le trajet.');
+    }
+  };
+
+  useEffect(() => {
+    console.log('🚗 ride passed to BottomSheet:', ride);
+  }, [ride]);
+
+  const currentRide = ride || {};
+  const weekdayOrder = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
+
+  const scheduleDays = currentRide?.scheduleDays?.length
+    ? [...currentRide.scheduleDays]
+        .sort((a, b) => weekdayOrder.indexOf(a) - weekdayOrder.indexOf(b))
+        .join(', ')
+    : 'Non spécifié';
+
+  const scheduleTime = currentRide?.scheduleTime || 'Heure non spécifiée';
+  const numberOfSeats = currentRide?.places;
+
+  const alreadyJoined = currentRide?.passengers?.some(
+    (p) => p === currentUserId || p?._id === currentUserId
+  );
+
+  const isFull =
+    Array.isArray(currentRide?.passengers) &&
+    currentRide?.passengers.length >= currentRide?.places;
 
   return (
     <BottomSheet
@@ -47,7 +106,6 @@ const TrajetBottomSheet = ({ ride, pickupStreet, targetStreet, distanceKm, visib
       onChange={handleSheetChange}
     >
       <BottomSheetView style={{ flex: 1, backgroundColor: 'white', padding: 20 }}>
-        {/* ✕ Close Button */}
         <TouchableOpacity
           onPress={() => sheetRef.current?.close()}
           style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}
@@ -60,34 +118,68 @@ const TrajetBottomSheet = ({ ride, pickupStreet, targetStreet, distanceKm, visib
         </Text>
 
         <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse, marginBottom: 16 }]}>
-          Proposé par {ride?.prenom || 'utilisateur inconnu'}
+          Proposé par {currentRide?.userId?.prenom && currentRide?.userId?.nom
+            ? `${currentRide.userId.prenom} ${currentRide.userId.nom}`
+            : 'utilisateur inconnu'}
         </Text>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Point de départ</Text>
           <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
-            {pickupStreet || 'Adresse inconnue'}
+            {currentRide?.pickupAddress || 'Adresse inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Destination</Text>
           <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
-            {targetStreet || 'Adresse inconnue'}
+            {currentRide?.targetAddress || 'Adresse inconnue'}
+          </Text>
+        </View>
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Distance</Text>
+          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+            {currentRide?.distance ? `${currentRide.distance.toFixed(1)} km` : 'Distance inconnue'}
+          </Text>
+        </View>
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Jours</Text>
+          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+            {scheduleDays}
+          </Text>
+
+          <Text style={[styles.label, { color: colors.couleurTexteInverse, marginTop: 10 }]}>
+            Heure
+          </Text>
+          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+            {scheduleTime}
           </Text>
         </View>
 
         <View style={{ marginBottom: 20 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Distance</Text>
+          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Places disponibles</Text>
           <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
-            {distanceKm ? `${distanceKm.toFixed(1)} km` : 'Distance inconnue'}
+            {numberOfSeats ? `${numberOfSeats} place${numberOfSeats > 1 ? 's' : ''}` : 'Non spécifié'}
           </Text>
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.bouton} onPress={handleJoinRide}>
-            <Text style={[styles.boutonTexte, { color: colors.couleurTexteInverse }]}>
-              Rejoindre ce trajet
+          <TouchableOpacity
+            style={[
+              styles.bouton,
+              isFull && !alreadyJoined && { backgroundColor: colors.grisSecondaire },
+            ]}
+            disabled={isFull && !alreadyJoined}
+            onPress={alreadyJoined ? handleUnjoinRide : handleJoinRide}
+          >
+            <Text style={[styles.boutonTexte, { color: colors.couleurTexte }]}>
+              {alreadyJoined
+                ? 'Quitter ce trajet'
+                : isFull
+                ? 'Complet'
+                : 'Rejoindre ce trajet'}
             </Text>
           </TouchableOpacity>
         </View>

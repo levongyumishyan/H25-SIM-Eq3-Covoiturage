@@ -4,7 +4,7 @@ import { styles } from "./Styles";
 import { colors } from "./Colors";
 import { BASE_URL } from "~/apiConfig";
 import { useAuthStore } from "./VariablesGlobales";
-import logo from 'temp_logo.png';
+import logo from "../assets/images/logo.png";
 
 
 //format pour l'affichage du numéro de téléphone standardisé
@@ -156,7 +156,6 @@ const Settings = () => {
             alignContent: 'center',
             width: 280,
             height: 280,
-            left: -10,
             top: -120,
             resizeMode: 'contain',
             marginBottom: -300,

@@ -1,6 +1,6 @@
 # Ride/w - Application de Covoiturage
 
-![LOGO](temp_logo.png)
+![LOGO](app/assets/images/logo.png)
 
 ## Description
 

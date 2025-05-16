@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 // Replace with your computer's local IP address on Wi-Fi
-const LOCAL_NETWORK_IP = 'http://192.168.2.17:5001';
+const LOCAL_NETWORK_IP = 'http://10.0.0.047:5001';
 
 const LOCAL_HOST =
   Platform.OS === 'android' //http://10.0.2.2:5001

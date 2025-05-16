@@ -104,7 +104,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
           <Text
             style={{
               ...styles.labelInverse,
-              color: isSelected ? colors.g : colors.noir,
+              color: isSelected ? colors.blanc : colors.noir,
               textDecorationLine: isSelected ? 'underline' : 'none'
             }}
           >

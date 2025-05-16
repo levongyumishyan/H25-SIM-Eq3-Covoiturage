@@ -54,7 +54,9 @@ export default function Rides() {
       try {
         const data = JSON.parse(text);
         const trajetsFiltres = data.filter(
-          (trajet) => trajet.userId === userId
+          (trajet) =>
+            trajet.userId === userId ||
+            (Array.isArray(trajet.passengers) && trajet.passengers.includes(userId))
         );
         setRides(trajetsFiltres);
         setStats(calculateStats(trajetsFiltres));

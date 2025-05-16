@@ -8,6 +8,9 @@
 const express = require('express');
 const router = express.Router();
 const Trajet = require('../models/Trajet');
+const Utilisateur = require('../models/Utilisateur'); // Assuming your user model is here
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 /**
  * GET /
@@ -21,7 +24,7 @@ const Trajet = require('../models/Trajet');
  */
 router.get('/', async (req, res) => {
   try {
-    const trajets = await Trajet.find();
+    const trajets = await Trajet.find().populate('userId', 'prenom nom');
     return res.json(trajets);
   } catch (err) {
     console.error('Erreur serveur (GET):', err);
@@ -37,39 +40,38 @@ router.get('/', async (req, res) => {
  * @route POST /trajets
  * @group Trajets - Opérations liées aux trajets
  * @param {Object} req.body - Données du trajet
- * @param {string} req.body.id - Identifiant de l'utilisateur
- * @param {number} req.body.long - Longitude du point de départ
- * @param {number} req.body.lat - Latitude du point de départ
- * @param {number} req.body.targetLong - Longitude de destination
- * @param {number} req.body.targetLat - Latitude de destination
- * @param {Array.<string>} req.body.scheduleDays - Jours de récurrence du trajet
- * @param {string} req.body.scheduleTime - Heure prévue du trajet (format HH:mm)
- * @returns {Object} 200 - Objet contenant un message de succès et le trajet enregistré
- * @returns {Object} 500 - Erreur serveur
  */
-
-
-//Enregistre un nouveau trajet
 router.post('/', async (req, res) => {
   try {
-    const { userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance } = req.body;
+    const {
+      userId, long, lat, targetLong, targetLat,
+      scheduleDays, scheduleTime, pickupAddress,
+      targetAddress, distance, places
+    } = req.body;
 
-    console.log("Reçu POST:", req.body); // 👈 DEBUG
+    console.log("Reçu POST:", req.body);
 
-    const trajet = new Trajet({ userId, long, lat, targetLong, targetLat, scheduleDays, scheduleTime, pickupAddress, targetAddress, distance });
+    const trajet = new Trajet({
+      userId, long, lat, targetLong, targetLat,
+      scheduleDays, scheduleTime, pickupAddress,
+      targetAddress, distance, places 
+    });
+
     await trajet.save();
-
     return res.json({ message: "Trajet enregistré", trajet });
+
   } catch (err) {
     console.error('Erreur serveur (POST):', err);
     return res.status(500).json({ msg: "Erreur serveur (POST)", error: err.message });
   }
 });
 
-
-//Get les trajets
-router.post("/getTrajets", [
-], async (req, res) => {
+/**
+ * POST /getTrajets
+ * 
+ * Authentifie un utilisateur et retourne ses trajets.
+ */
+router.post("/getTrajets", async (req, res) => {
   const erreurs = validationResult(req);
   if (!erreurs.isEmpty()) return res.status(400).json({ errors: erreurs.array() });
 
@@ -92,6 +94,7 @@ router.post("/getTrajets", [
         pickupAddress,
         targetAddress,
         distance,
+        places
       }
     });
   } catch (err) {
@@ -100,7 +103,11 @@ router.post("/getTrajets", [
   }
 });
 
-// --- TRAJET UPDATE --- 
+/**
+ * POST /updateTrajet
+ * 
+ * Met à jour ou crée un trajet.
+ */
 router.post("/updateTrajet", async (req, res) => {
   const { id, long, lat, targetLong, targetLat } = req.body;
 
@@ -120,6 +127,66 @@ router.post("/updateTrajet", async (req, res) => {
   } catch (err) {
     console.error("Erreur serveur trajet:", err);
     res.status(500).json({ msg: "Erreur server" });
+  }
+});
+
+/**
+ * POST /trajets/:id/join
+ * 
+ * Ajoute un utilisateur à la liste des passagers d’un trajet donné.
+ */
+router.post('/:id/join', async (req, res) => {
+  const { userId } = req.body;
+  const trajetId = req.params.id;
+
+  if (!userId) return res.status(400).json({ msg: 'userId requis' });
+
+  try {
+    const trajet = await Trajet.findById(trajetId);
+    if (!trajet) {
+      return res.status(404).json({ msg: 'Trajet non trouvé' });
+    }
+
+    // Créer la propriété passengers si elle n'existe pas encore
+    if (!trajet.passengers) trajet.passengers = [];
+
+    // Vérifier si l'utilisateur a déjà rejoint
+    const alreadyJoined = trajet.passengers.some(p => p.toString() === userId);
+    if (alreadyJoined) {
+      return res.status(400).json({ msg: 'Utilisateur déjà inscrit à ce trajet' });
+    }
+
+    // Vérifier qu'il reste des places
+    if (trajet.passengers.length >= trajet.places) {
+      return res.status(400).json({ msg: 'Plus de places disponibles pour ce trajet' });
+    }
+
+    // Ajouter l'utilisateur aux passagers
+    trajet.passengers.push(userId);
+    await trajet.save();
+
+    return res.status(200).json({ msg: 'Inscription réussie', trajet });
+  } catch (err) {
+    console.error('Erreur serveur (join):', err);
+    return res.status(500).json({ msg: 'Erreur serveur', error: err.message });
+  }
+});
+
+router.post('/:id/unjoin', async (req, res) => {
+  const { userId } = req.body;
+  const trajetId = req.params.id;
+
+  try {
+    const trajet = await Trajet.findById(trajetId);
+    if (!trajet) return res.status(404).json({ msg: 'Trajet non trouvé' });
+
+    trajet.passengers = trajet.passengers.filter(p => p.toString() !== userId);
+    await trajet.save();
+
+    return res.status(200).json({ msg: 'Désinscription réussie', trajet });
+  } catch (err) {
+    console.error('Erreur serveur (unjoin):', err);
+    return res.status(500).json({ msg: 'Erreur serveur', error: err.message });
   }
 });
 
