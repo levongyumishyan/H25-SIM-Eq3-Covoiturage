@@ -83,7 +83,7 @@ npm install -g expo-cli
       + OU consultez le lien suivant pour changer le paramètre sur votre OS. 
       Plus d'informations ici : https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=powershell
 
-4. Démarrer le serveur dans un autre terminal (dans le même dossier):
+4. Démarrer le serveur dans un autre terminal (dans le dossier 'backend'):
    ```sh
    node server.js
    ```  
