@@ -4,9 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from 'app/apiConfig.js';
 import { useAuthStore } from './VariablesGlobales';
 
-// Cette classe permet à l'utilisateur de créer un horaire
-// pour son trajet. L'utilisateur peut décider quand le moment
-// d'une journée d'un trajet. 
+// Cette classe possède les fonctionalités nécessaires 
+// permettant à l'utilisateur de planifier son trajet
+// à l'aide d'un horaire qu'il peut créer.
 
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
@@ -36,9 +36,8 @@ export default function SchedulePicker({ onClose }) {
 
   /**
    * Cette méthode traduit les coordonnées envoyées sous forme
-   * d'un tableau contenant la latitude et la longitude
-   * en une adresse.
-   * @param latEtLong
+   * d'un tableau contenant la latitude et la longitude en une adresse.
+   * @param tabLatLong
    * @returns 
    */
   const reverseGeocode = async ([lng, lat]) => {
@@ -71,6 +70,11 @@ export default function SchedulePicker({ onClose }) {
   const toRadians = (degrees) => degrees * (Math.PI / 180);
 
 
+  /**
+   * Cette méthode convertit la date pour l'afficher en heures et en minutes.
+   * @param date 
+   * @returns 
+   */
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');
     const m = date.getMinutes().toString().padStart(2, '0');

@@ -16,7 +16,7 @@ const formatPhone = (value) => {
 };
 
 const Settings = () => {
-  //Global
+  // Variables globales
   const {
     estConnecte,
     setEstConnecte,
@@ -32,7 +32,7 @@ const Settings = () => {
     setUserId
   } = useAuthStore();
 
-  //Local
+  // Variables locales
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
@@ -47,7 +47,7 @@ const Settings = () => {
   }, []);
 
 
-  //Enregistrement des nouvelles informations utilisateur (backend)
+  //Enregistrement des nouvelles informations de l'utilisateur (backend)
   const handleSave = async () => {
     if (!userId) {
       alert("Erreur : utilisateur non identifié.");
@@ -86,7 +86,9 @@ const Settings = () => {
   };
 
 
-  //Déconnection
+  /**
+   * Permet à l'utilisateur de se déconnecter de son compte.
+   */
   const handleLogout = async () => {
     setEstConnecte(false);
     setPrenomUtilisateur('');
@@ -146,7 +148,7 @@ const Settings = () => {
   };
 
 
-  //PAGE
+  // Apparence de la page 'Réglages'
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={[styles.colonneCentree, { paddingVertical: 30 }]}>

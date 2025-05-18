@@ -4,7 +4,7 @@ import { colors } from './Colors';
 const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
-  // ---------- Layout ----------
+  // ---------- Mise en page ----------
   card: {
     width: '90%',          
     maxWidth: 500,         
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
 
   },
 
-  // ---------- Typography ----------
+  // ---------- Typographie ----------
   titre: {
     fontSize: 50,
     fontWeight: 'bold',
@@ -134,7 +134,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // ---------- Buttons ----------
+  // ---------- Boutons ----------
   bouton: {
     backgroundColor: colors.vertPrincipal,
     paddingVertical: 14,
@@ -205,7 +205,7 @@ export const styles = StyleSheet.create({
     color: colors.couleurTexteInverse,
   },
 
-  // ---------- Checkboxes ----------
+  // ---------- Cases à cocher ----------
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -233,7 +233,7 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  // ---------- Map ----------
+  // ---------- Carte ----------
   map: {
     width: '100%',
     height: height * 0.9,
@@ -273,7 +273,7 @@ export const styles = StyleSheet.create({
 
 
 
-  // ---------- Search ----------
+  // ---------- Boite de recherche ----------
   searchBoxWrapper: {
     position: 'absolute',
     alignItems: 'center',
@@ -296,7 +296,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
   },
 
-  // ---------- Rides ----------
+  // ---------- Trajets ----------
 
   ridecontainer: {
     alignItems: 'center',
@@ -320,7 +320,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
 
-  // ---------- Links ----------
+  // ---------- Liens ----------
   linksContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

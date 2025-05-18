@@ -18,8 +18,9 @@ import { useAuthStore } from './VariablesGlobales';
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
 const SearchBox = forwardRef(({ onSelect }, ref) => {
+  // Ce que l'utilisateur rentrera dans la boite de recherche (SearchBox)
   const [input, setInput] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState([]); 
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
@@ -40,6 +41,11 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     })();
   }, []);
 
+    /**
+   * La boite de recherche peut suggérer des adresses 
+   * qui correspond possiblement à ce que 
+   * l'utilisateur cherche comme adresse.
+   */
   useEffect(() => {
     if (input.trim() === '') return setSuggestions([]);
     const fetchSuggestions = async () => {
@@ -63,6 +69,12 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
     onSelect?.();
   };
 
+  /**
+   * Envoie les informations du trajet sélectionné
+   * au serveur du backend.
+   * @param schedule L'horaire choisi par l'utilisateur
+   * @returns 
+   */
   const confirmSchedule = async (schedule) => {
     if (!location || !pendingTargetCoords) return;
     try {

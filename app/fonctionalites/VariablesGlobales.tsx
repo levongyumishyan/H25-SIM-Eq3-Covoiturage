@@ -29,6 +29,10 @@ interface AuthState {
   setTargetLat: (tLat: number) => void;
 }
 
+/**
+ * useAuthStore permet à les autres classes dans le dossier
+ * 'fonctionalités' de garder et de gérer les variables de l'utilisateur.
+ */
 export const useAuthStore = create<AuthState>((set) => ({
   estConnecte: false,
   setEstConnecte: (val) => set({ estConnecte: val }),

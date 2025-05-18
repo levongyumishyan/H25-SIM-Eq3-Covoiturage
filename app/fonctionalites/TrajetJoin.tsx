@@ -16,6 +16,11 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
     if (index === -1) onClose?.();
   }, []);
 
+  /**
+   * Avertit le serveur du backend qu'un utilisateur se 
+   * joigne à un trajet offert par un conducteur.
+   * @returns 
+   */
   const handleJoinRide = async () => {
     if (!currentUserId || !ride?._id) {
       Alert.alert('Erreur', 'Informations utilisateur ou trajet manquantes.');
@@ -47,6 +52,11 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
     }
   };
 
+  /**
+   * Informe le serveur du backend que l'utilisateur s'est
+   * désinscrit d'un trajet offert par un conducteur.
+   * @returns 
+   */
   const handleUnjoinRide = async () => {
     const url = `${BASE_URL}/api/trajets/${ride._id}/unjoin`;
     try {

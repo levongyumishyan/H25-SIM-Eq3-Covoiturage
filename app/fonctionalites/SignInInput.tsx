@@ -9,7 +9,7 @@ import { BASE_URL } from '../apiConfig';
 import { Link } from 'expo-router';
 
 const SignUpInput = () => {
-  //Variables utilisateur
+  //Variables de l'utilisateur
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [dateNaissance, setDateNaissance] = useState(new Date(1970, 0, 1));
@@ -20,16 +20,23 @@ const SignUpInput = () => {
   const [mdp, setMdp] = useState("");
   const [mdpVerif, setMdpVerif] = useState("");
 
+  // Variables pour savoir si l'utilisateur
+  // veut être un passager ou conducteur
   const [conducteur, setConducteur] = useState(false);
   const [passager, setPassager] = useState(false);
 
-  //Variables voiture (si utilisateur est conducteur)
+  //Variables de la voiture (si l'utilisateur est un conducteur)
   const [modeleVoiture, setModeleVoiture] = useState("");
   const [anneeVoiture, setAnneeVoiture] = useState("");
   const [consommationVoiture, setConsommationVoiture] = useState("");
 
 
-  //Pour la sélection de la date (puisque n'est pas un string)
+  /**
+   * Permet à l'utilisateur de sélectionner une date étant
+   * donné que ce n'est pas une chaîne (String)
+   * @param event 
+   * @param selectedDate La date selectionnée
+   */
   const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(Platform.OS === "ios");
     if (selectedDate) {
@@ -39,7 +46,11 @@ const SignUpInput = () => {
 
 
 
-  //Envoie au backend de l'inscription
+  /**
+   * Envoie au serveur du backend les informations de
+   * l'utilisateur du formulaire d'inscription.
+   * @returns 
+   */
   const verifierConnection = async () => {
     if (mdp !== mdpVerif) {
       alert("Les mots de passe ne correspondent pas.");
@@ -85,7 +96,7 @@ const SignUpInput = () => {
 
 
 
-  //Formulaire d'inscription
+  // Apparence du formulaire d'inscription
   return (
     <ScrollView style={styles.scrollContainer}>
       <SafeAreaView style={styles.colonneCentree}>
