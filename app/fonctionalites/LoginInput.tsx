@@ -9,12 +9,13 @@ import { useAuthStore } from './VariablesGlobales';
 import { BASE_URL } from '../apiConfig';
 
 const LoginInput = () => {
-  //Var locales
+  // Variables locales
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
   const [messageErreur, setMessageErreur] = useState('');
 
-  //Var globales --> lorsque l'utilisateur se connecte, ces données sont nécessaires pour les autres fenêtres de l'application
+  // Variables globales --> Lorsque l'utilisateur se connecte,
+  // ces données sont nécessaires pour les autres pages de l'application.
   const estConnecte = useAuthStore((state) => state.estConnecte);
   const setConnecte = useAuthStore((state) => state.setEstConnecte);
   const setNomUtilisateur = useAuthStore((state) => state.setNomUtilisateur);
@@ -24,7 +25,13 @@ const LoginInput = () => {
   const setUserId = useAuthStore((state) => state.setUserId);
 
 
-  //Connection de l'utilisateur (database)
+  /**
+   * Connexion de l'utilisateur (Base de données)
+   * 
+   * L'application communique avec le serveur à l'aide de cette méthode.
+   * Celle-ci envoie les données de l'utilisateur au serveur. Ensuite,
+   * le serveur vérifie les donnés et donne une réponse en format JSON.
+   */
   const verifierConnection = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -78,13 +85,19 @@ const LoginInput = () => {
 
 
 
-  //Affichage, si l'utilisateur est connecté: page de réglages utilisateur. Sinon page de connection
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.colonneCentree}>
+        {
+          /**Ici, l'algorithme vérifie si l'utilisateur est connecté.
+           * S'il est connecté, la page 'Réglages utilisateur' est affichée.
+           * S'il n'est pas connecté, c'est la page de connexion qui serait affichée.
+           */
+        }
         {estConnecte ? (
-          <Settings /> // Réglages utilisateur
+          <Settings /> // La page 'Réglages utilisateur'
         ) : (
+          // La page de connexion
           <>
             <Text style={styles.titre}>Ride/W</Text>
 

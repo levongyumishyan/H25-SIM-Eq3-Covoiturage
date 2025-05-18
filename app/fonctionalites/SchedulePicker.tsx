@@ -4,6 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from 'app/apiConfig.js';
 import { useAuthStore } from './VariablesGlobales';
 
+// Cette classe permet à l'utilisateur de créer un horaire
+// pour son trajet. L'utilisateur peut décider quand le moment
+// d'une journée d'un trajet. 
+
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
 export default function SchedulePicker({ onClose }) {
@@ -14,13 +18,29 @@ export default function SchedulePicker({ onClose }) {
   });
 
   const [selectedDays, setSelectedDays] = useState([]);
+  // Nombre de sièges disponibles dans la voiture
   const [places, setPlaces] = useState('');
+  // Coordonnées de l'utilisateur ou le point de départ
+  // (latitude et longitude)
   const userLat = useAuthStore((state) => state.userLat);
   const userLong = useAuthStore((state) => state.userLong);
+  // Coordonnées de la destination choisie
+  // (latitude et longitude)
   const targetLat = useAuthStore((state) => state.targetLat);
   const targetLong = useAuthStore((state) => state.targetLong);
+  // La variable 'userId' sert à associer un trajet à
+  // un compte spécifique. Ceci est utile pour afficher
+  // les trajets créés par l'utilisateur dans la page
+  // 'Historique trajets'.
   const userId = useAuthStore((state) => state.userId);
 
+  /**
+   * Cette méthode traduit les coordonnées envoyées sous forme
+   * d'un tableau contenant la latitude et la longitude
+   * en une adresse.
+   * @param latEtLong
+   * @returns 
+   */
   const reverseGeocode = async ([lng, lat]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
@@ -33,6 +53,8 @@ export default function SchedulePicker({ onClose }) {
     }
   };
 
+  // Utilisation des formules mathématiques pour
+  // calculer la distance du trajet choisi.
   const calculerDistance = (long, lat, targetLong, targetLat) => {
     const dLat = toRadians(targetLat - lat);
     const dLon = toRadians(targetLong - long);
@@ -45,7 +67,9 @@ export default function SchedulePicker({ onClose }) {
     return (Math.round(distance * 100) / 100).toFixed(2);
   };
 
+  // Convertir les angles de degrés en radians.
   const toRadians = (degrees) => degrees * (Math.PI / 180);
+
 
   const formatTime = (date) => {
     const h = date.getHours().toString().padStart(2, '0');

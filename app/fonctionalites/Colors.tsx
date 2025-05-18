@@ -1,8 +1,8 @@
 import { estDarkMode } from "./VariablesGlobales";
 
-/** Couleurs selon le thème de l'application */
+/** Couleurs utilisées selon le thème de l'application */
 
-export const colors = ({  //   dark        light
+export const colors = ({//  Mode sombre : Mode clair
   arrierePlan: estDarkMode ? "#1c1c1c" : "#ebefeb",
   couleurSurVert: estDarkMode ? "#ebefeb" : "#ebefeb",
   couleurTexte: estDarkMode ? "#ebefeb" : "#121212",

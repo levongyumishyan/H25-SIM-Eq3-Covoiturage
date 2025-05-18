@@ -33,6 +33,7 @@ LogBox.ignoreLogs([
 export default function MapScreen() {
   const cameraRef = useRef<Camera>(null);
   const { upcomingRide } = useRideStore();
+  // Coordonnées de l'utilisateur
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
   const [selectedRide, setSelectedRide] = useState(null);
   const [showTrajet, setShowTrajet] = useState(false);
@@ -44,9 +45,15 @@ export default function MapScreen() {
   const [showSchedulePicker, setShowSchedulePicker] = useState(false);
   const [drivers, setDrivers] = useState([]);
 
+  // Latitude de l'utilisateur
   const setUserLat = useAuthStore((state) => state.setUserLat);
+  // Longitude de l'utilisateur
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
+  /**
+   * Cette méthode récupère tous les trajets
+   * enregistrés dans le serveur pour les afficher sur la carte.
+   */
   const fetchDrivers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
@@ -94,6 +101,11 @@ export default function MapScreen() {
     requestPermission();
   }, []);
 
+  /**
+   * 
+   * @param waypoints 
+   * @returns 
+   */
   const fetchRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
     const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=50;50&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
@@ -107,6 +119,12 @@ export default function MapScreen() {
     }
   };
 
+  /**
+   * Cette méthode permet de traduire les coordonnées
+   * (latitude et longitude) d'un endroit en une adresse.
+   * @param param0
+   * @returns 
+   */
   const reverseGeocode = async ([lng, lat]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
@@ -198,6 +216,7 @@ export default function MapScreen() {
         attributionEnabled={false}
         localizeLabels
       >
+        {/** Ceci affiche la position de l'utilisateur sur la carte. */}
         <UserLocation
           onUpdate={(location) => {
             const coords: [number, number] = [
@@ -221,6 +240,9 @@ export default function MapScreen() {
           shape={points}
           onPress={handlePinPress}
         >
+          {/** Ceci vérifie le niveau d'agrandissement de la carte pour déterminer
+           * s'il faut afficher un numéro de conducteurs.
+           */}
           <CircleLayer
             id="clusters"
             filter={['has', 'point_count']}
@@ -263,6 +285,7 @@ export default function MapScreen() {
 
         <Images images={{ pin }} />
 
+        {/** Ceci permet de tracer, sur la carte, une ligne qui relie le point de départ et la destination. */}
         {routeGeoJSON && (
           <ShapeSource id="route" shape={routeGeoJSON}>
             <LineLayer
@@ -276,8 +299,10 @@ export default function MapScreen() {
         )}
       </MapView>
 
+        {/** Bouton pour aller à l'endroit de l'utilisateur. */}
       <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
 
+        {/** Bouton '+' qui créer un trajet. */}
       <TrajetSearch
         onSheetChange={setIsSearchOpen}
         isAnotherSheetOpen={isRideDetailsOpen || showTrajet || showSchedulePicker}
