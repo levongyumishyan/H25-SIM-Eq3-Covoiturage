@@ -12,7 +12,7 @@ import Mapbox, {
   LocationPuck
 } from '@rnmapbox/maps';
 import * as Location from 'expo-location';
-import { colors } from './Colors';
+import { couleurs } from './Couleurs';
 import LocateButton from './LocateButton';
 import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';
@@ -196,7 +196,7 @@ export default function MapScreen() {
           position: 'absolute',
           top: 50,
           alignSelf: 'center',
-          backgroundColor: colors.vertPrincipal,
+          backgroundColor: couleurs.vertPrincipal,
           paddingHorizontal: 20,
           paddingVertical: 10,
           borderRadius: 20,
@@ -247,13 +247,13 @@ export default function MapScreen() {
             id="clusters"
             filter={['has', 'point_count']}
             style={{
-              circleColor: colors.vertPrincipal,
+              circleColor: couleurs.vertPrincipal,
               circleRadius: [
                 'step',
                 ['get', 'point_count'],
                 20, 10, 25, 25, 30,
               ],
-              circleStrokeColor: colors.blanc,
+              circleStrokeColor: couleurs.blanc,
               circleStrokeWidth: 3,
               circleOpacity: 0.9,
             }}
@@ -264,8 +264,8 @@ export default function MapScreen() {
             style={{
               textField: ['get', 'point_count'],
               textSize: 16,
-              textColor: colors.blanc,
-              textHaloColor: colors.vertPrincipal,
+              textColor: couleurs.blanc,
+              textHaloColor: couleurs.vertPrincipal,
               textHaloWidth: 1.5,
               textIgnorePlacement: true,
               textAllowOverlap: true,
@@ -291,7 +291,7 @@ export default function MapScreen() {
             <LineLayer
               id="route-line"
               style={{
-                lineColor: colors.vertPrincipal,
+                lineColor: couleurs.vertPrincipal,
                 lineWidth: 5,
               }}
             />

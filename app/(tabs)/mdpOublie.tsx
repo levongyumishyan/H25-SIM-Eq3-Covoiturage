@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native";
 import React, { useState } from "react";
-import { colors } from "../fonctionalites/Colors";
+import { couleurs } from "../fonctionalites/Couleurs";
 import { styles } from "../fonctionalites/Styles";
 import { Link } from "expo-router";
 
@@ -20,7 +20,7 @@ export default function Index() {
           onChangeText={setCourriel}
           value={courriel}
           placeholder="courriel@entreprise.ca"
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           keyboardType="email-address"
           autoCapitalize="none"
         />

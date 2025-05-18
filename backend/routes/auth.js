@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 
-// --- SIGNUP ---
+// --- SIGNUP/INSCRIPTION ---
 router.post("/signup", [
   body("nom").notEmpty().withMessage("Nom est requis"),
   body("email").isEmail().withMessage("Email invalide"),

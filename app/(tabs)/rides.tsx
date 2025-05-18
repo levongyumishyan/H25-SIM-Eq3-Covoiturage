@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../fonctionalites/Colors";
+import { couleurs } from "../fonctionalites/Couleurs";
 import { styles } from "../fonctionalites/Styles";
 import { useAuthStore } from "../fonctionalites/VariablesGlobales";
 import { useRideStore } from "../fonctionalites/useRideStore";
@@ -36,7 +36,7 @@ export default function Rides() {
   //Case d'affichage pour un trajet effectué
   const renderRide = ({ item }) => (
     <TouchableOpacity style={styles.ridecontainer}>
-      <Ionicons name="car-outline" size={24} color={colors.couleurTexte} style={styles.icon} />
+      <Ionicons name="car-outline" size={24} color={couleurs.couleurTexte} style={styles.icon} />
       <View style={styles.rideDetails}>
         <Text style={styles.label}>{item.pickupAddress} → {item.targetAddress}</Text>
         <Text style={styles.petitTexte}>{item.distance} km • À venir</Text>
@@ -85,15 +85,15 @@ export default function Rides() {
         {stats && (
           <View style={styles.ligneCentree}>
             <View style={styles.colonneCentree}>
-              <Ionicons name="leaf-outline" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="leaf-outline" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
             </View>
             <View style={styles.colonneCentree}>
-              <Ionicons name="cloud-outline" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="cloud-outline" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
             </View>
             <View style={styles.colonneCentree}>
-              <Ionicons name="bicycle" size={30} color={colors.vertSecondaire} />
+              <Ionicons name="bicycle" size={30} color={couleurs.vertSecondaire} />
               <Text style={styles.labelCentered}>{stats.totalDistance} km parcourus</Text>
             </View>
           </View>
@@ -103,7 +103,7 @@ export default function Rides() {
           <View style={styles.upcomingRideContainer}>
             <Text style={styles.titre}>Trajet en Cours</Text>
             <View style={styles.ridecontainer}>
-              <Ionicons name="car-sport-outline" size={24} color={colors.vertPrincipal} style={styles.icon} />
+              <Ionicons name="car-sport-outline" size={24} color={couleurs.vertPrincipal} style={styles.icon} />
               <View style={styles.rideDetails}>
                 <Text style={styles.label}>{upcomingRide.origin} → {upcomingRide.destination}</Text>
                 <Text style={styles.petitTexte}>{upcomingRide.distance} km • En cours...</Text>

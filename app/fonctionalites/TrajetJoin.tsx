@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './Styles';
-import { colors } from './Colors';
+import { couleurs } from './Couleurs';
 import { BASE_URL } from '../apiConfig';
 import { useAuthStore } from './VariablesGlobales';
 
@@ -120,57 +120,57 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
           onPress={() => sheetRef.current?.close()}
           style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}
         >
-          <Ionicons name="close" size={24} color={colors.grisPrincipal} />
+          <Ionicons name="close" size={24} color={couleurs.grisPrincipal} />
         </TouchableOpacity>
 
-        <Text style={[styles.sousTitre, { marginTop: 20, color: colors.couleurTexteInverse }]}>
+        <Text style={[styles.sousTitre, { marginTop: 20, color: couleurs.couleurTexteInverse }]}>
           Trajet proposé
         </Text>
 
-        <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse, marginBottom: 16 }]}>
+        <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse, marginBottom: 16 }]}>
           Proposé par {currentRide?.userId?.prenom && currentRide?.userId?.nom
             ? `${currentRide.userId.prenom} ${currentRide.userId.nom}`
             : 'utilisateur inconnu'}
         </Text>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Point de départ</Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Point de départ</Text>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {currentRide?.pickupAddress || 'Adresse inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Destination</Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Destination</Text>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {currentRide?.targetAddress || 'Adresse inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Distance</Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Distance</Text>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {currentRide?.distance ? `${currentRide.distance.toFixed(1)} km` : 'Distance inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Jours</Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Jours</Text>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {scheduleDays}
           </Text>
 
-          <Text style={[styles.label, { color: colors.couleurTexteInverse, marginTop: 10 }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse, marginTop: 10 }]}>
             Heure
           </Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {scheduleTime}
           </Text>
         </View>
 
         <View style={{ marginBottom: 20 }}>
-          <Text style={[styles.label, { color: colors.couleurTexteInverse }]}>Places disponibles</Text>
-          <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+          <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Places disponibles</Text>
+          <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
             {numberOfSeats ? `${numberOfSeats} place${numberOfSeats > 1 ? 's' : ''}` : 'Non spécifié'}
           </Text>
         </View>
@@ -179,12 +179,12 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
           <TouchableOpacity
             style={[
               styles.bouton,
-              isFull && !alreadyJoined && { backgroundColor: colors.grisSecondaire },
+              isFull && !alreadyJoined && { backgroundColor: couleurs.grisSecondaire },
             ]}
             disabled={isFull && !alreadyJoined}
             onPress={alreadyJoined ? handleUnjoinRide : handleJoinRide}
           >
-            <Text style={[styles.boutonTexte, { color: colors.couleurTexte }]}>
+            <Text style={[styles.boutonTexte, { color: couleurs.couleurTexte }]}>
               {alreadyJoined
                 ? 'Quitter ce trajet'
                 : isFull

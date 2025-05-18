@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 import { styles } from "./Styles";
-import { colors } from "./Colors";
+import { couleurs } from "./Couleurs";
 import { BASE_URL } from "~/apiConfig";
 import { useAuthStore } from "./VariablesGlobales";
 import logo from "../assets/images/logo.png";
@@ -125,20 +125,20 @@ const Settings = () => {
         {isEditing ? (
           <TextInput
             autoFocus
-            style={[styles.inputSettings, { color: colors.couleurTexteInverse }]}
+            style={[styles.inputSettings, { color: couleurs.couleurTexteInverse }]}
             value={formattedValue}
             onChangeText={handleTextChange}
             keyboardType={keyboardType}
             onBlur={() => setEditingField(null)}
             placeholder={label}
-            placeholderTextColor={colors.grisPrincipal}
+            placeholderTextColor={couleurs.grisPrincipal}
           />
         ) : (
           <View>
-            <Text style={[styles.labelLeft, { color: colors.couleurTexteInverse }]}>
+            <Text style={[styles.labelLeft, { color: couleurs.couleurTexteInverse }]}>
               {label}
             </Text>
-            <Text style={[styles.petitTexte, { color: colors.couleurTexteInverse }]}>
+            <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
               {formattedValue || "(Cliquez pour ajouter)"}
             </Text>
           </View>
@@ -165,7 +165,7 @@ const Settings = () => {
         />
 
         <View style={styles.card}>
-          <Text style={[styles.sousTitre, { color: colors.couleurTexteInverse, marginBottom: 20 }]}>
+          <Text style={[styles.sousTitre, { color: couleurs.couleurTexteInverse, marginBottom: 20 }]}>
             Réglages utilisateur
           </Text>
 

@@ -11,7 +11,7 @@ import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { styles } from './Styles';
-import { colors } from './Colors';
+import { couleurs } from './Couleurs';
 import { BASE_URL } from '~/apiConfig';
 import { useAuthStore } from './VariablesGlobales';
 
@@ -116,7 +116,7 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
           <Text
             style={{
               ...styles.labelInverse,
-              color: isSelected ? colors.blanc : colors.noir,
+              color: isSelected ? couleurs.blanc : couleurs.noir,
               textDecorationLine: isSelected ? 'underline' : 'none'
             }}
           >
@@ -129,17 +129,17 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
 
   return (
     <View style={[styles.searchBoxWrapper, {
-      backgroundColor: colors.blanc,
+      backgroundColor: couleurs.blanc,
       borderRadius: 12,
       elevation: 5,
       padding: 10,
     }]}>
       <View style={styles.ligneCentree}>
-        <Ionicons name="search" size={30} color={colors.noir} style={styles.searchIcon} />
+        <Ionicons name="search" size={30} color={couleurs.noir} style={styles.searchIcon} />
         <TextInput
           style={styles.labelInverse}
           placeholder={'Où allez-vous ?'}
-          placeholderTextColor={colors.noir}
+          placeholderTextColor={couleurs.noir}
           value={input}
           onChangeText={setInput}
         />

@@ -1,5 +1,5 @@
 import { Tabs, useNavigation } from 'expo-router';
-import { colors } from '../fonctionalites/Colors';
+import { couleurs } from '../fonctionalites/Couleurs';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions, StatusBar, BackHandler } from 'react-native';
 import React, { useCallback } from 'react';
@@ -39,16 +39,16 @@ export default function TabLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar barStyle="light-content" backgroundColor={colors.arrierePlan} />
+      <StatusBar barStyle="light-content" backgroundColor={couleurs.arrierePlan} />
 
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: colors.couleurSurVert,
-          tabBarInactiveTintColor: colors.couleurSurVert,
+          tabBarActiveTintColor: couleurs.couleurSurVert,
+          tabBarInactiveTintColor: couleurs.couleurSurVert,
           headerShown: false,
           tabBarStyle: estConnecte
             ? {
-              backgroundColor: colors.vertPrincipal,
+              backgroundColor: couleurs.vertPrincipal,
               height: 80,
               position: 'absolute',
               elevation: 8,

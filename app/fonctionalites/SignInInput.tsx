@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, Text, TouchableOpacity, View, ScrollView, Platform, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from './Colors';
+import { couleurs } from './Couleurs';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { styles } from './Styles';
 import Checkbox from 'expo-checkbox';
@@ -114,22 +114,22 @@ const SignUpInput = () => {
 
         <Text style={styles.sousTitre}>Prénom</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setPrenom}
           value={prenom}
           placeholder=""
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           keyboardType="default"
           autoCapitalize="words"
         />
 
         <Text style={styles.sousTitre}>Nom</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setNom}
           value={nom}
           placeholder=""
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           keyboardType="default"
           autoCapitalize="words"
         />
@@ -157,43 +157,43 @@ const SignUpInput = () => {
 
         <Text style={styles.sousTitre}>Téléphone</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setTelephone}
           value={telephone}
           placeholder="(514) 666-6666"
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           keyboardType="numeric"
           autoCapitalize="none"
         />
 
         <Text style={styles.sousTitre}>Courriel</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setCourriel}
           value={courriel}
           placeholder="courriel@entreprise.ca"
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           keyboardType="email-address"
           autoCapitalize="none"
         />
 
         <Text style={styles.sousTitre}>Mot de passe</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setMdp}
           value={mdp}
           placeholder="**********"
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           secureTextEntry
         />
 
         <Text style={styles.sousTitre}>Vérifier votre mot de passe</Text>
         <TextInput
-          style={[styles.input, { color: colors.couleurTexteInverse }]}
+          style={[styles.input, { color: couleurs.couleurTexteInverse }]}
           onChangeText={setMdpVerif}
           value={mdpVerif}
           placeholder="**********"
-          placeholderTextColor={colors.grisPrincipal}
+          placeholderTextColor={couleurs.grisPrincipal}
           secureTextEntry
         />
 
@@ -212,7 +212,7 @@ const SignUpInput = () => {
                   setConducteur(val);
                   if (val) setPassager(false);
                 }}
-                color={conducteur ? colors.vertPrincipal : undefined}
+                color={conducteur ? couleurs.vertPrincipal : undefined}
               />
             </View>
           )}
@@ -226,7 +226,7 @@ const SignUpInput = () => {
                   setPassager(val);
                   if (val) setConducteur(false);
                 }}
-                color={passager ? colors.vertPrincipal : undefined}
+                color={passager ? couleurs.vertPrincipal : undefined}
               />
             </View>
           )}
@@ -239,7 +239,7 @@ const SignUpInput = () => {
                 onChangeText={setModeleVoiture}
                 value={modeleVoiture}
                 placeholder=""
-                placeholderTextColor={colors.grisPrincipal}
+                placeholderTextColor={couleurs.grisPrincipal}
               />
 
               <Text style={styles.sousTitre}>Année</Text>
@@ -248,7 +248,7 @@ const SignUpInput = () => {
                 onChangeText={setAnneeVoiture}
                 value={anneeVoiture}
                 placeholder=""
-                placeholderTextColor={colors.grisPrincipal}
+                placeholderTextColor={couleurs.grisPrincipal}
                 keyboardType="numeric"
               />
 
@@ -260,7 +260,7 @@ const SignUpInput = () => {
                 onChangeText={setConsommationVoiture}
                 value={consommationVoiture}
                 placeholder=""
-                placeholderTextColor={colors.grisPrincipal}
+                placeholderTextColor={couleurs.grisPrincipal}
                 keyboardType="numeric"
               />
             </View>
