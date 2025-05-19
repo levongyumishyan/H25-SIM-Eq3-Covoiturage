@@ -15,7 +15,7 @@ const formatPhone = (value) => {
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 };
 
-const Settings = () => {
+const Reglages = () => {
   // Variables globales
   const {
     estConnecte,
@@ -191,4 +191,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Reglages;

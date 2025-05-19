@@ -8,7 +8,7 @@ import Checkbox from 'expo-checkbox';
 import { BASE_URL } from '../apiConfig';
 import { Link } from 'expo-router';
 
-const SignUpInput = () => {
+const Inscription = () => {
   //Variables de l'utilisateur
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
@@ -276,4 +276,4 @@ const SignUpInput = () => {
   );
 };
 
-export default SignUpInput;
+export default Inscription;

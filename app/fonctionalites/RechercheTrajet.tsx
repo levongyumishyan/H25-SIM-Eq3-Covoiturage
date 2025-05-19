@@ -11,7 +11,7 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
   const sheetRef = useRef(null);
   const BoiteDeRechercheRef = useRef(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [showSchedule, setShowSchedule] = useState(false);
+  const [montrerHoraire, setMontrerHoraire] = useState(false);
 
   const snapPoints = useMemo(() => ['30%', '60%'], []);
 
@@ -22,11 +22,11 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
   };
 
   const handleSheetChange = (index) => {
-    const closed = index === -1;
-    setIsSheetOpen(!closed);
-    onSheetChange(!closed);
-    if (closed) {
-      setShowSchedule(false);
+    const estFerme = index === -1;
+    setIsSheetOpen(!estFerme);
+    onSheetChange(!estFerme);
+    if (estFerme) {
+      setMontrerHoraire(false);
     }
   };
 
@@ -35,14 +35,14 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
       BoiteDeRechercheRef.current.confirmSchedule(schedule);
       console.log("Sending schedule to BoiteDeRecherche:", schedule);
     }
-    setShowSchedule(false);
+    setMontrerHoraire(false);
     setIsSheetOpen(false);
     onSheetChange(false);
     sheetRef.current?.close();
   };
 
 
-  const shouldShowPlusButton = !isSheetOpen && !isAnotherSheetOpen && !showSchedule;
+  const montrerBoutonPlus = !isSheetOpen && !isAnotherSheetOpen && !montrerHoraire;
 
   return (
     <>
@@ -55,8 +55,8 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
       >
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
           <>
-            {!showSchedule ? (
-              <BoiteDeRecherche ref={BoiteDeRechercheRef} onSelect={() => setShowSchedule(true)} />
+            {!montrerHoraire ? (
+              <BoiteDeRecherche ref={BoiteDeRechercheRef} onSelect={() => setMontrerHoraire(true)} />
             ) : (
               <SelecteurHoraire onClose={handleScheduleConfirm} />
             )}
@@ -65,7 +65,7 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
         </BottomSheetView>
       </BottomSheet>
 
-      {shouldShowPlusButton && (
+      {montrerBoutonPlus && (
         <TouchableOpacity style={styles.trajetButton} onPress={openBottomSheet}>
           <Ionicons name="add" size={30} color={couleurs.blanc} />
         </TouchableOpacity>

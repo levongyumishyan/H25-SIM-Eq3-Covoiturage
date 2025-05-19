@@ -8,7 +8,7 @@ import { useAuthStore } from './VariablesGlobales';
 // permettant à l'utilisateur de planifier son trajet
 // à l'aide d'un horaire qu'il peut créer.
 
-const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
+const joursDeLaSemaine = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
 export default function SelecteurHoraire({ onClose }) {
   const [time, setTime] = useState(() => {
@@ -186,7 +186,7 @@ export default function SelecteurHoraire({ onClose }) {
       </View>
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
-        {weekdays.map((day, idx) => (
+        {joursDeLaSemaine.map((day, idx) => (
           <TouchableOpacity
             key={idx}
             onPress={() => toggleDay(day)}

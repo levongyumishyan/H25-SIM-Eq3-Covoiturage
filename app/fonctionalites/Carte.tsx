@@ -137,7 +137,7 @@ export default function EcranCarte() {
     }
   };
 
-  const closeTrajet = () => {
+  const fermerTrajet = () => {
     setMontrerTrajet(false);
     setTrajetChoisi(null);
     setRouteGeoJSON(null);
@@ -299,10 +299,10 @@ export default function EcranCarte() {
         )}
       </MapView>
 
-        {/** Bouton pour aller à l'endroit de l'utilisateur. */}
+        {/** Bouton pour aller à la position de l'utilisateur sur la carte. */}
       <BoutonLocalisation cameraRef={cameraRef} userCoords={userCoords} />
 
-        {/** Bouton '+' qui créer un trajet. */}
+        {/** Bouton '+' qui permet de créer un trajet. */}
       <RechercheTrajet
         onSheetChange={setIsSearchOpen}
         isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire}
@@ -316,7 +316,7 @@ export default function EcranCarte() {
           adresseDestination={adresseDestination}
           distanceKm={routeGeoJSON} // or calculate real one
           visible={true}
-          onClose={closeTrajet}
+          onClose={fermerTrajet}
         />
       )}
 

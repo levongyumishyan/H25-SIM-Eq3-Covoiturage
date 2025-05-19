@@ -8,8 +8,8 @@ import { useAuthStore } from '../fonctionalites/VariablesGlobales';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 
-const { width } = Dimensions.get("window");
-const iconSize = width * 0.075;
+const { largeur } = Dimensions.get("window");
+const tailleIcon = largeur * 0.075;
 
 
 /**
@@ -73,29 +73,29 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen
-          name="map"
+          name="carte"
           options={{
             tabBarButton: estConnecte ? undefined : () => null,
             tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'map' : 'map-outline'} color={color} size={iconSize} />
+              <Ionicons name={focused ? 'map' : 'map-outline'} color={color} size={tailleIcon} />
             ),
           }}
         />
         <Tabs.Screen
-          name="rides"
+          name="trajets"
           options={{
             tabBarButton: estConnecte ? undefined : () => null,
             tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'car' : 'car-outline'} color={color} size={iconSize} />
+              <Ionicons name={focused ? 'car' : 'car-outline'} color={color} size={tailleIcon} />
             ),
           }}
         />
         <Tabs.Screen
-          name="account"
+          name="compte"
           options={{
             tabBarButton: estConnecte ? undefined : () => null,
             tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={iconSize} />
+              <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={tailleIcon} />
             ),
           }}
         />

@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import * as Location from 'expo-location';
+import * as Position from 'expo-position';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { styles } from './Styles';
@@ -21,23 +21,22 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
   // Ce que l'utilisateur rentrera dans la boite de recherche (SearchBox)
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]); 
-  const [location, setLocation] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [position, setPosition] = useState(null);
+  const [adresseSelectionnee, setAdresseSelectionnee] = useState(null);
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
   const setTargetLat = useAuthStore((state) => state.setTargetLat);
   const setTargetLong = useAuthStore((state) => state.setTargetLong);
 
   useImperativeHandle(ref, () => ({
-    confirmSchedule,
+    confirmerHoraire,
   }));
 
   useEffect(() => {
     (async () => {
-      const loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc.coords);
-      console.log("coordonnées actuelles raw: " + location);
-      S
+      const loc = await Position.getCurrentPositionAsync({});
+      setPosition(loc.coords);
+      console.log("coordonnées actuelles raw: " + position);
     })();
   }, []);
 
@@ -51,16 +50,22 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
     const fetchSuggestions = async () => {
       const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
         input
-      )}.json?proximity=${location?.longitude},${location?.latitude}&autocomplete=true&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+      )}.json?proximity=${position?.longitude},${position?.latitude}&autocomplete=true&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
       const res = await fetch(url);
       const data = await res.json();
       setSuggestions(data.features || []);
     };
-    if (location) fetchSuggestions();
-  }, [input, location]);
+    if (position) fetchSuggestions();
+  }, [input, position]);
 
-  const handleSelect = (place_name, coords) => {
-    setSelectedAddress(place_name);
+  /**
+   * Enregistre le nom et les coordonnées pour afficher
+   * la destination sur la carte.
+   * @param nomDuEndroit Le nom de la destination
+   * @param coords Les coordonnées de la destination
+   */
+  const handleSelect = (nomDuEndroit, coords) => {
+    setAdresseSelectionnee(nomDuEndroit);
     setPendingTargetCoords(coords);
     console.log(coords[1]);
     setTargetLong(coords[0]);
@@ -75,12 +80,12 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
    * @param schedule L'horaire choisi par l'utilisateur
    * @returns 
    */
-  const confirmSchedule = async (schedule) => {
-    if (!location || !pendingTargetCoords) return;
+  const confirmerHoraire = async (schedule) => {
+    if (!position || !pendingTargetCoords) return;
     try {
       const body = {
-        long: location.longitude,
-        lat: location.latitude,
+        long: position.longitude,
+        lat: position.latitude,
         targetLong: pendingTargetCoords[0],
         targetLat: pendingTargetCoords[1],
       };
@@ -103,24 +108,29 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
     }
   };
 
-  const renderSuggestions = ({ item }) => {
-    const { place_name, geometry } = item;
-    const coords = geometry?.coordinates ?? [];
-    const isSelected = selectedAddress === place_name;
+  /**
+   * 
+   * @param item0 
+   * @returns 
+   */
+  const donnerSuggestions = ({ item }) => {
+    const { nomDuEndroit, geometrie } = item;
+    const coordonnees = geometrie?.coordinates ?? [];
+    const estSelectionne = adresseSelectionnee === nomDuEndroit;
     return (
       <TouchableOpacity
         style={styles.trajetItem}
-        onPress={() => handleSelect(place_name, coords)}
+        onPress={() => handleSelect(nomDuEndroit, coordonnees)}
       >
         <View>
           <Text
             style={{
               ...styles.labelInverse,
-              color: isSelected ? couleurs.blanc : couleurs.noir,
-              textDecorationLine: isSelected ? 'underline' : 'none'
+              color: estSelectionne ? couleurs.blanc : couleurs.noir,
+              textDecorationLine: estSelectionne ? 'underline' : 'none'
             }}
           >
-            {place_name}
+            {nomDuEndroit}
           </Text>
         </View>
       </TouchableOpacity>
@@ -147,10 +157,10 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
 
       {suggestions.length > 0 && (
         <FlatList
-          style={{ marginTop: 10, maxHeight: 180 }} // limit size if needed
+          style={{ marginTop: 10, maxHeight: 180 }} // Limiter la taille si nécessaire
           data={suggestions}
           keyExtractor={(item, index) => item.id + index}
-          renderItem={renderSuggestions}
+          renderItem={donnerSuggestions}
         />
       )}
     </View>

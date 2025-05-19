@@ -8,7 +8,7 @@ import { styles } from './Styles';
 import { useAuthStore } from './VariablesGlobales';
 import { BASE_URL } from '../apiConfig';
 
-const LoginInput = () => {
+const Connexion = () => {
   // Variables locales
   const [courriel, setCourriel] = useState('');
   const [mdp, setMdp] = useState('');
@@ -141,4 +141,4 @@ const LoginInput = () => {
   );
 };
 
-export default LoginInput;
+export default Connexion;
