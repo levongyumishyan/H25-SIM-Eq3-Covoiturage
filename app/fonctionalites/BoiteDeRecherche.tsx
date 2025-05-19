@@ -17,7 +17,7 @@ import { useAuthStore } from './VariablesGlobales';
 
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
-const SearchBox = forwardRef(({ onSelect }, ref) => {
+const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
   // Ce que l'utilisateur rentrera dans la boite de recherche (SearchBox)
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]); 
@@ -158,4 +158,4 @@ const SearchBox = forwardRef(({ onSelect }, ref) => {
   );
 });
 
-export default SearchBox;
+export default BoiteDeRecherche;

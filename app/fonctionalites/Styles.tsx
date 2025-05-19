@@ -3,6 +3,10 @@ import { couleurs } from './Couleurs';
 
 const { width, height } = Dimensions.get('window');
 
+//** Cette classe contient toutes les styles configurés
+// en avance. Ils sont alors utilisés pour créer l'apparence
+// de chaque page de l'application.
+// */
 export const styles = StyleSheet.create({
   // ---------- Mise en page ----------
   card: {
@@ -238,7 +242,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: height * 0.9,
   },
-  boutonLocalisation: {
+  locationButton: {
     position: 'absolute',
     bottom: 100,
     right: 20,
@@ -267,11 +271,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
     zIndex: 999,
   },
-
-  // ---------- Inscription ----------
-
-
-
 
   // ---------- Boite de recherche ----------
   searchBoxWrapper: {

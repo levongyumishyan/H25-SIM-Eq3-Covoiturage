@@ -13,15 +13,15 @@ import Mapbox, {
 } from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 import { couleurs } from './Couleurs';
-import LocateButton from './BoutonLocalisation';
+import BoutonLocalisation from './BoutonLocalisation';
 import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';
 import { estDarkMode, useAuthStore } from './VariablesGlobales';
-import TrajetSearch from './TrajetSearch';
-import Trajet from './TrajetJoin';
+import RechercheTrajet from './RechercheTrajet';
+import Trajet from './RejoindreTrajet';
 import SelecteurHoraire from './SelecteurHoraire';
 import { useRideStore } from './useRideStore';
-import TrajetBottomSheet from './TrajetJoin';
+import TrajetBottomSheet from './RejoindreTrajet';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
@@ -300,10 +300,10 @@ export default function EcranCarte() {
       </MapView>
 
         {/** Bouton pour aller à l'endroit de l'utilisateur. */}
-      <LocateButton cameraRef={cameraRef} userCoords={userCoords} />
+      <BoutonLocalisation cameraRef={cameraRef} userCoords={userCoords} />
 
         {/** Bouton '+' qui créer un trajet. */}
-      <TrajetSearch
+      <RechercheTrajet
         onSheetChange={setIsSearchOpen}
         isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire}
       />

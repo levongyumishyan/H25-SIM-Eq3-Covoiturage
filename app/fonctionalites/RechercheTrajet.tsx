@@ -4,12 +4,12 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Ionicons } from '@expo/vector-icons';
 import { couleurs } from './Couleurs';
 import { styles } from './Styles';
-import SearchBox from './SearchBox';
+import BoiteDeRecherche from './BoiteDeRecherche';
 import SelecteurHoraire from './SelecteurHoraire';
 
-export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
+export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
   const sheetRef = useRef(null);
-  const searchBoxRef = useRef(null);
+  const BoiteDeRechercheRef = useRef(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showSchedule, setShowSchedule] = useState(false);
 
@@ -31,9 +31,9 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
   };
 
   const handleScheduleConfirm = (schedule) => {
-    if (searchBoxRef.current) {
-      searchBoxRef.current.confirmSchedule(schedule);
-      console.log("Sending schedule to SearchBox:", schedule);
+    if (BoiteDeRechercheRef.current) {
+      BoiteDeRechercheRef.current.confirmSchedule(schedule);
+      console.log("Sending schedule to BoiteDeRecherche:", schedule);
     }
     setShowSchedule(false);
     setIsSheetOpen(false);
@@ -56,7 +56,7 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
         <BottomSheetView style={{ flex: 1, padding: 10 }}>
           <>
             {!showSchedule ? (
-              <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
+              <BoiteDeRecherche ref={BoiteDeRechercheRef} onSelect={() => setShowSchedule(true)} />
             ) : (
               <SelecteurHoraire onClose={handleScheduleConfirm} />
             )}
