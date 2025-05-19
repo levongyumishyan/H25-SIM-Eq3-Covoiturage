@@ -30,7 +30,7 @@ const LoginInput = () => {
    * 
    * L'application communique avec le serveur à l'aide de cette méthode.
    * Celle-ci envoie les données de l'utilisateur au serveur. Ensuite,
-   * le serveur vérifie les donnés et donne une réponse en format JSON.
+   * le serveur vérifie les données et donne une réponse en format JSON.
    */
   const verifierConnection = async () => {
     try {

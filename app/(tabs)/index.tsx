@@ -15,7 +15,7 @@ export default function App() {
   const nomUtilisateur = useAuthStore((state) => state.prenomUtilisateur);
 
 
-  //Animation d'ouverture d'application
+  //Affiche l'animation d'ouverture de l'application
   useEffect(() => {
     const load = async () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -50,6 +50,9 @@ export default function App() {
           {estConnecte ? 'Bon retour !' : 'Application de Covoiturage'}
         </Text>
 
+        {/** Affiche les options pour s'inscrire ou se connecter
+         * si l'utilisateur n'est pas inscrit ou connecté.
+         */}
         {!estConnecte && (
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.bouton} onPress={() => router.push('/inscription')}>

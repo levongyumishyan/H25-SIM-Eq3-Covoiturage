@@ -32,18 +32,18 @@ LogBox.ignoreLogs([
 
 export default function MapScreen() {
   const cameraRef = useRef<Camera>(null);
-  const { upcomingRide } = useRideStore();
+  const { prochainTrajet } = useRideStore();
   // Coordonnées de l'utilisateur
   const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
-  const [selectedRide, setSelectedRide] = useState(null);
-  const [showTrajet, setShowTrajet] = useState(false);
+  const [trajetChoisi, setTrajetChoisi] = useState(null);
+  const [montrerTrajet, setMontrerTrajet] = useState(false);
   const [routeGeoJSON, setRouteGeoJSON] = useState(null);
-  const [pickupStreet, setPickupStreet] = useState('');
-  const [targetStreet, setTargetStreet] = useState('');
+  const [adresseDepart, setAdresseDepart] = useState('');
+  const [adresseDestination, setAdresseDestination] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
   const [showSchedulePicker, setShowSchedulePicker] = useState(false);
-  const [drivers, setDrivers] = useState([]);
+  const [conducteurs, setConducteurs] = useState([]);
 
   // Latitude de l'utilisateur
   const setUserLat = useAuthStore((state) => state.setUserLat);
@@ -54,14 +54,14 @@ export default function MapScreen() {
    * Cette méthode récupère tous les trajets
    * enregistrés dans le serveur pour les afficher sur la carte.
    */
-  const fetchDrivers = async () => {
+  const fetchconducteurs = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
 
       try {
         const data = JSON.parse(text);
-        setDrivers(data);
+        setConducteurs(data);
       } catch (parseError) {
         console.error('JSON parse error:', parseError.message);
         console.error('Response:', text);
@@ -74,14 +74,14 @@ export default function MapScreen() {
 
 
   useEffect(() => {
-    fetchDrivers();
-    const interval = setInterval(fetchDrivers, 10000);
+    fetchconducteurs();
+    const interval = setInterval(fetchconducteurs, 10000);
     return () => clearInterval(interval);
   }, []);
 
   const points = {
     type: 'FeatureCollection',
-    features: drivers.map((driver, index) => ({
+    features: conducteurs.map((driver, index) => ({
       type: 'Feature',
       geometry: {
         type: 'Point',
@@ -138,11 +138,11 @@ export default function MapScreen() {
   };
 
   const closeTrajet = () => {
-    setShowTrajet(false);
-    setSelectedRide(null);
+    setMontrerTrajet(false);
+    setTrajetChoisi(null);
     setRouteGeoJSON(null);
-    setPickupStreet('');
-    setTargetStreet('');
+    setAdresseDepart('');
+    setAdresseDestination('');
   };
 
   const handlePinPress = async (event) => {
@@ -177,21 +177,21 @@ export default function MapScreen() {
         const pickupAddress = await reverseGeocode(rideCoords);
         const targetAddress = await reverseGeocode(targetCoords);
 
-        setPickupStreet(pickupAddress);
-        setTargetStreet(targetAddress);
-        setSelectedRide(feature.properties);
-        setShowTrajet(true);
+        setAdresseDepart(pickupAddress);
+        setAdresseDestination(targetAddress);
+        setTrajetChoisi(feature.properties);
+        setMontrerTrajet(true);
       }
     }
 
-    console.log("showTrajet:", showTrajet);
-    console.log("selectedRide:", selectedRide);
+    console.log("montrerTrajet:", montrerTrajet);
+    console.log("trajetChoisi:", trajetChoisi);
 
   };
 
   return (
     <View style={{ flex: 1 }}>
-      {upcomingRide && (
+      {prochainTrajet && (
         <View style={{
           position: 'absolute',
           top: 50,
@@ -203,7 +203,7 @@ export default function MapScreen() {
           zIndex: 10,
         }}>
           <Text style={{ color: 'white', fontWeight: 'bold' }}>
-            🚴‍♂️ Trajet en cours: {upcomingRide.origin} ➔ {upcomingRide.destination}
+            🚴‍♂️ Trajet en cours: {prochainTrajet.origin} ➔ {prochainTrajet.destination}
           </Text>
         </View>
       )}
@@ -234,7 +234,7 @@ export default function MapScreen() {
         <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
         <ShapeSource
-          id="drivers"
+          id="conducteurs"
           cluster
           clusterRadius={50}
           shape={points}
@@ -272,7 +272,7 @@ export default function MapScreen() {
             }}
           />
           <SymbolLayer
-            id="drivers-icons"
+            id="conducteurs-icons"
             filter={['!', ['has', 'point_count']]}
             style={{
               iconImage: 'pin',
@@ -305,25 +305,25 @@ export default function MapScreen() {
         {/** Bouton '+' qui créer un trajet. */}
       <TrajetSearch
         onSheetChange={setIsSearchOpen}
-        isAnotherSheetOpen={isRideDetailsOpen || showTrajet || showSchedulePicker}
+        isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || showSchedulePicker}
       />
 
       {/* Bottom Sheet Overlay */}
-      {showTrajet && selectedRide && (
+      {montrerTrajet && trajetChoisi && (
         <TrajetBottomSheet
-          ride={selectedRide}
-          pickupStreet={pickupStreet}
-          targetStreet={targetStreet}
+          ride={trajetChoisi}
+          adresseDepart={adresseDepart}
+          adresseDestination={adresseDestination}
           distanceKm={routeGeoJSON} // or calculate real one
           visible={true}
           onClose={closeTrajet}
         />
       )}
 
-      {showSchedulePicker && selectedRide && (
+      {showSchedulePicker && trajetChoisi && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
           <SchedulePicker
-            ride={selectedRide}
+            ride={trajetChoisi}
             onClose={() => setShowSchedulePicker(false)}
           />
         </View>

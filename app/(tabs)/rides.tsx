@@ -10,17 +10,22 @@ import { BASE_URL } from "../apiConfig";
 
 export default function Rides() {
   const userId = useAuthStore((state) => state.userId);
-  const upcomingRide = useRideStore((state) => state.upcomingRide);
-  const clearUpcomingRide = useRideStore((state) => state.clearUpcomingRide);
-  const [rides, setRides] = useState([]);
-  const [stats, setStats] = useState(null);
+  const prochainTrajet = useRideStore((state) => state.prochainTrajet);
+  const effacerProchainTrajet = useRideStore((state) => state.effacerProchainTrajet);
+  const [trajets, setTrajets] = useState([]);
+  const [statistiques, setStatistiques] = useState(null);
 
   useEffect(() => {
     if (userId) actualiserTrajets();
   }, [userId]);
 
-  //Statitistiques écolo
-  const calculateStats = (rides) => {
+  /**
+   * Calcule les statistiques sur la préservation de
+   * l'environnement.
+   * @param rides Les trajets effectués par l'utilisateur
+   * @returns 
+   */
+  const calculerStatistiques = (rides) => {
     const totalDistance = rides.reduce((sum, ride) => sum + (ride.distance || 0), 0);
     const co2Saved = totalDistance * 0.21;
     const treesSaved = co2Saved / 21;
@@ -44,10 +49,13 @@ export default function Rides() {
     </TouchableOpacity>
   );
 
-  //Get les trajets de l'utilisateur connecté uniquement
+  /**
+   * Demande au serveur du backend uniquement les trajets
+   * effectués par l'utilisateur connecté.
+   */
   const actualiserTrajets = async () => {
     try {
-      setRides(null);
+      setTrajets(null);
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
 
@@ -58,8 +66,8 @@ export default function Rides() {
             trajet.userId === userId ||
             (Array.isArray(trajet.passengers) && trajet.passengers.includes(userId))
         );
-        setRides(trajetsFiltres);
-        setStats(calculateStats(trajetsFiltres));
+        setTrajets(trajetsFiltres);
+        setStatistiques(calculerStatistiques(trajetsFiltres));
 
       } catch (parseError) {
         console.error('erreur transfert json', parseError.message);
@@ -70,10 +78,10 @@ export default function Rides() {
   };
 
   //Pas fini
-  const completeRide = () => {
-    if (upcomingRide) {
-      setRides((prev) => [upcomingRide, ...prev]);
-      clearUpcomingRide();
+  const completerTrajet = () => {
+    if (prochainTrajet) {
+      setTrajets((prev) => [prochainTrajet, ...prev]);
+      effacerProchainTrajet();
     }
   };
 
@@ -82,46 +90,46 @@ export default function Rides() {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
         {/*Statistiques écolo de l'utilisateur*/}
-        {stats && (
+        {statistiques && (
           <View style={styles.ligneCentree}>
             <View style={styles.colonneCentree}>
               <Ionicons name="leaf-outline" size={30} color={couleurs.vertSecondaire} />
-              <Text style={styles.labelCentered}>{stats.treesSaved} arbres sauvés</Text>
+              <Text style={styles.labelCentered}>{statistiques.treesSaved} arbres sauvés</Text>
             </View>
             <View style={styles.colonneCentree}>
               <Ionicons name="cloud-outline" size={30} color={couleurs.vertSecondaire} />
-              <Text style={styles.labelCentered}>{stats.co2Reduced} CO₂ réduit</Text>
+              <Text style={styles.labelCentered}>{statistiques.co2Reduced} CO₂ réduit</Text>
             </View>
             <View style={styles.colonneCentree}>
               <Ionicons name="bicycle" size={30} color={couleurs.vertSecondaire} />
-              <Text style={styles.labelCentered}>{stats.totalDistance} km parcourus</Text>
+              <Text style={styles.labelCentered}>{statistiques.totalDistance} km parcourus</Text>
             </View>
           </View>
         )}
 
-        {upcomingRide && ( //Pas fini
-          <View style={styles.upcomingRideContainer}>
+        {prochainTrajet && ( //Pas fini
+          <View style={styles.prochainTrajetContainer}>
             <Text style={styles.titre}>Trajet en Cours</Text>
             <View style={styles.ridecontainer}>
               <Ionicons name="car-sport-outline" size={24} color={couleurs.vertPrincipal} style={styles.icon} />
               <View style={styles.rideDetails}>
-                <Text style={styles.label}>{upcomingRide.origin} → {upcomingRide.destination}</Text>
-                <Text style={styles.petitTexte}>{upcomingRide.distance} km • En cours...</Text>
+                <Text style={styles.label}>{prochainTrajet.origin} → {prochainTrajet.destination}</Text>
+                <Text style={styles.petitTexte}>{prochainTrajet.distance} km • En cours...</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.bouton} onPress={completeRide}>
+            <TouchableOpacity style={styles.bouton} onPress={completerTrajet}>
               <Text style={styles.boutonTexte}>Terminer le trajet</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Affichage de tous les trajets de l'utlisateur*/}
+        {/* Affichage de tous les trajets de l'utilisateur*/}
         <Text style={styles.titre}>Trajets Récents</Text>
         <TouchableOpacity style={styles.bouton} onPress={actualiserTrajets}>
           <Text style={styles.boutonTexte}>Actualiser</Text>
         </TouchableOpacity>
         <FlatList
-          data={rides}
+          data={trajets}
           keyExtractor={(item) => item.id}
           renderItem={renderRide}
           contentContainerStyle={styles.scrollContainer}
