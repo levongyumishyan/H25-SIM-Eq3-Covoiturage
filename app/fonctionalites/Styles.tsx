@@ -309,7 +309,7 @@ export const styles = StyleSheet.create({
 
   },
 
-  rideItem: {
+  trajetItem: {
     paddingVertical: 10,
     borderBottomColor: couleurs.grisPrincipal,
     borderBottomWidth: 1,
@@ -326,7 +326,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
   },
-  linkText: {
+  texteAvecLien: {
     fontSize: 14,
     color: couleurs.vertPrincipal,
   },

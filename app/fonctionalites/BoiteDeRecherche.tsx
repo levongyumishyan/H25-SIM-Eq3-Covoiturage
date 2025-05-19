@@ -109,7 +109,7 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
     const isSelected = selectedAddress === place_name;
     return (
       <TouchableOpacity
-        style={styles.rideItem}
+        style={styles.trajetItem}
         onPress={() => handleSelect(place_name, coords)}
       >
         <View>

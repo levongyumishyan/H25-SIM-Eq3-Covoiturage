@@ -8,7 +8,7 @@ import { useAuthStore } from "../fonctionalites/VariablesGlobales";
 import { useRideStore } from "../fonctionalites/useRideStore";
 import { BASE_URL } from "../apiConfig";
 
-export default function Rides() {
+export default function Trajets() {
   const userId = useAuthStore((state) => state.userId);
   const prochainTrajet = useRideStore((state) => state.prochainTrajet);
   const effacerProchainTrajet = useRideStore((state) => state.effacerProchainTrajet);
@@ -22,18 +22,19 @@ export default function Rides() {
   /**
    * Calcule les statistiques sur la préservation de
    * l'environnement.
-   * @param rides Les trajets effectués par l'utilisateur
+   * @param trajets Les trajets effectués par l'utilisateur
    * @returns 
    */
-  const calculerStatistiques = (rides) => {
-    const totalDistance = rides.reduce((sum, ride) => sum + (ride.distance || 0), 0);
-    const co2Saved = totalDistance * 0.21;
-    const treesSaved = co2Saved / 21;
+  const calculerStatistiques = (trajets) => {
+    const distanceTotale = trajets.reduce((sum, ride) => sum + (ride.distance || 0), 0);
+    // quantiteCO2Sauvee : la quantité de CO2 sauvée
+    const quantiteCO2Sauvee = distanceTotale * 0.21;
+    const arbresSauvees = quantiteCO2Sauvee / 21;
     return {
-      totalDistance: totalDistance.toFixed(1),
-      co2Reduced: `${co2Saved.toFixed(1)} kg`,
-      treesSaved: treesSaved.toFixed(2),
-      ridesCompleted: rides.length,
+      distanceTotale: distanceTotale.toFixed(1),
+      co2Reduced: `${quantiteCO2Sauvee.toFixed(1)} kg`,
+      arbresSauvees: arbresSauvees.toFixed(2),
+      trajetsCompletes: trajets.length,
     };
   };
 
@@ -94,7 +95,7 @@ export default function Rides() {
           <View style={styles.ligneCentree}>
             <View style={styles.colonneCentree}>
               <Ionicons name="leaf-outline" size={30} color={couleurs.vertSecondaire} />
-              <Text style={styles.labelCentered}>{statistiques.treesSaved} arbres sauvés</Text>
+              <Text style={styles.labelCentered}>{statistiques.arbresSauvees} arbres sauvés</Text>
             </View>
             <View style={styles.colonneCentree}>
               <Ionicons name="cloud-outline" size={30} color={couleurs.vertSecondaire} />
@@ -102,7 +103,7 @@ export default function Rides() {
             </View>
             <View style={styles.colonneCentree}>
               <Ionicons name="bicycle" size={30} color={couleurs.vertSecondaire} />
-              <Text style={styles.labelCentered}>{statistiques.totalDistance} km parcourus</Text>
+              <Text style={styles.labelCentered}>{statistiques.distanceTotale} km parcourus</Text>
             </View>
           </View>
         )}

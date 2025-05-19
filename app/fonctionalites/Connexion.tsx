@@ -127,8 +127,8 @@ const LoginInput = () => {
             ) : null}
 
             <View style={styles.linksContainer}>
-              <Link href="../(tabs)/mdpOublie" style={styles.linkText}>Mot de passe oublié?</Link>
-              <Link href="../(tabs)/inscription" style={styles.linkText}>Se créer un compte</Link>
+              <Link href="../(tabs)/mdpOublie" style={styles.texteAvecLien}>Mot de passe oublié?</Link>
+              <Link href="../(tabs)/inscription" style={styles.texteAvecLien}>Se créer un compte</Link>
             </View>
 
             <TouchableOpacity style={styles.bouton} onPress={verifierConnection}>

@@ -72,7 +72,7 @@ router.post("/signup", [
 
 
 
-// --- LOGIN ---
+// --- LOGIN/CONNEXION ---
 router.post("/login", [
   body("email").isEmail().withMessage("Email invalide"),
   body("mdp").exists().withMessage("Mot de passe requis")
@@ -128,7 +128,7 @@ router.post("/logout", async (req, res) => {
   }
 });
 
-// --- UPDATE USER INFOS ---
+// --- UPDATE USER INFOS/METTRE À JOUR LES INFORMATIONS DE L'UTILISATEUR ---
 router.post("/updateUserInfos", [
   body("nom").notEmpty().withMessage("Nom est requis"),
   body("email").isEmail().withMessage("Email invalide"),

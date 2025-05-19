@@ -29,7 +29,7 @@ export default function Index() {
             <Text style={styles.label}>Envoyer le lien</Text>
           </TouchableOpacity>
         </View>
-        <Link href="../(tabs)/" style={styles.linkText}>
+        <Link href="../(tabs)/" style={styles.texteAvecLien}>
           Retour
         </Link>
       </View>
