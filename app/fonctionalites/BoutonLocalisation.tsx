@@ -11,8 +11,8 @@ interface LocateButtonProps {
 
 /** Pour réinitialiser la vue de la caméra à la localisation de l'utilisateur */
 
-const LocateButton: React.FC<LocateButtonProps> = ({ cameraRef, userCoords }) => {
-  const centerOnUser = () => {
+const BoutonLocalisation: React.FC<LocateButtonProps> = ({ cameraRef, userCoords }) => {
+  const centrerSurUtilisateur = () => {
     if (cameraRef.current && userCoords) {
       cameraRef.current.setCamera({
         centerCoordinate: userCoords,
@@ -24,11 +24,11 @@ const LocateButton: React.FC<LocateButtonProps> = ({ cameraRef, userCoords }) =>
   };
 
   return (
-    <TouchableOpacity style={styles.locationButton} onPress={centerOnUser}>
+    <TouchableOpacity style={styles.locationButton} onPress={centrerSurUtilisateur}>
       <Ionicons name="compass" size={30} color="white" />
     </TouchableOpacity>
   );
 };
 
 
-export default LocateButton;
+export default BoutonLocalisation;

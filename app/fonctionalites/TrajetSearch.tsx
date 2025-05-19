@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { couleurs } from './Couleurs';
 import { styles } from './Styles';
 import SearchBox from './SearchBox';
-import SchedulePicker from './SchedulePicker';
+import SelecteurHoraire from './SelecteurHoraire';
 
 export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
   const sheetRef = useRef(null);
@@ -58,7 +58,7 @@ export default function TrajetSearch({ onSheetChange, isAnotherSheetOpen }) {
             {!showSchedule ? (
               <SearchBox ref={searchBoxRef} onSelect={() => setShowSchedule(true)} />
             ) : (
-              <SchedulePicker onClose={handleScheduleConfirm} />
+              <SelecteurHoraire onClose={handleScheduleConfirm} />
             )}
           </>
 

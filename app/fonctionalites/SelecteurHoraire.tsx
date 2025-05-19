@@ -10,16 +10,16 @@ import { useAuthStore } from './VariablesGlobales';
 
 const weekdays = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
-export default function SchedulePicker({ onClose }) {
+export default function SelecteurHoraire({ onClose }) {
   const [time, setTime] = useState(() => {
     const date = new Date();
     date.setHours(8, 0, 0, 0);
     return date;
   });
 
-  const [selectedDays, setSelectedDays] = useState([]);
+  const [joursChoisis, setJoursChoisis] = useState([]);
   // Nombre de sièges disponibles dans la voiture
-  const [places, setPlaces] = useState('');
+  const [sieges, setSieges] = useState('');
   // Coordonnées de l'utilisateur ou le point de départ
   // (latitude et longitude)
   const userLat = useAuthStore((state) => state.userLat);
@@ -41,7 +41,7 @@ export default function SchedulePicker({ onClose }) {
    * @returns 
    */
   const reverseGeocode = async ([lng, lat]) => {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.sieges/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -94,15 +94,15 @@ export default function SchedulePicker({ onClose }) {
   };
 
   const toggleDay = (day) => {
-    setSelectedDays((prev) =>
+    setJoursChoisis((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
     );
   };
 
   const handleConfirm = async () => {
-    const parsedPlaces = parseInt(places);
-    if (!parsedPlaces || parsedPlaces <= 0) {
-      Alert.alert('Erreur', 'Veuillez entrer un nombre de places valide.');
+    const parsedsieges = parseInt(sieges);
+    if (!parsedsieges || parsedsieges <= 0) {
+      Alert.alert('Erreur', 'Veuillez entrer un nombre de sieges valide.');
       return;
     }
 
@@ -115,12 +115,12 @@ export default function SchedulePicker({ onClose }) {
       lat: userLat,
       targetLong,
       targetLat,
-      scheduleDays: selectedDays,
+      scheduleDays: joursChoisis,
       scheduleTime: formatTime(time),
       pickupAddress,
       targetAddress,
       distance: calculerDistance(userLong, userLat, targetLong, targetLat),
-      places: parsedPlaces, // ✅ CORRECT
+      sieges: parsedsieges, // ✅ CORRECT
     };
 
     console.log('🛰️ Payload envoyé:', payload);
@@ -139,7 +139,7 @@ export default function SchedulePicker({ onClose }) {
       if (response.ok) {
         console.log("✅ Saved:", result);
         Alert.alert("Succès", "Trajet enregistré !");
-        onClose?.({ days: selectedDays, time: formatTime(time), places: parsedPlaces });
+        onClose?.({ days: joursChoisis, time: formatTime(time), sieges: parsedsieges });
       } else {
         console.error("❌ Server error:", result);
         Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
@@ -151,9 +151,9 @@ export default function SchedulePicker({ onClose }) {
   };
 
   const isFormValid =
-    selectedDays.length > 0 &&
-    places.trim() !== '' &&
-    parseInt(places) > 0;
+    joursChoisis.length > 0 &&
+    sieges.trim() !== '' &&
+    parseInt(sieges) > 0;
 
   return (
     <View style={{
@@ -191,7 +191,7 @@ export default function SchedulePicker({ onClose }) {
             key={idx}
             onPress={() => toggleDay(day)}
             style={{
-              backgroundColor: selectedDays.includes(day) ? '#2ecc71' : '#ccc',
+              backgroundColor: joursChoisis.includes(day) ? '#2ecc71' : '#ccc',
               borderRadius: 20,
               margin: 4,
               paddingVertical: 8,
@@ -203,12 +203,12 @@ export default function SchedulePicker({ onClose }) {
         ))}
       </View>
 
-      <Text style={{ fontWeight: 'bold', marginBottom: 6 }}>Nombre de places disponibles</Text>
+      <Text style={{ fontWeight: 'bold', marginBottom: 6 }}>Nombre de sieges disponibles</Text>
       <TextInput
         placeholder="Ex: 3"
         keyboardType="numeric"
-        value={places}
-        onChangeText={setPlaces}
+        value={sieges}
+        onChangeText={setSieges}
         style={{
           borderWidth: 1,
           borderColor: '#ccc',

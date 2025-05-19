@@ -13,13 +13,13 @@ import Mapbox, {
 } from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 import { couleurs } from './Couleurs';
-import LocateButton from './LocateButton';
+import LocateButton from './BoutonLocalisation';
 import pin from "../assets/images/pin.png";
 import { BASE_URL } from '../apiConfig';
 import { estDarkMode, useAuthStore } from './VariablesGlobales';
 import TrajetSearch from './TrajetSearch';
 import Trajet from './TrajetJoin';
-import SchedulePicker from './SchedulePicker';
+import SelecteurHoraire from './SelecteurHoraire';
 import { useRideStore } from './useRideStore';
 import TrajetBottomSheet from './TrajetJoin';
 
@@ -30,7 +30,7 @@ LogBox.ignoreLogs([
   'Mapbox [error] ViewTagResolver',
 ]);
 
-export default function MapScreen() {
+export default function EcranCarte() {
   const cameraRef = useRef<Camera>(null);
   const { prochainTrajet } = useRideStore();
   // Coordonnées de l'utilisateur
@@ -42,7 +42,7 @@ export default function MapScreen() {
   const [adresseDestination, setAdresseDestination] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
-  const [showSchedulePicker, setShowSchedulePicker] = useState(false);
+  const [montrerSelecteurHoraire, setMontrerSelecteurHoraire] = useState(false);
   const [conducteurs, setConducteurs] = useState([]);
 
   // Latitude de l'utilisateur
@@ -305,7 +305,7 @@ export default function MapScreen() {
         {/** Bouton '+' qui créer un trajet. */}
       <TrajetSearch
         onSheetChange={setIsSearchOpen}
-        isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || showSchedulePicker}
+        isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire}
       />
 
       {/* Bottom Sheet Overlay */}
@@ -320,11 +320,11 @@ export default function MapScreen() {
         />
       )}
 
-      {showSchedulePicker && trajetChoisi && (
+      {montrerSelecteurHoraire && trajetChoisi && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
-          <SchedulePicker
+          <SelecteurHoraire
             ride={trajetChoisi}
-            onClose={() => setShowSchedulePicker(false)}
+            onClose={() => setMontrerSelecteurHoraire(false)}
           />
         </View>
       )}

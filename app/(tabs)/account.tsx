@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import LoginInput from "../fonctionalites/LoginInput";
+import Connexion from "../fonctionalites/Connexion";
 import React from "react";
 import { useRouter } from 'expo-router';
 import { styles } from "../fonctionalites/Styles"
@@ -11,7 +11,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <LoginInput />
+        <Connexion />
       </View>
     </SafeAreaView>
   );

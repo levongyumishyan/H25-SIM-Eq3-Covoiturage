@@ -238,7 +238,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: height * 0.9,
   },
-  locationButton: {
+  boutonLocalisation: {
     position: 'absolute',
     bottom: 100,
     right: 20,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Settings from "./Settings";
+import Reglages from "./Reglages";
 import { Link } from 'expo-router';
 import { couleurs } from './Couleurs';
 import { styles } from './Styles';
@@ -95,7 +95,7 @@ const LoginInput = () => {
            */
         }
         {estConnecte ? (
-          <Settings /> // La page 'Réglages utilisateur'
+          <Reglages /> // La page 'Réglages utilisateur'
         ) : (
           // La page de connexion
           <>

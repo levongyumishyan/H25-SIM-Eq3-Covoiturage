@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native';
-import Map from '~/fonctionalites/Map';
+import Carte from '~/fonctionalites/Carte';
 
 
-const MapScreen = () => {
+const EcranCarte = () => {
   return (
     <View style={styles.container}>
-      <Map />
+      <Carte />
     </View>
   );
 };
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MapScreen;
+export default EcranCarte;
