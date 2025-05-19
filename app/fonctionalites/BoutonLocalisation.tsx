@@ -24,7 +24,7 @@ const BoutonLocalisation: React.FC<BoutonLocalisationProps> = ({ cameraRef, user
   };
 
   return (
-    <TouchableOpacity style={styles.locationButton} onPress={centrerSurUtilisateur}>
+    <TouchableOpacity style={styles.boutonLocalisation} onPress={centrerSurUtilisateur}>
       <Ionicons name="compass" size={30} color="white" />
     </TouchableOpacity>
   );

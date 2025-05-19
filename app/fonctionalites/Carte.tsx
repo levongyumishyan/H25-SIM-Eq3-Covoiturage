@@ -240,8 +240,9 @@ export default function EcranCarte() {
           shape={points}
           onPress={handlePinPress}
         >
-          {/** Ceci vérifie le niveau d'agrandissement de la carte pour déterminer
-           * s'il faut afficher un numéro de conducteurs.
+          {/** Ceci vérifie à quel la carte est agrandie pour déterminer
+           * s'il faut afficher le nombre de conducteurs situés dans une partie de la carte
+           * ou s'il faut afficher chaque conducteur présent individuellement.
            */}
           <CircleLayer
             id="clusters"

@@ -28,9 +28,9 @@ const Connexion = () => {
   /**
    * Connexion de l'utilisateur (Base de données)
    * 
-   * L'application communique avec le serveur à l'aide de cette méthode.
-   * Celle-ci envoie les données de l'utilisateur au serveur. Ensuite,
-   * le serveur vérifie les données et donne une réponse en format JSON.
+   * Envoie les entrées de l'utilisateur au serveur. Ensuite,
+   * le serveur vérifie l'information envoyée pour donner une
+   * réponse en format JSON.
    */
   const verifierConnection = async () => {
     try {

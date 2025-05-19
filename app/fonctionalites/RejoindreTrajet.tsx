@@ -21,7 +21,7 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
    * joigne à un trajet offert par un conducteur.
    * @returns 
    */
-  const handleJoinRide = async () => {
+  const gererRejoindreTrajet = async () => {
     if (!currentUserId || !ride?._id) {
       Alert.alert('Erreur', 'Informations utilisateur ou trajet manquantes.');
       return;
@@ -57,7 +57,7 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
    * désinscrit d'un trajet offert par un conducteur.
    * @returns 
    */
-  const handleUnjoinRide = async () => {
+  const gererDesinscriptionTrajet = async () => {
     const url = `${BASE_URL}/api/trajets/${ride._id}/unjoin`;
     try {
       const response = await fetch(url, {
@@ -182,7 +182,7 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
               isFull && !alreadyJoined && { backgroundColor: couleurs.grisSecondaire },
             ]}
             disabled={isFull && !alreadyJoined}
-            onPress={alreadyJoined ? handleUnjoinRide : handleJoinRide}
+            onPress={alreadyJoined ? gererDesinscriptionTrajet : gererRejoindreTrajet}
           >
             <Text style={[styles.boutonTexte, { color: couleurs.couleurTexte }]}>
               {alreadyJoined

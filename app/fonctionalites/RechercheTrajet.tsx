@@ -21,6 +21,10 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
     sheetRef.current?.expand();
   };
 
+  /**
+   * Gére l'affichage des éléments.
+   * @param index L'indice qui détermine si ça doit être fermé.
+   */
   const handleSheetChange = (index) => {
     const estFerme = index === -1;
     setIsSheetOpen(!estFerme);

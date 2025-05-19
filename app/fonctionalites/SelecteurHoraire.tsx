@@ -99,6 +99,12 @@ export default function SelecteurHoraire({ onClose }) {
     );
   };
 
+  /**
+   * Envoie au serveur du backend les informations
+   * du trajet offert. Le trajet sera alors affiché 
+   * sur la carte pour les autres utilisateurs.
+   * @returns 
+   */
   const handleConfirm = async () => {
     const parsedsieges = parseInt(sieges);
     if (!parsedsieges || parsedsieges <= 0) {
@@ -155,6 +161,7 @@ export default function SelecteurHoraire({ onClose }) {
     sieges.trim() !== '' &&
     parseInt(sieges) > 0;
 
+    // Apparence 
   return (
     <View style={{
       padding: 24,
