@@ -1,6 +1,7 @@
 /**
  * @file Trajet route handler using Express Router.
  * This module defines API endpoints to manage Trajets in the database.
+ * Cette module définit les "endpoints" de l'API pour gérer les Trajets dans la base de données.
  * 
  * @module routes/trajet
  */
@@ -172,6 +173,11 @@ router.post('/:id/join', async (req, res) => {
   }
 });
 
+/**
+ * POST /trajets/:id/unjoin
+ * 
+ * Enlève un utilisateur à la liste des passagers d’un trajet donné.
+ */
 router.post('/:id/unjoin', async (req, res) => {
   const { userId } = req.body;
   const trajetId = req.params.id;

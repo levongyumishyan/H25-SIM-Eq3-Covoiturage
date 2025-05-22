@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 
-// --- SIGNUP/INSCRIPTION ---
+// --- INSCRIPTION ---
 router.post("/signup", [
   body("nom").notEmpty().withMessage("Nom est requis"),
   body("email").isEmail().withMessage("Email invalide"),
@@ -72,7 +72,7 @@ router.post("/signup", [
 
 
 
-// --- LOGIN/CONNEXION ---
+// --- CONNEXION ---
 router.post("/login", [
   body("email").isEmail().withMessage("Email invalide"),
   body("mdp").exists().withMessage("Mot de passe requis")
@@ -110,7 +110,7 @@ router.post("/login", [
   }
 });
 
-// --- LOGOUT  ---
+// --- DÉCONNEXION  ---
 router.post("/logout", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ msg: "Email manquant." });
@@ -128,7 +128,7 @@ router.post("/logout", async (req, res) => {
   }
 });
 
-// --- UPDATE USER INFOS/METTRE À JOUR LES INFORMATIONS DE L'UTILISATEUR ---
+// --- METTRE À JOUR LES INFORMATIONS DE L'UTILISATEUR ---
 router.post("/updateUserInfos", [
   body("nom").notEmpty().withMessage("Nom est requis"),
   body("email").isEmail().withMessage("Email invalide"),

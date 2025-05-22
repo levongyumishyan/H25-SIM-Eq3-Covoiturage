@@ -32,6 +32,11 @@ app.use("/api/trajets", trajetRoutes);
 
 app.get("/", (req, res) => res.send("API is running"));
 
+// CONNEXION DE MONGODB ATLAS
+// IMPORTANT : Pour que le serveur se connecte à MongoDB Atlas, il est
+// important d'avoir le fichier ".env" dans le dossier principal avec
+// toutes les variables d'environnement requises. Si le fichier ".env" est absent, 
+// veuillez consulter le README.md pour les instructions.
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB est connecté"))
   .catch((err) => console.error("Erreur MongoDB:", err));

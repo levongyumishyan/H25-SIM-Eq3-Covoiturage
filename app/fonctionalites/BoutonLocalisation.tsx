@@ -23,6 +23,7 @@ const BoutonLocalisation: React.FC<BoutonLocalisationProps> = ({ cameraRef, user
     }
   };
 
+  // Apparence du bouton de localisation
   return (
     <TouchableOpacity style={styles.boutonLocalisation} onPress={centrerSurUtilisateur}>
       <Ionicons name="compass" size={30} color="white" />

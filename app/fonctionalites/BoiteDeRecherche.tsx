@@ -18,11 +18,11 @@ import { useAuthStore } from './VariablesGlobales';
 const MAPBOX_TOKEN = Constants.expoConfig?.extra?.mapboxToken;
 
 const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
-  // Ce que l'utilisateur rentrera dans la boite de recherche (SearchBox)
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(''); // Ce que l'utilisateur cherchera dans la boite de recherche (SearchBox)
   const [suggestions, setSuggestions] = useState([]); 
   const [position, setPosition] = useState(null);
   const [adresseSelectionnee, setAdresseSelectionnee] = useState(null);
+  // Variables ci-dessous servent à stocker temporairement les coordonnées de la destination avant que l'utilisateur finit son choix
   const [pendingTargetCoords, setPendingTargetCoords] = useState(null);
 
   const setTargetLat = useAuthStore((state) => state.setTargetLat);
@@ -59,13 +59,13 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
   }, [input, position]);
 
   /**
-   * Enregistre le nom et les coordonnées pour afficher
-   * la destination sur la carte.
-   * @param nomDuEndroit Le nom de la destination
+   * Enregistre le nom et les coordonnées pour ensuite 
+   * afficher la destination sur la carte.
+   * @param nomDuLieu Le nom de la destination
    * @param coords Les coordonnées de la destination
    */
-  const handleSelect = (nomDuEndroit, coords) => {
-    setAdresseSelectionnee(nomDuEndroit);
+  const gererSelection = (nomDuLieu, coords) => {
+    setAdresseSelectionnee(nomDuLieu);
     setPendingTargetCoords(coords);
     console.log(coords[1]);
     setTargetLong(coords[0]);
@@ -77,10 +77,10 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
   /**
    * Envoie les informations du trajet sélectionné
    * au serveur du backend.
-   * @param schedule L'horaire choisi par l'utilisateur
+   * @param horaire L'horaire choisi par l'utilisateur
    * @returns 
    */
-  const confirmerHoraire = async (schedule) => {
+  const confirmerHoraire = async (horaire) => {
     if (!position || !pendingTargetCoords) return;
     try {
       const body = {
@@ -114,13 +114,13 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
    * @returns 
    */
   const donnerSuggestions = ({ item }) => {
-    const { nomDuEndroit, geometrie } = item;
+    const { nomDuLieu, geometrie } = item;
     const coordonnees = geometrie?.coordinates ?? [];
-    const estSelectionne = adresseSelectionnee === nomDuEndroit;
+    const estSelectionne = adresseSelectionnee === nomDuLieu;
     return (
       <TouchableOpacity
         style={styles.trajetItem}
-        onPress={() => handleSelect(nomDuEndroit, coordonnees)}
+        onPress={() => gererSelection(nomDuLieu, coordonnees)}
       >
         <View>
           <Text
@@ -130,7 +130,7 @@ const BoiteDeRecherche = forwardRef(({ onSelect }, ref) => {
               textDecorationLine: estSelectionne ? 'underline' : 'none'
             }}
           >
-            {nomDuEndroit}
+            {nomDuLieu}
           </Text>
         </View>
       </TouchableOpacity>

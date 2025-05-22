@@ -11,7 +11,7 @@ const schemaUtilisateur = new mongoose.Schema({
     dateNaissance: { type: Date, required: true },
     conducteur: { type: Boolean, required: false },
     passager: { type: Boolean, required: false },
-    voiture: { type: mongoose.Schema.Types.ObjectId, required: false } //objectid unique de la voiture de l'utilisateur
+    voiture: { type: mongoose.Schema.Types.ObjectId, required: false } //ObjectId unique de la voiture de l'utilisateur
 }, { timestamps: true });
 
 module.exports = mongoose.model("Utilisateur", schemaUtilisateur);
