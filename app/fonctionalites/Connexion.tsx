@@ -29,7 +29,7 @@ const Connexion = () => {
    * Connexion de l'utilisateur (Base de données)
    * 
    * Envoie les entrées de l'utilisateur au serveur. Ensuite,
-   * le serveur vérifie l'information envoyée pour donner une
+   * le serveur vérifie les entrées envoyées pour donner une
    * réponse en format JSON.
    */
   const verifierConnection = async () => {

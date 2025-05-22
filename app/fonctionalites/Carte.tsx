@@ -33,8 +33,7 @@ LogBox.ignoreLogs([
 export default function EcranCarte() {
   const cameraRef = useRef<Camera>(null);
   const { prochainTrajet } = useRideStore();
-  // Coordonnées de l'utilisateur
-  const [userCoords, setUserCoords] = useState<[number, number] | null>(null);
+  const [userCoords, setUserCoords] = useState<[number, number] | null>(null);// Coordonnées de l'utilisateur
   const [trajetChoisi, setTrajetChoisi] = useState(null);
   const [montrerTrajet, setMontrerTrajet] = useState(false);
   const [routeGeoJSON, setRouteGeoJSON] = useState(null);
@@ -51,10 +50,10 @@ export default function EcranCarte() {
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
   /**
-   * Cette méthode récupère tous les trajets
-   * enregistrés dans le serveur pour les afficher sur la carte.
+   * Cette méthode récupère tous les trajets enregistrés
+   * dans le serveur pour les afficher sur la carte.
    */
-  const fetchconducteurs = async () => {
+  const chercherConducteurs = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
@@ -74,11 +73,13 @@ export default function EcranCarte() {
 
 
   useEffect(() => {
-    fetchconducteurs();
-    const interval = setInterval(fetchconducteurs, 10000);
+    chercherConducteurs();
+    const interval = setInterval(chercherConducteurs, 10000);
     return () => clearInterval(interval);
   }, []);
 
+// Prépare les informations de chaque conducteur
+// pour les afficher sur la carte.
   const points = {
     type: 'FeatureCollection',
     features: conducteurs.map((driver, index) => ({
@@ -91,6 +92,8 @@ export default function EcranCarte() {
     })),
   };
 
+  // Demande la permission à l'utilisateur pour avoir
+  // accès à son position sur la carte.
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -102,11 +105,12 @@ export default function EcranCarte() {
   }, []);
 
   /**
-   * 
-   * @param waypoints 
+   * Prépare la ligne reliant le départ et la destination
+   * du trajet.
+   * @param waypoints Le chemin entre le départ et la destination
    * @returns 
    */
-  const fetchRoute = async (waypoints) => {
+  const chercherRoute = async (waypoints) => {
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
     const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=50;50&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
@@ -122,7 +126,7 @@ export default function EcranCarte() {
   /**
    * Cette méthode permet de traduire les coordonnées
    * (latitude et longitude) d'un endroit en une adresse.
-   * @param param0
+   * @param tableau Les coordonnées : longitude et latitude
    * @returns 
    */
   const reverseGeocode = async ([lng, lat]) => {
@@ -145,6 +149,12 @@ export default function EcranCarte() {
     setAdresseDestination('');
   };
 
+  /**
+   * Enregistre les informations du trajet dans les variables locales après que
+   * l'utilisateur a appuyé sur un conducteur affiché sur la carte.
+   * @param event 
+   * @returns 
+   */
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
@@ -167,7 +177,7 @@ export default function EcranCarte() {
       }
 
       const targetCoords = [targetLong, targetLat];
-      const route = await fetchRoute([rideCoords, targetCoords]);
+      const route = await chercherRoute([rideCoords, targetCoords]);
       if (route) {
         setRouteGeoJSON({
           type: 'FeatureCollection',
@@ -189,6 +199,7 @@ export default function EcranCarte() {
 
   };
 
+  // Apparence de la carte
   return (
     <View style={{ flex: 1 }}>
       {prochainTrajet && (
@@ -231,6 +242,7 @@ export default function EcranCarte() {
 
         <Camera ref={cameraRef} zoomLevel={14} centerCoordinate={userCoords} />
 
+       {/** Ceci représente la position de l'utilisateur sur la carte */}
         <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
         <ShapeSource
@@ -240,9 +252,10 @@ export default function EcranCarte() {
           shape={points}
           onPress={handlePinPress}
         >
-          {/** Ceci vérifie à quel la carte est agrandie pour déterminer
-           * s'il faut afficher le nombre de conducteurs situés dans une partie de la carte
-           * ou s'il faut afficher chaque conducteur présent individuellement.
+          {/** 
+           * Ceci vérifie à quel point la carte est agrandie. Si la carte n'est pas
+           * assez agrandie, c'est le nombre de conducteurs qui est affiché sur la carte.
+           * Sinon, chaque conducteur est affiché individuellement sur la carte.
            */}
           <CircleLayer
             id="clusters"
@@ -286,7 +299,7 @@ export default function EcranCarte() {
 
         <Images images={{ pin }} />
 
-        {/** Ceci permet de tracer, sur la carte, une ligne qui relie le point de départ et la destination. */}
+        {/** Ceci trace sur la carte une ligne qui relie le point de départ et la destination. */}
         {routeGeoJSON && (
           <ShapeSource id="route" shape={routeGeoJSON}>
             <LineLayer
@@ -303,7 +316,7 @@ export default function EcranCarte() {
         {/** Bouton pour aller à la position de l'utilisateur sur la carte. */}
       <BoutonLocalisation cameraRef={cameraRef} userCoords={userCoords} />
 
-        {/** Bouton '+' qui permet de créer un trajet. */}
+        {/** Bouton '+' qui permet à l'utilisateur de créer un trajet. */}
       <RechercheTrajet
         onSheetChange={setIsSearchOpen}
         isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire}

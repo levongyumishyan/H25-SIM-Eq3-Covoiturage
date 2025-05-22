@@ -13,8 +13,7 @@ const Inscription = () => {
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [dateNaissance, setDateNaissance] = useState(new Date(1970, 0, 1));
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
+  const [montrerSelecteurDate, setMontrerSelecteurDate] = useState(false);
   const [telephone, setTelephone] = useState("");
   const [courriel, setCourriel] = useState("");
   const [mdp, setMdp] = useState("");
@@ -32,13 +31,13 @@ const Inscription = () => {
 
 
   /**
-   * Permet à l'utilisateur de sélectionner une date étant
-   * donné que ce n'est pas une chaîne (String)
+   * Permet à l'utilisateur de sélectionner une date 
+   * étant donné que ce n'est pas une chaîne (String)
    * @param event 
    * @param selectedDate La date selectionnée
    */
-  const handleDateChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === "ios");
+  const gererChangementDate = (event, selectedDate) => {
+    setMontrerSelecteurDate(Platform.OS === "ios");
     if (selectedDate) {
       setDateNaissance(selectedDate);
     }
@@ -48,7 +47,7 @@ const Inscription = () => {
 
   /**
    * Envoie au serveur du backend les informations de
-   * l'utilisateur du formulaire d'inscription.
+   * du formulaire d'inscription rempli par l'utilisateur.
    * @returns 
    */
   const verifierConnection = async () => {
@@ -137,19 +136,19 @@ const Inscription = () => {
         <Text style={styles.sousTitre}>Date de naissance</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
-          onPress={() => setShowDatePicker(true)}
+          onPress={() => setMontrerSelecteurDate(true)}
         >
           <Text style={styles.datePickerText}>
             {dateNaissance.toLocaleDateString()}
           </Text>
         </TouchableOpacity>
 
-        {showDatePicker && (
+        {montrerSelecteurDate && (
           <DateTimePicker
             value={dateNaissance}
             mode="date"
             display="spinner"
-            onChange={handleDateChange}
+            onChange={gererChangementDate}
             maximumDate={new Date()}
             minimumDate={new Date(1900, 0, 1)}
           />

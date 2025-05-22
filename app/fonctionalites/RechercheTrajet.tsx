@@ -34,10 +34,10 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
     }
   };
 
-  const handleScheduleConfirm = (schedule) => {
+  const gererConfirmationHoraire = (horaire) => {
     if (BoiteDeRechercheRef.current) {
-      BoiteDeRechercheRef.current.confirmSchedule(schedule);
-      console.log("Sending schedule to BoiteDeRecherche:", schedule);
+      BoiteDeRechercheRef.current.confirmSchedule(horaire);
+      console.log("Horaire est envoyé à BoiteDeRecherche:", horaire);
     }
     setMontrerHoraire(false);
     setIsSheetOpen(false);
@@ -62,7 +62,7 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
             {!montrerHoraire ? (
               <BoiteDeRecherche ref={BoiteDeRechercheRef} onSelect={() => setMontrerHoraire(true)} />
             ) : (
-              <SelecteurHoraire onClose={handleScheduleConfirm} />
+              <SelecteurHoraire onClose={gererConfirmationHoraire} />
             )}
           </>
 
