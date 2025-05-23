@@ -257,7 +257,7 @@ export const styles = StyleSheet.create({
     zIndex: 999,
   },
 
-  trajetButton: {
+  trajetBouton: {
     position: 'absolute',
     bottom: 100,
     right: 180,

@@ -7,11 +7,21 @@ import { couleurs } from './Couleurs';
 import { BASE_URL } from '../apiConfig';
 import { useAuthStore } from './VariablesGlobales';
 
+/**
+ * Cette classe regroupe toutes les fonctionalités qui déterminent
+ * ce qui arrive lorsque l'utilisateur décide de rejoindre un trajet
+ * offert par un conducteur.
+ * @param param0 
+ * @returns 
+ */
 const TrajetBottomSheet = ({ ride, visible, onClose }) => {
   const sheetRef = useRef(null);
   const currentUserId = useAuthStore((state) => state.userId);
   const snapPoints = useMemo(() => ['50%', '90%'], []);
 
+  /**
+   * Détermine si ça doit être fermé ou ouvert.
+   */
   const handleSheetChange = useCallback((index) => {
     if (index === -1) onClose?.();
   }, []);
@@ -87,25 +97,26 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
     console.log('🚗 ride passed to BottomSheet:', ride);
   }, [ride]);
 
-  const currentRide = ride || {};
-  const weekdayOrder = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
+  const trajetActuel = ride || {};
+  const joursDeSemaine = ['LU', 'MA', 'ME', 'JE', 'VE', 'SA', 'DI'];
 
-  const scheduleDays = currentRide?.scheduleDays?.length
-    ? [...currentRide.scheduleDays]
-        .sort((a, b) => weekdayOrder.indexOf(a) - weekdayOrder.indexOf(b))
+  const joursDuHoraire = trajetActuel?.joursDuHoraire?.length
+    ? [...trajetActuel.joursDuHoraire]
+        .sort((a, b) => joursDeSemaine.indexOf(a) - joursDeSemaine.indexOf(b))
         .join(', ')
     : 'Non spécifié';
 
-  const scheduleTime = currentRide?.scheduleTime || 'Heure non spécifiée';
-  const numberOfSeats = currentRide?.places;
+  const scheduleTime = trajetActuel?.scheduleTime || 'Heure non spécifiée';
+  const nbDeSieges = trajetActuel?.places;
 
-  const alreadyJoined = currentRide?.passengers?.some(
+  const alreadyJoined = trajetActuel?.passengers?.some(
     (p) => p === currentUserId || p?._id === currentUserId
   );
 
-  const isFull =
-    Array.isArray(currentRide?.passengers) &&
-    currentRide?.passengers.length >= currentRide?.places;
+  // Variable qui dit s'il y a encore des sièges dans la voiture du conducteur
+  const estRempli =
+    Array.isArray(trajetActuel?.passengers) &&
+    trajetActuel?.passengers.length >= trajetActuel?.places;
 
   return (
     <BottomSheet
@@ -128,36 +139,36 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
         </Text>
 
         <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse, marginBottom: 16 }]}>
-          Proposé par {currentRide?.userId?.prenom && currentRide?.userId?.nom
-            ? `${currentRide.userId.prenom} ${currentRide.userId.nom}`
+          Proposé par {trajetActuel?.userId?.prenom && trajetActuel?.userId?.nom
+            ? `${trajetActuel.userId.prenom} ${trajetActuel.userId.nom}`
             : 'utilisateur inconnu'}
         </Text>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Point de départ</Text>
           <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
-            {currentRide?.pickupAddress || 'Adresse inconnue'}
+            {trajetActuel?.pickupAddress || 'Adresse inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Destination</Text>
           <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
-            {currentRide?.targetAddress || 'Adresse inconnue'}
+            {trajetActuel?.targetAddress || 'Adresse inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Distance</Text>
           <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
-            {currentRide?.distance ? `${currentRide.distance.toFixed(1)} km` : 'Distance inconnue'}
+            {trajetActuel?.distance ? `${trajetActuel.distance.toFixed(1)} km` : 'Distance inconnue'}
           </Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Jours</Text>
           <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
-            {scheduleDays}
+            {joursDuHoraire}
           </Text>
 
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse, marginTop: 10 }]}>
@@ -171,7 +182,7 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
         <View style={{ marginBottom: 20 }}>
           <Text style={[styles.label, { color: couleurs.couleurTexteInverse }]}>Places disponibles</Text>
           <Text style={[styles.petitTexte, { color: couleurs.couleurTexteInverse }]}>
-            {numberOfSeats ? `${numberOfSeats} place${numberOfSeats > 1 ? 's' : ''}` : 'Non spécifié'}
+            {nbDeSieges ? `${nbDeSieges} place${nbDeSieges > 1 ? 's' : ''}` : 'Non spécifié'}
           </Text>
         </View>
 
@@ -179,15 +190,15 @@ const TrajetBottomSheet = ({ ride, visible, onClose }) => {
           <TouchableOpacity
             style={[
               styles.bouton,
-              isFull && !alreadyJoined && { backgroundColor: couleurs.grisSecondaire },
+              estRempli && !alreadyJoined && { backgroundColor: couleurs.grisSecondaire },
             ]}
-            disabled={isFull && !alreadyJoined}
+            disabled={estRempli && !alreadyJoined}
             onPress={alreadyJoined ? gererDesinscriptionTrajet : gererRejoindreTrajet}
           >
             <Text style={[styles.boutonTexte, { color: couleurs.couleurTexte }]}>
               {alreadyJoined
                 ? 'Quitter ce trajet'
-                : isFull
+                : estRempli
                 ? 'Complet'
                 : 'Rejoindre ce trajet'}
             </Text>

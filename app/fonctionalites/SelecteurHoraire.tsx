@@ -18,17 +18,19 @@ export default function SelecteurHoraire({ onClose }) {
   });
 
   const [joursChoisis, setJoursChoisis] = useState([]);
-  // Nombre de sièges disponibles dans la voiture
-  const [sieges, setSieges] = useState('');
+  const [sieges, setSieges] = useState(''); // Nombre de sièges disponibles dans la voiture
+
   // Coordonnées de l'utilisateur ou le point de départ
   // (latitude et longitude)
   const userLat = useAuthStore((state) => state.userLat);
   const userLong = useAuthStore((state) => state.userLong);
+
   // Coordonnées de la destination choisie
   // (latitude et longitude)
   const targetLat = useAuthStore((state) => state.targetLat);
   const targetLong = useAuthStore((state) => state.targetLong);
-  // La variable 'userId' sert à associer un trajet à
+
+  // La variable "userId" sert à associer un trajet à
   // un compte spécifique. Ceci est utile pour afficher
   // les trajets créés par l'utilisateur dans la page
   // 'Historique trajets'.
@@ -93,6 +95,10 @@ export default function SelecteurHoraire({ onClose }) {
     setTime(prev);
   };
 
+  /**
+   * Gére la sélection d'une ou des journées choisies
+   * @param day La journée choisie
+   */
   const toggleDay = (day) => {
     setJoursChoisis((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
@@ -161,7 +167,7 @@ export default function SelecteurHoraire({ onClose }) {
     sieges.trim() !== '' &&
     parseInt(sieges) > 0;
 
-    // Apparence 
+    // Apparence du sélecteur d'horaire
   return (
     <View style={{
       padding: 24,

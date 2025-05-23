@@ -70,7 +70,7 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
       </BottomSheet>
 
       {montrerBoutonPlus && (
-        <TouchableOpacity style={styles.trajetButton} onPress={openBottomSheet}>
+        <TouchableOpacity style={styles.trajetBouton} onPress={openBottomSheet}>
           <Ionicons name="add" size={30} color={couleurs.blanc} />
         </TouchableOpacity>
       )}
