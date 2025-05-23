@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity
 } from 'react-native';
-import * as Position from 'expo-position';
+import * as Position from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { styles } from './Styles';

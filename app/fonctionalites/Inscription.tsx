@@ -103,7 +103,7 @@ const Inscription = () => {
           <Text style={styles.titre}>Créer un compte</Text>
         </View>
         <View style={styles.linksContainer}>
-          <Link href="../(tabs)/account" style={styles.texteAvecLien}>
+          <Link href="../(tabs)/compte" style={styles.texteAvecLien}>
             J'ai déjà un compte!
           </Link>
           <Link href="../(tabs)/" style={styles.texteAvecLien}>
