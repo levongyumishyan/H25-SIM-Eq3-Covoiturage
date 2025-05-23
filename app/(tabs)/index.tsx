@@ -58,7 +58,7 @@ export default function App() {
             <TouchableOpacity style={styles.bouton} onPress={() => router.push('/inscription')}>
               <Text style={styles.label}>S'inscrire</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.bouton, styles.contourBouton]} onPress={() => router.push('/account')}>
+            <TouchableOpacity style={[styles.bouton, styles.contourBouton]} onPress={() => router.push('/compte')}>
               <Text style={[styles.label, styles.contourBoutonTexte]}>Se connecter</Text>
             </TouchableOpacity>
           </View>
