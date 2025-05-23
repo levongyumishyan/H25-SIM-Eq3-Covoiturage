@@ -8,6 +8,11 @@ import { useAuthStore } from "../fonctionalites/VariablesGlobales";
 import { useRideStore } from "../fonctionalites/useRideStore";
 import { BASE_URL } from "../apiConfig";
 
+/**
+ * Cette classe retourne les statistiques et tous
+ * les trajets effectués par l'utilisateur.
+ * @returns 
+ */
 export default function Trajets() {
   const userId = useAuthStore((state) => state.userId);
   const prochainTrajet = useRideStore((state) => state.prochainTrajet);
