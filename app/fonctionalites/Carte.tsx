@@ -23,77 +23,87 @@ import SelecteurHoraire from './SelecteurHoraire';
 import { useRideStore } from './useRideStore';
 import TrajetBottomSheet from './RejoindreTrajet';
 
+// Configuration de l'access token Mapbox
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_ACCESS_KEY || '');
 
+// Ignorer les warnings spécifiques à Mapbox dans la console
 LogBox.ignoreLogs([
   'ViewTagResolver',
   'Mapbox [error] ViewTagResolver',
 ]);
 
+/**
+ * Composant principal de l'écran carte
+ * Affiche une carte interactive avec les trajets disponibles et permet la gestion des trajets
+ */
 export default function EcranCarte() {
+  // Référence pour contrôler la caméra de la carte
   const cameraRef = useRef<Camera>(null);
+  
+  // État du prochain trajet depuis le store global
   const { prochainTrajet } = useRideStore();
-  const [userCoords, setUserCoords] = useState<[number, number] | null>(null);// Coordonnées de l'utilisateur
-  const [trajetChoisi, setTrajetChoisi] = useState(null);
-  const [montrerTrajet, setMontrerTrajet] = useState(false);
-  const [routeGeoJSON, setRouteGeoJSON] = useState(null);
-  const [adresseDepart, setAdresseDepart] = useState('');
-  const [adresseDestination, setAdresseDestination] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false);
-  const [montrerSelecteurHoraire, setMontrerSelecteurHoraire] = useState(false);
-  const [conducteurs, setConducteurs] = useState([]);
+  
+  // États locaux pour la gestion de l'interface
+  const [userCoords, setUserCoords] = useState<[number, number] | null>(null); // Coordonnées de l'utilisateur
+  const [trajetChoisi, setTrajetChoisi] = useState(null); // Trajet sélectionné par l'utilisateur
+  const [montrerTrajet, setMontrerTrajet] = useState(false); // Contrôle l'affichage du bottom sheet
+  const [routeGeoJSON, setRouteGeoJSON] = useState(null); // Données GeoJSON pour afficher la route
+  const [adresseDepart, setAdresseDepart] = useState(''); // Adresse de départ formatée
+  const [adresseDestination, setAdresseDestination] = useState(''); // Adresse de destination formatée
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // État d'ouverture de la recherche
+  const [isRideDetailsOpen, setIsRideDetailsOpen] = useState(false); // État des détails du trajet
+  const [montrerSelecteurHoraire, setMontrerSelecteurHoraire] = useState(false); // État du sélecteur d'horaire
+  const [conducteurs, setConducteurs] = useState([]); // Liste des conducteurs/trajets disponibles
 
-  // Latitude de l'utilisateur
+  // Fonctions du store global pour sauvegarder la position de l'utilisateur
   const setUserLat = useAuthStore((state) => state.setUserLat);
-  // Longitude de l'utilisateur
   const setUserLong = useAuthStore((state) => state.setUserLong);
 
   /**
-   * Cette méthode récupère tous les trajets enregistrés
-   * dans le serveur pour les afficher sur la carte.
+   * Fonction pour récupérer la liste des conducteurs depuis l'API
    */
   const chercherConducteurs = async () => {
     try {
       const response = await fetch(`${BASE_URL}/api/trajets`);
       const text = await response.text();
-
       try {
         const data = JSON.parse(text);
         setConducteurs(data);
       } catch (parseError) {
         console.error('JSON parse error:', parseError.message);
-        console.error('Response:', text);
       }
-
     } catch (error) {
       console.error('Network error fetching trajets:', error.message);
     }
   };
 
-
+  // Effet pour charger les conducteurs au montage et les actualiser périodiquement
   useEffect(() => {
     chercherConducteurs();
-    const interval = setInterval(chercherConducteurs, 10000);
+    const interval = setInterval(chercherConducteurs, 10000); // Actualisation toutes les 10 secondes
     return () => clearInterval(interval);
   }, []);
 
-// Prépare les informations de chaque conducteur
-// pour les afficher sur la carte.
+  /**
+   * Structure GeoJSON pour afficher les points des conducteurs sur la carte
+   * Chaque conducteur devient un point géographique avec ses propriétés
+   */
   const points = {
     type: 'FeatureCollection',
     features: conducteurs.map((driver, index) => ({
       type: 'Feature',
       geometry: {
         type: 'Point',
-        coordinates: [driver.long, driver.lat],
+        coordinates: [driver.long, driver.lat], // Coordonnées longitude, latitude
       },
-      properties: { ...driver, id: index },
+      properties: { 
+        ...driver, // Toutes les propriétés du conducteur
+        id: index, // Index unique pour l'identification
+      },
     })),
   };
 
-  // Demande la permission à l'utilisateur pour avoir
-  // accès à son position sur la carte.
+  // Effet pour demander les permissions de géolocalisation
   useEffect(() => {
     const requestPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -105,18 +115,35 @@ export default function EcranCarte() {
   }, []);
 
   /**
-   * Prépare la ligne reliant le départ et la destination
-   * du trajet.
-   * @param waypoints Le chemin entre le départ et la destination
-   * @returns 
+   * Fonction pour calculer un itinéraire entre deux points via l'API Mapbox Directions
+   * @param {Array} waypoints - Tableau de coordonnées [longitude, latitude]
+   * @returns {Object|null} - Géométrie de la route ou null si erreur
    */
   const chercherRoute = async (waypoints) => {
+    // Validation des coordonnées avant l'appel API
+    for (let i = 0; i < waypoints.length; i++) {
+      const [lng, lat] = waypoints[i];
+      if (typeof lng !== 'number' || typeof lat !== 'number' || 
+          isNaN(lng) || isNaN(lat) || 
+          Math.abs(lng) > 180 || Math.abs(lat) > 90) {
+        return null;
+      }
+    }
+    
+    // Formatage des coordonnées pour l'URL de l'API
     const coords = waypoints.map(coord => `${coord[0]},${coord[1]}`).join(';');
-    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=50;50&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?geometries=geojson&overview=full&radiuses=500;500&access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+    
     try {
       const response = await fetch(url);
       const json = await response.json();
-      return json.routes[0]?.geometry || null;
+      
+      // Retourne la géométrie de la première route trouvée
+      if (json.routes && json.routes.length > 0) {
+        return json.routes[0].geometry;
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error('Error fetching route:', error);
       return null;
@@ -124,12 +151,11 @@ export default function EcranCarte() {
   };
 
   /**
-   * Cette méthode permet de traduire les coordonnées
-   * (latitude et longitude) d'un endroit en une adresse.
-   * @param tableau Les coordonnées : longitude et latitude
-   * @returns 
+   * Fonction pour convertir des coordonnées en adresse lisible via l'API Mapbox Geocoding
+   * @param {Array} coords - Coordonnées [longitude, latitude]
+   * @returns {string} - Nom de lieu formaté ou chaîne vide si erreur
    */
-  const reverseGeocode = async ([lng, lat]) => {
+  const reverseGeocode = async ([lng, lat]: [number, number]) => {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
     try {
       const response = await fetch(url);
@@ -141,6 +167,9 @@ export default function EcranCarte() {
     }
   };
 
+  /**
+   * Fonction pour fermer le bottom sheet et réinitialiser les états liés au trajet
+   */
   const fermerTrajet = () => {
     setMontrerTrajet(false);
     setTrajetChoisi(null);
@@ -150,15 +179,15 @@ export default function EcranCarte() {
   };
 
   /**
-   * Enregistre les informations du trajet dans les variables locales après que
-   * l'utilisateur a appuyé sur un conducteur affiché sur la carte.
-   * @param event 
-   * @returns 
+   * Gestionnaire d'événement pour les clics sur les pins de la carte
+   * Gère à la fois les clusters et les pins individuels
+   * @param {Object} event - Événement de clic contenant les features
    */
   const handlePinPress = async (event) => {
     const feature = event.features?.[0];
     if (!feature) return;
 
+    // Si c'est un cluster, zoom pour décomposer le cluster
     if (feature.properties?.point_count) {
       const [longitude, latitude] = feature.geometry.coordinates;
       cameraRef.current?.setCamera({
@@ -167,41 +196,68 @@ export default function EcranCarte() {
         animationDuration: 500,
       });
     } else {
-      const rideCoords = feature.geometry.coordinates;
+      // Traitement d'un pin individuel
+      const rideCoords: [number, number] = feature.geometry.coordinates;
       const targetLong = feature.properties.targetLong;
       const targetLat = feature.properties.targetLat;
 
-      if (typeof targetLong !== 'number' || typeof targetLat !== 'number') {
-        console.warn('Target coordinates missing');
+      // Vérification de la validité des coordonnées de destination
+      if (typeof targetLong !== 'number' || typeof targetLat !== 'number' || 
+          isNaN(targetLong) || isNaN(targetLat)) {
+        // Fallback: afficher le trajet sans route si coordonnées invalides
+        const rideData = feature.properties;
+        setTrajetChoisi(rideData);
+        setAdresseDepart(rideData.pickupAddress || 'Adresse de départ inconnue');
+        setAdresseDestination(rideData.targetAddress || 'Destination inconnue');
+        setMontrerTrajet(true);
         return;
       }
 
-      const targetCoords = [targetLong, targetLat];
-      const route = await chercherRoute([rideCoords, targetCoords]);
-      if (route) {
-        setRouteGeoJSON({
-          type: 'FeatureCollection',
-          features: [{ type: 'Feature', geometry: route, properties: {} }],
-        });
+      const targetCoords: [number, number] = [targetLong, targetLat];
+      
+      try {
+        // Calcul de l'itinéraire
+        const route = await chercherRoute([rideCoords, targetCoords]);
+        
+        if (route) {
+          // Si route trouvée, récupérer les adresses en parallèle pour optimiser
+          const [pickupAddress, targetAddress] = await Promise.all([
+            reverseGeocode(rideCoords),
+            reverseGeocode(targetCoords)
+          ]);
 
-        const pickupAddress = await reverseGeocode(rideCoords);
-        const targetAddress = await reverseGeocode(targetCoords);
+          // Configuration de la route pour l'affichage sur la carte
+          setRouteGeoJSON({
+            type: 'FeatureCollection',
+            features: [{ type: 'Feature', geometry: route, properties: {} }],
+          });
 
-        setAdresseDepart(pickupAddress);
-        setAdresseDestination(targetAddress);
+          // Mise à jour des états avec les données récupérées
+          setAdresseDepart(pickupAddress || feature.properties.pickupAddress || 'Adresse de départ');
+          setAdresseDestination(targetAddress || feature.properties.targetAddress || 'Destination');
+          setTrajetChoisi(feature.properties);
+          setMontrerTrajet(true);
+        } else {
+          // Fallback: afficher le trajet sans route si calcul échoue
+          setTrajetChoisi(feature.properties);
+          setAdresseDepart(feature.properties.pickupAddress || 'Adresse de départ');
+          setAdresseDestination(feature.properties.targetAddress || 'Destination');
+          setMontrerTrajet(true);
+        }
+      } catch (error) {
+        // Gestion d'erreur: afficher le trajet avec données de base
+        console.error('Error in handlePinPress:', error);
         setTrajetChoisi(feature.properties);
+        setAdresseDepart(feature.properties.pickupAddress || 'Adresse de départ');
+        setAdresseDestination(feature.properties.targetAddress || 'Destination');
         setMontrerTrajet(true);
       }
     }
-
-    console.log("montrerTrajet:", montrerTrajet);
-    console.log("trajetChoisi:", trajetChoisi);
-
   };
 
-  // Apparence de la carte
   return (
     <View style={{ flex: 1 }}>
+      {/* Bannière affichant le prochain trajet de l'utilisateur */}
       {prochainTrajet && (
         <View style={{
           position: 'absolute',
@@ -219,15 +275,16 @@ export default function EcranCarte() {
         </View>
       )}
 
+      {/* Composant principal de la carte Mapbox */}
       <MapView
         style={{ flex: 1 }}
-        styleURL={estDarkMode ? Mapbox.StyleURL.Dark : Mapbox.StyleURL.Street}
+        styleURL={estDarkMode ? Mapbox.StyleURL.Dark : Mapbox.StyleURL.Street} // Style adaptatif selon le thème
         compassEnabled
         logoEnabled={false}
         attributionEnabled={false}
-        localizeLabels
+        localizeLabels // Localisation automatique des labels
       >
-        {/** Ceci affiche la position de l'utilisateur sur la carte. */}
+        {/* Composant pour afficher et suivre la position de l'utilisateur */}
         <UserLocation
           onUpdate={(location) => {
             const coords: [number, number] = [
@@ -235,43 +292,44 @@ export default function EcranCarte() {
               location.coords.latitude,
             ];
             setUserCoords(coords);
+            // Sauvegarde de la position dans le store global
             setUserLat(location.coords.latitude);
             setUserLong(location.coords.longitude);
           }}
         />
 
+        {/* Contrôleur de caméra pour la navigation sur la carte */}
         <Camera ref={cameraRef} zoomLevel={14} centerCoordinate={userCoords} />
-
-       {/** Ceci représente la position de l'utilisateur sur la carte */}
+        
+        {/* Indicateur de position de l'utilisateur avec animation */}
         <LocationPuck puckBearingEnabled puckBearing="heading" pulsing={{ isEnabled: true }} />
 
+        {/* Source de données pour les points des conducteurs avec clustering */}
         <ShapeSource
           id="conducteurs"
           cluster
-          clusterRadius={50}
+          clusterRadius={50} // Rayon de clustering en pixels
           shape={points}
           onPress={handlePinPress}
         >
-          {/** 
-           * Ceci vérifie à quel point la carte est agrandie. Si la carte n'est pas
-           * assez agrandie, c'est le nombre de conducteurs qui est affiché sur la carte.
-           * Sinon, chaque conducteur est affiché individuellement sur la carte.
-           */}
+          {/* Style pour les clusters (groupes de points) */}
           <CircleLayer
             id="clusters"
-            filter={['has', 'point_count']}
+            filter={['has', 'point_count']} // Filtre pour identifier les clusters
             style={{
               circleColor: couleurs.vertPrincipal,
               circleRadius: [
                 'step',
                 ['get', 'point_count'],
-                20, 10, 25, 25, 30,
+                20, 10, 25, 25, 30, // Taille variable selon le nombre de points
               ],
               circleStrokeColor: couleurs.blanc,
               circleStrokeWidth: 3,
               circleOpacity: 0.9,
             }}
           />
+          
+          {/* Texte affichant le nombre d'éléments dans chaque cluster */}
           <SymbolLayer
             id="cluster-count"
             filter={['has', 'point_count']}
@@ -285,9 +343,11 @@ export default function EcranCarte() {
               textAllowOverlap: true,
             }}
           />
+          
+          {/* Style pour les points individuels (non-clusters) */}
           <SymbolLayer
             id="conducteurs-icons"
-            filter={['!', ['has', 'point_count']]}
+            filter={['!', ['has', 'point_count']]} // Filtre pour exclure les clusters
             style={{
               iconImage: 'pin',
               iconSize: 0.5,
@@ -297,43 +357,50 @@ export default function EcranCarte() {
           />
         </ShapeSource>
 
+        {/* Chargement des images utilisées sur la carte */}
         <Images images={{ pin }} />
 
-        {/** Ceci trace sur la carte une ligne qui relie le point de départ et la destination. */}
+        {/* Affichage conditionnel de la route calculée */}
         {routeGeoJSON && (
           <ShapeSource id="route" shape={routeGeoJSON}>
             <LineLayer
               id="route-line"
               style={{
-                lineColor: couleurs.vertPrincipal,
-                lineWidth: 5,
+                lineColor: couleurs.vertSecondaire,
+                lineWidth: 3,
+                lineOpacity: 0.9,
+                lineCap: 'round', // Extrémités arrondies
+                lineJoin: 'round', // Jointures arrondies
               }}
             />
           </ShapeSource>
         )}
       </MapView>
 
-        {/** Bouton pour aller à la position de l'utilisateur sur la carte. */}
+      {/* Bouton de localisation pour centrer la carte sur l'utilisateur */}
       <BoutonLocalisation cameraRef={cameraRef} userCoords={userCoords} />
 
-        {/** Bouton '+' qui permet à l'utilisateur de créer un trajet. */}
+      {/* Composant de recherche de trajets */}
       <RechercheTrajet
         onSheetChange={setIsSearchOpen}
-        isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire}
+        isAnotherSheetOpen={isRideDetailsOpen || montrerTrajet || montrerSelecteurHoraire} // Gestion des conflits entre bottom sheets
       />
 
-      {/* Bottom Sheet Overlay */}
+      {/* Bottom sheet pour afficher les détails du trajet sélectionné */}
       {montrerTrajet && trajetChoisi && (
         <TrajetBottomSheet
           ride={trajetChoisi}
-          adresseDepart={adresseDepart}
-          adresseDestination={adresseDestination}
-          distanceKm={routeGeoJSON} // or calculate real one
-          visible={true}
+          visible={montrerTrajet}
           onClose={fermerTrajet}
+          onStateChange={(isOpen) => {
+            if (!isOpen) {
+              fermerTrajet(); // Fermeture automatique quand le sheet se ferme
+            }
+          }}
         />
       )}
 
+      {/* Bottom sheet pour la sélection d'horaires */}
       {montrerSelecteurHoraire && trajetChoisi && (
         <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 50 }}>
           <SelecteurHoraire

@@ -37,7 +37,6 @@ export default function RechercheTrajet({ onSheetChange, isAnotherSheetOpen }) {
   const gererConfirmationHoraire = (horaire) => {
     if (BoiteDeRechercheRef.current) {
       BoiteDeRechercheRef.current.confirmSchedule(horaire);
-      console.log("Horaire est envoyé à BoiteDeRecherche:", horaire);
     }
     setMontrerHoraire(false);
     setIsSheetOpen(false);

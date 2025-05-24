@@ -78,9 +78,6 @@ const Inscription = () => {
       });
 
       const data = await response.json();
-
-      console.log("Réponse serveur:", data);
-
       if (!response.ok) {
         const erreur = data.msg || JSON.stringify(data) || "Erreur inconnue";
         throw new Error(erreur);

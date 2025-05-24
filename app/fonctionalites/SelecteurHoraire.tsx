@@ -43,7 +43,8 @@ export default function SelecteurHoraire({ onClose }) {
    * @returns 
    */
   const reverseGeocode = async ([lng, lat]) => {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.sieges/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${process.env.EXPO_PUBLIC_ACCESS_KEY}`;
+
     try {
       const response = await fetch(url);
       const json = await response.json();
@@ -111,56 +112,54 @@ export default function SelecteurHoraire({ onClose }) {
    * sur la carte pour les autres utilisateurs.
    * @returns 
    */
-  const handleConfirm = async () => {
-    const parsedsieges = parseInt(sieges);
-    if (!parsedsieges || parsedsieges <= 0) {
-      Alert.alert('Erreur', 'Veuillez entrer un nombre de sieges valide.');
-      return;
-    }
+const handleConfirm = async () => {
+  const parsedsieges = parseInt(sieges);
+  if (!parsedsieges || parsedsieges <= 0) {
+    Alert.alert('Erreur', 'Veuillez entrer un nombre de sieges valide.');
+    return;
+  }
 
-    const pickupAddress = await reverseGeocode([userLong, userLat]);
-    const targetAddress = await reverseGeocode([targetLong, targetLat]);
+  const pickupAddress = await reverseGeocode([userLong, userLat]);
+  const targetAddress = await reverseGeocode([targetLong, targetLat]);
 
-    const payload = {
-      userId,
-      long: userLong,
-      lat: userLat,
-      targetLong,
-      targetLat,
-      scheduleDays: joursChoisis,
-      scheduleTime: formatTime(time),
-      pickupAddress,
-      targetAddress,
-      distance: calculerDistance(userLong, userLat, targetLong, targetLat),
-      sieges: parsedsieges, // ✅ CORRECT
-    };
 
-    console.log('🛰️ Payload envoyé:', payload);
-
-    Alert.alert("Envoi", "Tentative d'envoi du trajet...");
-
-    try {
-      const response = await fetch(`${BASE_URL}/api/trajets`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        console.log("✅ Saved:", result);
-        Alert.alert("Succès", "Trajet enregistré !");
-        onClose?.({ days: joursChoisis, time: formatTime(time), sieges: parsedsieges });
-      } else {
-        console.error("❌ Server error:", result);
-        Alert.alert("Erreur", "Erreur serveur: " + (result.msg || "Erreur inconnue"));
-      }
-    } catch (err) {
-      console.error("📡 Network error:", err);
-      Alert.alert("Erreur", "Impossible de se connecter au serveur");
-    }
+  const payload = {
+    userId,
+    long: userLong,
+    lat: userLat,
+    targetLong,
+    targetLat,
+    scheduleDays: joursChoisis,
+    scheduleTime: formatTime(time),
+    pickupAddress,
+    targetAddress,
+    distance: calculerDistance(userLong, userLat, targetLong, targetLat),
+    places: parsedsieges,
   };
+
+
+  Alert.alert("Envoi", "Tentative d'envoi du trajet...");
+
+  try {
+    const response = await fetch(`${BASE_URL}/api/trajets`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      Alert.alert("Succès", "Trajet enregistré !");
+      onClose?.();
+    } else {
+      Alert.alert("Erreur", result.message || "Échec de l'enregistrement du trajet.");
+    }
+  } catch (error) {
+    console.error("❌ Error sending payload:", error);
+    Alert.alert("Erreur", "Une erreur s'est produite lors de l'envoi.");
+  }
+};
 
   const isFormValid =
     joursChoisis.length > 0 &&

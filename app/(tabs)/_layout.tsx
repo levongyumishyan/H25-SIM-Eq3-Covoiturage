@@ -1,15 +1,14 @@
 import { Tabs, useNavigation } from 'expo-router';
 import { couleurs } from '../fonctionalites/Couleurs';
 import { Ionicons } from '@expo/vector-icons';
-import { Dimensions, StatusBar, BackHandler } from 'react-native';
+import {StatusBar, BackHandler } from 'react-native';
 import React, { useCallback } from 'react';
 import { useKeyboard } from 'react-native-use-keyboard';
 import { useAuthStore } from '../fonctionalites/VariablesGlobales';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 
-const { largeur } = Dimensions.get("window");
-const tailleIcon = largeur * 0.075;
+const tailleIcon = 30;
 
 
 /**
